@@ -159,6 +159,10 @@
       <a data-vista="bdencuestas" id="nav-bdencuestas" onclick="cambiarVista('bdencuestas')" style="display:none;">🗄️ Base de Datos Encuestas</a>
       <a data-vista="precios" id="nav-precios" onclick="cambiarVista('precios')" style="display:none;">💲 Indicador Precios</a>
       <a data-vista="bdprecios" id="nav-bdprecios" onclick="cambiarVista('bdprecios')" style="display:none;">🗄️ Base de Datos Precios</a>
+      <a data-vista="agotados" id="nav-agotados" onclick="cambiarVista('agotados')" style="display:none;">📦 Indicador Agotados</a>
+      <a data-vista="bdagotados" id="nav-bdagotados" onclick="cambiarVista('bdagotados')" style="display:none;">🗄️ Base de Datos Agotados</a>
+      <a data-vista="facing" id="nav-facing" onclick="cambiarVista('facing')" style="display:none;">📐 Indicador Facing</a>
+      <a data-vista="bdfacing" id="nav-bdfacing" onclick="cambiarVista('bdfacing')" style="display:none;">🗄️ Base de Datos Facing</a>
     </nav>
     <div class="filtros-tit">Filtros</div>
     <div class="filtro-grupo"><label>Indicador</label><select id="f-indicador"><option value="">Todos</option></select></div>
@@ -180,7 +184,7 @@
         <h1>Dashboard Mercaderismo CHALUPO</h1>
         <div class="sub">Seguimiento de actividades en punto de venta — SEPTIEMBRE</div>
       </div>
-      <div class="corte">Ultimo corte: <b id="fecha-corte">-</b><br>Generado: 10/09/2026 14:00</div>
+      <div class="corte">Ultimo corte: <b id="fecha-corte">-</b><br>Generado: 10/09/2026 15:43</div>
     </div>
 
     <div id="vista-resumen" class="vista">
@@ -498,9 +502,141 @@
         <div class="bd-info" id="precios-info"></div>
       </div>
     </div>
+
+    <div id="vista-agotados" class="vista" style="display:none;">
+      <div class="selector-enc">
+        <label for="sel-cat-agotados">Categoria</label>
+        <select id="sel-cat-agotados"><option value="">Todas las categorias</option></select>
+      </div>
+      <div class="chips" id="agotados-chips"></div>
+      <div class="kpis" id="agotados-kpis"></div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2>% Agotado por categoria</h2>
+          <div class="chart-box tall"><canvas id="chart-agotados-cat" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>% Agotado por cadena</h2>
+          <div class="chart-box tall"><canvas id="chart-agotados-cad" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2 id="agotados-t3">% Agotado por equipo</h2>
+          <div class="chart-box tall"><canvas id="chart-agotados-eq" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Tendencia diaria</h2>
+          <div class="chart-box"><canvas id="chart-agotados-fec" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Resultados por categoria y producto</h2>
+        <div class="bd-info" id="agotados-t1-info" style="margin:-6px 0 12px;"></div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="agotados-t1-head"></thead><tbody id="agotados-t1-body"></tbody></table>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Resultados por punto de venta</h2>
+        <div class="buscador">
+          <input type="text" id="buscador-agotados-pdv" placeholder="Buscar PDV, codigo, ciudad, cadena...">
+          <button class="btn-exportar" onclick="indExportarResumen('agotados')">⬇ Descargar resultados a Excel</button>
+        </div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="agotados-t2-head"></thead><tbody id="agotados-t2-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="agotados-t2-info"></div>
+      </div>
+    </div>
+
+    <div id="vista-bdagotados" class="vista" style="display:none;">
+      <div class="tabla-wrap">
+        <h2>Base de Datos % Agotado</h2>
+        <div class="selector-enc">
+          <label for="sel-cat-agotados-bd">Categoria</label>
+          <select id="sel-cat-agotados-bd"><option value="">Todas las categorias</option></select>
+        </div>
+        <div class="chips" id="agotados-chips-bd"></div>
+        <div class="buscador">
+          <input type="text" id="buscador-agotados" placeholder="Buscar producto, PDV, cadena, ciudad...">
+          <button class="btn-exportar" onclick="indExportarBD('agotados')">⬇ Descargar Base de Datos a Excel</button>
+        </div>
+        <div class="tabla-scroll tabla-res" style="max-height:600px;">
+          <table><thead id="agotados-head"></thead><tbody id="agotados-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="agotados-info"></div>
+      </div>
+    </div>
+
+    <div id="vista-facing" class="vista" style="display:none;">
+      <div class="selector-enc">
+        <label for="sel-cat-facing">Categoria</label>
+        <select id="sel-cat-facing"><option value="">Todas las categorias</option></select>
+      </div>
+      <div class="chips" id="facing-chips"></div>
+      <div class="kpis" id="facing-kpis"></div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2>% Facing por categoria</h2>
+          <div class="chart-box tall"><canvas id="chart-facing-cat" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>% Facing por cadena</h2>
+          <div class="chart-box tall"><canvas id="chart-facing-cad" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2 id="facing-t3">% Facing por equipo</h2>
+          <div class="chart-box tall"><canvas id="chart-facing-eq" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Tendencia diaria</h2>
+          <div class="chart-box"><canvas id="chart-facing-fec" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Resultados por categoria</h2>
+        <div class="bd-info" id="facing-t1-info" style="margin:-6px 0 12px;"></div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="facing-t1-head"></thead><tbody id="facing-t1-body"></tbody></table>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Resultados por punto de venta</h2>
+        <div class="buscador">
+          <input type="text" id="buscador-facing-pdv" placeholder="Buscar PDV, codigo, ciudad, cadena...">
+          <button class="btn-exportar" onclick="indExportarResumen('facing')">⬇ Descargar resultados a Excel</button>
+        </div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="facing-t2-head"></thead><tbody id="facing-t2-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="facing-t2-info"></div>
+      </div>
+    </div>
+
+    <div id="vista-bdfacing" class="vista" style="display:none;">
+      <div class="tabla-wrap">
+        <h2>Base de Datos % Facing</h2>
+        <div class="selector-enc">
+          <label for="sel-cat-facing-bd">Categoria</label>
+          <select id="sel-cat-facing-bd"><option value="">Todas las categorias</option></select>
+        </div>
+        <div class="chips" id="facing-chips-bd"></div>
+        <div class="buscador">
+          <input type="text" id="buscador-facing" placeholder="Buscar producto, PDV, cadena, ciudad...">
+          <button class="btn-exportar" onclick="indExportarBD('facing')">⬇ Descargar Base de Datos a Excel</button>
+        </div>
+        <div class="tabla-scroll tabla-res" style="max-height:600px;">
+          <table><thead id="facing-head"></thead><tbody id="facing-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="facing-info"></div>
+      </div>
+    </div>
   </div>
 </div>
-<footer>Datos actualizados: 10/09/2026 14:00 &nbsp;|&nbsp; Generado automaticamente — Indicadores por Marca PLF</footer>
+<footer>Datos actualizados: 10/09/2026 15:43 &nbsp;|&nbsp; Generado automaticamente — Indicadores por Marca PLF</footer>
 
 <script>/*!
  * Chart.js v4.4.4
@@ -1892,10 +2028,12 @@ T=Gr(p[0],false);k=p.index+p[0].length}break;case"s":break;case"database-range":
 if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Error("Unsupported ZIP file")}var a=Nr(e);var n=Kn(Or(e,"[Content_Types].xml"));var i=false;var s,f;if(n.workbooks.length===0){f="xl/workbook.xml";if(Rr(e,f,true))n.workbooks.push(f)}if(n.workbooks.length===0){f="xl/workbook.bin";if(!Rr(e,f,true))throw new Error("Could not find workbook");n.workbooks.push(f);i=true}if(n.workbooks[0].slice(-3)=="bin")i=true;var o={};var c={};if(!r.bookSheets&&!r.bookProps){Cd=[];if(n.sst)try{Cd=Tm(Rr(e,jg(n.sst)),n.sst,r)}catch(l){if(r.WTF)throw l}if(r.cellStyles&&n.themes.length)o=km(Or(e,n.themes[0].replace(/^\//,""),true)||"",n.themes[0],r);if(n.style)c=wm(Rr(e,jg(n.style)),n.style,o,r)}n.links.map(function(t){try{var a=Qn(Or(e,Zn(jg(t))),t);return Sm(Rr(e,jg(t)),a,t,r)}catch(n){}});var u=vm(Rr(e,jg(n.workbooks[0])),n.workbooks[0],r);var h={},d="";if(n.coreprops.length){d=Rr(e,jg(n.coreprops[0]),true);if(d)h=ui(d);if(n.extprops.length!==0){d=Rr(e,jg(n.extprops[0]),true);if(d)bi(d,h,r)}}var v={};if(!r.bookSheets||r.bookProps){if(n.custprops.length!==0){d=Or(e,jg(n.custprops[0]),true);if(d)v=ki(d,r)}}var p={};if(r.bookSheets||r.bookProps){if(u.Sheets)s=u.Sheets.map(function I(e){return e.name});else if(h.Worksheets&&h.SheetNames.length>0)s=h.SheetNames;if(r.bookProps){p.Props=h;p.Custprops=v}if(r.bookSheets&&typeof s!=="undefined")p.SheetNames=s;if(r.bookSheets?p.SheetNames:r.bookProps)return p}s={};var m={};if(r.bookDeps&&n.calcchain)m=ym(Rr(e,jg(n.calcchain)),n.calcchain,r);var b=0;var g={};var w,k;{var T=u.Sheets;h.Worksheets=T.length;h.SheetNames=[];for(var E=0;E!=T.length;++E){h.SheetNames[E]=T[E].name}}var y=i?"bin":"xml";var S=n.workbooks[0].lastIndexOf("/");var _=(n.workbooks[0].slice(0,S+1)+"_rels/"+n.workbooks[0].slice(S+1)+".rels").replace(/^\//,"");if(!xr(e,_))_="xl/_rels/workbook."+y+".rels";var A=Qn(Or(e,_,true),_.replace(/_rels.*/,"s5s"));if((n.metadata||[]).length>=1){r.xlmeta=_m(Rr(e,jg(n.metadata[0])),n.metadata[0],r)}if((n.people||[]).length>=1){r.people=lu(Rr(e,jg(n.people[0])),r)}if(A)A=Vg(A,u.Sheets);var x=Rr(e,"xl/worksheets/sheet.xml",true)?1:0;e:for(b=0;b!=h.Worksheets;++b){var C="sheet";if(A&&A[b]){w="xl/"+A[b][1].replace(/[\/]?xl\//,"");if(!xr(e,w))w=A[b][1];if(!xr(e,w))w=_.replace(/_rels\/.*$/,"")+A[b][1];C=A[b][2]}else{w="xl/worksheets/sheet"+(b+1-x)+"."+y;w=w.replace(/sheet0\./,"sheet.")}k=w.replace(/^(.*)(\/)([^\/]*)$/,"$1/_rels/$3.rels");if(r&&r.sheets!=null)switch(typeof r.sheets){case"number":if(b!=r.sheets)continue e;break;case"string":if(h.SheetNames[b].toLowerCase()!=r.sheets.toLowerCase())continue e;break;default:if(Array.isArray&&Array.isArray(r.sheets)){var R=false;for(var O=0;O!=r.sheets.length;++O){if(typeof r.sheets[O]=="number"&&r.sheets[O]==b)R=1;if(typeof r.sheets[O]=="string"&&r.sheets[O].toLowerCase()==h.SheetNames[b].toLowerCase())R=1}if(!R)continue e};}Gg(e,w,k,h.SheetNames[b],b,g,s,C,r,u,o,c)}p={Directory:n,Workbook:u,Props:h,Custprops:v,Deps:m,Sheets:s,SheetNames:h.SheetNames,Strings:Cd,Styles:c,Themes:o,SSF:gr(X)};if(r&&r.bookFiles){if(e.files){p.keys=a;p.files=e.files}else{p.keys=[];p.files={};e.FullPaths.forEach(function(r,t){r=r.replace(/^Root Entry[\/]/,"");p.keys.push(r);p.files[r]=e.FileIndex[t]})}}if(r&&r.bookVBA){if(n.vba.length>0)p.vbaraw=Rr(e,jg(n.vba[0]),true);else if(n.defaults&&n.defaults.bin===gu)p.vbaraw=Rr(e,"xl/vbaProject.bin",true)}return p}function $g(e,r){var t=r||{};var a="Workbook",n=Ke.find(e,a);try{a="/!DataSpaces/Version";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);Ko(n.content);a="/!DataSpaces/DataSpaceMap";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);var i=qo(n.content);if(i.length!==1||i[0].comps.length!==1||i[0].comps[0].t!==0||i[0].name!=="StrongEncryptionDataSpace"||i[0].comps[0].v!=="EncryptedPackage")throw new Error("ECMA-376 Encrypted file bad "+a);a="/!DataSpaces/DataSpaceInfo/StrongEncryptionDataSpace";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);var s=Zo(n.content);if(s.length!=1||s[0]!="StrongEncryptionTransform")throw new Error("ECMA-376 Encrypted file bad "+a);a="/!DataSpaces/TransformInfo/StrongEncryptionTransform/!Primary";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);ec(n.content)}catch(f){}a="/EncryptionInfo";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);var o=ac(n.content);a="/EncryptedPackage";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);if(o[0]==4&&typeof decrypt_agile!=="undefined")return decrypt_agile(o[1],n.content,t.password||"",t);if(o[0]==2&&typeof decrypt_std76!=="undefined")return decrypt_std76(o[1],n.content,t.password||"",t);throw new Error("File is password-protected")}function Yg(e,r){if(r.bookType=="ods")return tg(e,r);if(r.bookType=="numbers")return Ug(e,r);if(r.bookType=="xlsb")return Kg(e,r);return Jg(e,r)}function Kg(e,r){au=1024;if(e&&!e.SSF){e.SSF=gr(X)}if(e&&e.SSF){ze();He(e.SSF);r.revssf=nr(e.SSF);r.revssf[e.SSF[65535]]=0;r.ssf=e.SSF}r.rels={};r.wbrels={};r.Strings=[];r.Strings.Count=0;r.Strings.Unique=0;if(Od)r.revStrings=new Map;else{r.revStrings={};r.revStrings.foo=[];delete r.revStrings.foo}var t=r.bookType=="xlsb"?"bin":"xml";var a=Tu.indexOf(r.bookType)>-1;var n=Yn();Hg(r=r||{});var i=Dr();var s="",f=0;r.cellXfs=[];Dd(r.cellXfs,{},{revssf:{General:0}});if(!e.Props)e.Props={};s="docProps/core.xml";Fr(i,s,di(e.Props,r));n.coreprops.push(s);ri(r.rels,2,s,qn.CORE_PROPS);s="docProps/app.xml";if(e.Props&&e.Props.SheetNames){}else if(!e.Workbook||!e.Workbook.Sheets)e.Props.SheetNames=e.SheetNames;else{var o=[];for(var c=0;c<e.SheetNames.length;++c)if((e.Workbook.Sheets[c]||{}).Hidden!=2)o.push(e.SheetNames[c]);e.Props.SheetNames=o}e.Props.Worksheets=e.Props.SheetNames.length;Fr(i,s,gi(e.Props,r));n.extprops.push(s);ri(r.rels,3,s,qn.EXT_PROPS);if(e.Custprops!==e.Props&&rr(e.Custprops||{}).length>0){s="docProps/custom.xml";Fr(i,s,Ti(e.Custprops,r));n.custprops.push(s);ri(r.rels,4,s,qn.CUST_PROPS)}for(f=1;f<=e.SheetNames.length;++f){var l={"!id":{}};var u=e.Sheets[e.SheetNames[f-1]];var h=(u||{})["!type"]||"sheet";switch(h){case"chart":;default:s="xl/worksheets/sheet"+f+"."+t;Fr(i,s,xm(f-1,s,r,e,l));n.sheets.push(s);ri(r.wbrels,-1,"worksheets/sheet"+f+"."+t,qn.WS[0]);}if(u){var d=u["!comments"];var v=false;var p="";if(d&&d.length>0){p="xl/comments"+f+"."+t;Fr(i,p,Im(d,p,r));n.comments.push(p);ri(l,-1,"../comments"+f+"."+t,qn.CMNT);v=true}if(u["!legacy"]){if(v)Fr(i,"xl/drawings/vmlDrawing"+f+".vml",nu(f,u["!comments"]))}delete u["!comments"];delete u["!legacy"]}if(l["!id"].rId1)Fr(i,Zn(s),ei(l))}if(r.Strings!=null&&r.Strings.length>0){s="xl/sharedStrings."+t;Fr(i,s,Om(r.Strings,s,r));n.strs.push(s);ri(r.wbrels,-1,"sharedStrings."+t,qn.SST)}s="xl/workbook."+t;Fr(i,s,Am(e,s,r));n.workbooks.push(s);ri(r.rels,1,s,qn.WB);s="xl/theme/theme1.xml";Fr(i,s,Il(e.Themes,r));n.themes.push(s);ri(r.wbrels,-1,"theme/theme1.xml",qn.THEME);s="xl/styles."+t;Fr(i,s,Rm(e,s,r));n.styles.push(s);ri(r.wbrels,-1,"styles."+t,qn.STY);if(e.vbaraw&&a){s="xl/vbaProject.bin";Fr(i,s,e.vbaraw);n.vba.push(s);ri(r.wbrels,-1,"vbaProject.bin",qn.VBA)}s="xl/metadata."+t;Fr(i,s,Nm(s));n.metadata.push(s);ri(r.wbrels,-1,"metadata."+t,qn.XLMETA);Fr(i,"[Content_Types].xml",Jn(n,r));Fr(i,"_rels/.rels",ei(r.rels));Fr(i,"xl/_rels/workbook."+t+".rels",ei(r.wbrels));delete r.revssf;delete r.ssf;return i}function Jg(e,r){au=1024;if(e&&!e.SSF){e.SSF=gr(X)}if(e&&e.SSF){ze();He(e.SSF);r.revssf=nr(e.SSF);r.revssf[e.SSF[65535]]=0;r.ssf=e.SSF}r.rels={};r.wbrels={};r.Strings=[];r.Strings.Count=0;r.Strings.Unique=0;if(Od)r.revStrings=new Map;else{r.revStrings={};r.revStrings.foo=[];delete r.revStrings.foo}var t="xml";var a=Tu.indexOf(r.bookType)>-1;var n=Yn();Hg(r=r||{});var i=Dr();var s="",f=0;r.cellXfs=[];Dd(r.cellXfs,{},{revssf:{General:0}});if(!e.Props)e.Props={};s="docProps/core.xml";Fr(i,s,di(e.Props,r));n.coreprops.push(s);ri(r.rels,2,s,qn.CORE_PROPS);s="docProps/app.xml";if(e.Props&&e.Props.SheetNames){}else if(!e.Workbook||!e.Workbook.Sheets)e.Props.SheetNames=e.SheetNames;else{var o=[];for(var c=0;c<e.SheetNames.length;++c)if((e.Workbook.Sheets[c]||{}).Hidden!=2)o.push(e.SheetNames[c]);e.Props.SheetNames=o}e.Props.Worksheets=e.Props.SheetNames.length;Fr(i,s,gi(e.Props,r));n.extprops.push(s);ri(r.rels,3,s,qn.EXT_PROPS);if(e.Custprops!==e.Props&&rr(e.Custprops||{}).length>0){s="docProps/custom.xml";Fr(i,s,Ti(e.Custprops,r));n.custprops.push(s);ri(r.rels,4,s,qn.CUST_PROPS)}var l=["SheetJ5"];r.tcid=0;for(f=1;f<=e.SheetNames.length;++f){var u={"!id":{}};var h=e.Sheets[e.SheetNames[f-1]];var d=(h||{})["!type"]||"sheet";switch(d){case"chart":;default:s="xl/worksheets/sheet"+f+"."+t;Fr(i,s,pv(f-1,r,e,u));n.sheets.push(s);ri(r.wbrels,-1,"worksheets/sheet"+f+"."+t,qn.WS[0]);}if(h){var v=h["!comments"];var p=false;var m="";if(v&&v.length>0){var b=false;v.forEach(function(e){e[1].forEach(function(e){if(e.T==true)b=true})});if(b){m="xl/threadedComments/threadedComment"+f+"."+t;Fr(i,m,cu(v,l,r));n.threadedcomments.push(m);ri(u,-1,"../threadedComments/threadedComment"+f+"."+t,qn.TCMNT)}m="xl/comments"+f+"."+t;Fr(i,m,fu(v,r));n.comments.push(m);ri(u,-1,"../comments"+f+"."+t,qn.CMNT);p=true}if(h["!legacy"]){if(p)Fr(i,"xl/drawings/vmlDrawing"+f+".vml",nu(f,h["!comments"]))}delete h["!comments"];delete h["!legacy"]}if(u["!id"].rId1)Fr(i,Zn(s),ei(u))}if(r.Strings!=null&&r.Strings.length>0){s="xl/sharedStrings."+t;Fr(i,s,Ho(r.Strings,r));n.strs.push(s);ri(r.wbrels,-1,"sharedStrings."+t,qn.SST)}s="xl/workbook."+t;Fr(i,s,rm(e,r));n.workbooks.push(s);ri(r.rels,1,s,qn.WB);s="xl/theme/theme1.xml";Fr(i,s,Il(e.Themes,r));n.themes.push(s);ri(r.wbrels,-1,"theme/theme1.xml",qn.THEME);s="xl/styles."+t;Fr(i,s,$c(e,r));n.styles.push(s);ri(r.wbrels,-1,"styles."+t,qn.STY);if(e.vbaraw&&a){s="xl/vbaProject.bin";Fr(i,s,e.vbaraw);n.vba.push(s);ri(r.wbrels,-1,"vbaProject.bin",qn.VBA)}s="xl/metadata."+t;Fr(i,s,Jl());n.metadata.push(s);ri(r.wbrels,-1,"metadata."+t,qn.XLMETA);if(l.length>1){s="xl/persons/person.xml";Fr(i,s,uu(l,r));n.people.push(s);ri(r.wbrels,-1,"persons/person.xml",qn.PEOPLE)}Fr(i,"[Content_Types].xml",Jn(n,r));Fr(i,"_rels/.rels",ei(r.rels));Fr(i,"xl/_rels/workbook."+t+".rels",ei(r.wbrels));delete r.revssf;delete r.ssf;return i}function qg(e,r){var t="";switch((r||{}).type||"base64"){case"buffer":return[e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]];case"base64":t=k(e.slice(0,12));break;case"binary":t=e;break;case"array":return[e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]];default:throw new Error("Unrecognized type "+(r&&r.type||"undefined"));}return[t.charCodeAt(0),t.charCodeAt(1),t.charCodeAt(2),t.charCodeAt(3),t.charCodeAt(4),t.charCodeAt(5),t.charCodeAt(6),t.charCodeAt(7)]}function Zg(e,r){if(Ke.find(e,"EncryptedPackage"))return $g(e,r);return vb(e,r)}function Qg(e,r){var t,a=e;var n=r||{};if(!n.type)n.type=T&&Buffer.isBuffer(e)?"buffer":"base64";t=Pr(a,n);return Xg(t,n)}function ew(e,r){var t=0;e:while(t<e.length)switch(e.charCodeAt(t)){case 10:;case 13:;case 32:++t;break;case 60:return jm(e.slice(t),r);default:break e;}return Ao.to_workbook(e,r)}function rw(e,r){var t="",a=qg(e,r);switch(r.type){case"base64":t=k(e);break;case"binary":t=e;break;case"buffer":t=e.toString("binary");break;case"array":t=br(e);break;default:throw new Error("Unrecognized type "+r.type);}if(a[0]==239&&a[1]==187&&a[2]==191)t=ct(t);r.type="binary";return ew(t,r)}function tw(e,r){var t=e;if(r.type=="base64")t=k(t);t=a.utils.decode(1200,t.slice(2),"str");r.type="binary";return ew(t,r)}function aw(e){return!e.match(/[^\x00-\x7F]/)?e:lt(e)}function nw(e,r,t,a){if(a){t.type="string";return Ao.to_workbook(e,t)}return Ao.to_workbook(r,t)}function iw(e,r){c();var t=r||{};if(typeof ArrayBuffer!=="undefined"&&e instanceof ArrayBuffer)return iw(new Uint8Array(e),(t=gr(t),t.type="array",t));if(typeof Uint8Array!=="undefined"&&e instanceof Uint8Array&&!t.type)t.type=typeof Deno!=="undefined"?"buffer":"array";var a=e,n=[0,0,0,0],i=false;if(t.cellStyles){t.cellNF=true;t.sheetStubs=true}Rd={};if(t.dateNF)Rd.dateNF=t.dateNF;if(!t.type)t.type=T&&Buffer.isBuffer(e)?"buffer":"base64";if(t.type=="file"){t.type=T?"buffer":"binary";a=er(e);if(typeof Uint8Array!=="undefined"&&!T)t.type="array"}if(t.type=="string"){i=true;t.type="binary";t.codepage=65001;a=aw(e)}if(t.type=="array"&&typeof Uint8Array!=="undefined"&&e instanceof Uint8Array&&typeof ArrayBuffer!=="undefined"){var s=new ArrayBuffer(3),f=new Uint8Array(s);f.foo="bar";if(!f.foo){t=gr(t);t.type="array";return iw(R(a),t)}}switch((n=qg(a,t))[0]){case 208:if(n[1]===207&&n[2]===17&&n[3]===224&&n[4]===161&&n[5]===177&&n[6]===26&&n[7]===225)return Zg(Ke.read(a,t),t);break;case 9:if(n[1]<=8)return vb(a,t);break;case 60:return jm(a,t);case 73:if(n[1]===73&&n[2]===42&&n[3]===0)throw new Error("TIFF Image File is not a spreadsheet");if(n[1]===68)return xo(a,t);break;case 84:if(n[1]===65&&n[2]===66&&n[3]===76)return So.to_workbook(a,t);break;case 80:return n[1]===75&&n[2]<9&&n[3]<9?Qg(a,t):nw(e,a,t,i);case 239:return n[3]===60?jm(a,t):nw(e,a,t,i);case 255:if(n[1]===254){return tw(a,t)}else if(n[1]===0&&n[2]===2&&n[3]===0)return Co.to_workbook(a,t);break;case 0:if(n[1]===0){if(n[2]>=2&&n[3]===0)return Co.to_workbook(a,t);if(n[2]===0&&(n[3]===8||n[3]===9))return Co.to_workbook(a,t)}break;case 3:;case 131:;case 139:;case 140:return Eo.to_workbook(a,t);case 123:if(n[1]===92&&n[2]===114&&n[3]===116)return mc.to_workbook(a,t);break;case 10:;case 13:;case 32:return rw(a,t);case 137:if(n[1]===80&&n[2]===78&&n[3]===71)throw new Error("PNG Image File is not a spreadsheet");break;}if(To.indexOf(n[0])>-1&&n[2]<=12&&n[3]<=31)return Eo.to_workbook(a,t);return nw(e,a,t,i)}function sw(e,r){var t=r||{};t.type="file";return iw(e,t)}function fw(e,r){switch(r.type){case"base64":;case"binary":break;case"buffer":;case"array":r.type="";break;case"file":return Qe(r.file,Ke.write(e,{type:T?"buffer":""}));case"string":throw new Error("'string' output type invalid for '"+r.bookType+"' files");default:throw new Error("Unrecognized type "+r.type);}return Ke.write(e,r)}function ow(e,r){var t=gr(r||{});var a=Yg(e,t);return lw(a,t)}function cw(e,r){var t=gr(r||{});var a=Jg(e,t);return lw(a,t)}function lw(e,r){var t={};var a=T?"nodebuffer":typeof Uint8Array!=="undefined"?"array":"string";if(r.compression)t.compression="DEFLATE";if(r.password)t.type=a;else switch(r.type){case"base64":t.type="base64";break;case"binary":t.type="string";break;case"string":throw new Error("'string' output type invalid for '"+r.bookType+"' files");case"buffer":;case"file":t.type=a;break;default:throw new Error("Unrecognized type "+r.type);}var n=e.FullPaths?Ke.write(e,{fileType:"zip",type:{nodebuffer:"buffer",string:"binary"}[t.type]||t.type,compression:!!r.compression}):e.generate(t);if(typeof Deno!=="undefined"){if(typeof n=="string"){if(r.type=="binary"||r.type=="base64")return n;n=new Uint8Array(A(n))}}if(r.password&&typeof encrypt_agile!=="undefined")return fw(encrypt_agile(n,r.password),r);if(r.type==="file")return Qe(r.file,n);return r.type=="string"?ct(n):n}function uw(e,r){var t=r||{};var a=pb(e,t);return fw(a,t)}function hw(e,r,t){if(!t)t="";var a=t+e;switch(r.type){case"base64":return w(lt(a));case"binary":return lt(a);case"string":return e;case"file":return Qe(r.file,a,"utf8");case"buffer":{if(T)return E(a,"utf8");else if(typeof TextEncoder!=="undefined")return(new TextEncoder).encode(a);else return hw(a,{type:"binary"}).split("").map(function(e){return e.charCodeAt(0)})};}throw new Error("Unrecognized type "+r.type)}function dw(e,r){switch(r.type){case"base64":return w(e);case"binary":return e;case"string":return e;case"file":return Qe(r.file,e,"binary");case"buffer":{if(T)return E(e,"binary");else return e.split("").map(function(e){return e.charCodeAt(0)})};}throw new Error("Unrecognized type "+r.type)}function vw(e,r){switch(r.type){case"string":;case"base64":;case"binary":var t="";for(var a=0;a<e.length;++a)t+=String.fromCharCode(e[a]);return r.type=="base64"?w(t):r.type=="string"?ct(t):t;case"file":return Qe(r.file,e);case"buffer":return e;default:throw new Error("Unrecognized type "+r.type);}}function pw(e,r){c();Zp(e);var t=gr(r||{});if(t.cellStyles){t.cellNF=true;t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=pw(e,t);t.type="array";return A(a)}return cw(e,t)}function mw(e,r){c();Zp(e);var t=gr(r||{});if(t.cellStyles){t.cellNF=true;t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=mw(e,t);t.type="array";return A(a)}var n=0;if(t.sheet){if(typeof t.sheet=="number")n=t.sheet;else n=e.SheetNames.indexOf(t.sheet);if(!e.SheetNames[n])throw new Error("Sheet not found: "+t.sheet+" : "+typeof t.sheet)}switch(t.bookType||"xlsb"){case"xml":;case"xlml":return hw(nb(e,t),t);case"slk":;case"sylk":return hw(yo.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"htm":;case"html":return hw(Vb(e.Sheets[e.SheetNames[n]],t),t);case"txt":return dw(Aw(e.Sheets[e.SheetNames[n]],t),t);case"csv":return hw(_w(e.Sheets[e.SheetNames[n]],t),t,"\ufeff");case"dif":return hw(So.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"dbf":return vw(Eo.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"prn":return hw(Ao.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"rtf":return hw(mc.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"eth":return hw(_o.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"fods":return hw(tg(e,t),t);case"wk1":return vw(Co.sheet_to_wk1(e.Sheets[e.SheetNames[n]],t),t);case"wk3":return vw(Co.book_to_wk3(e,t),t);case"biff2":if(!t.biff)t.biff=2;case"biff3":if(!t.biff)t.biff=3;case"biff4":if(!t.biff)t.biff=4;return vw(Lb(e,t),t);case"biff5":if(!t.biff)t.biff=5;case"biff8":;case"xla":;case"xls":if(!t.biff)t.biff=8;return uw(e,t);case"xlsx":;case"xlsm":;case"xlam":;case"xlsb":;case"numbers":;case"ods":return ow(e,t);default:throw new Error("Unrecognized bookType |"+t.bookType+"|");}}function bw(e){if(e.bookType)return;var r={xls:"biff8",htm:"html",slk:"sylk",socialcalc:"eth",Sh33tJS:"WTF"};var t=e.file.slice(e.file.lastIndexOf(".")).toLowerCase();if(t.match(/^\.[a-z]+$/))e.bookType=t.slice(1);e.bookType=r[e.bookType]||e.bookType}function gw(e,r,t){var a=t||{};a.type="file";a.file=r;bw(a);return mw(e,a)}function ww(e,r,t){var a=t||{};a.type="file";a.file=r;bw(a);return pw(e,a)}function kw(e,r,t,a){var n=t||{};n.type="file";n.file=e;bw(n);n.type="buffer";var i=a;if(!(i instanceof Function))i=t;return Je.writeFile(e,mw(r,n),i)}function Tw(e,r,t,a,n,i,s,f){var o=Ta(t);var c=f.defval,l=f.raw||!Object.prototype.hasOwnProperty.call(f,"raw");var u=true;var h=n===1?[]:{};if(n!==1){if(Object.defineProperty)try{Object.defineProperty(h,"__rowNum__",{value:t,enumerable:false})}catch(d){h.__rowNum__=t}else h.__rowNum__=t}if(!s||e[t])for(var v=r.s.c;v<=r.e.c;++v){var p=s?e[t][v]:e[a[v]+o];if(p===undefined||p.t===undefined){if(c===undefined)continue;if(i[v]!=null){h[i[v]]=c}continue}var m=p.v;switch(p.t){case"z":if(m==null)break;continue;case"e":m=m==0?null:void 0;break;case"s":;case"d":;case"b":;case"n":break;default:throw new Error("unrecognized type "+p.t);}if(i[v]!=null){if(m==null){if(p.t=="e"&&m===null)h[i[v]]=null;else if(c!==undefined)h[i[v]]=c;else if(l&&m===null)h[i[v]]=null;else continue}else{h[i[v]]=l&&(p.t!=="n"||p.t==="n"&&f.rawNumbers!==false)?m:Pa(p,m,f)}if(m!=null)u=false}}return{row:h,isempty:u}}function Ew(e,r){if(e==null||e["!ref"]==null)return[];var t={t:"n",v:0},a=0,n=1,i=[],s=0,f="";var o={s:{r:0,c:0},e:{r:0,c:0}};var c=r||{};var l=c.range!=null?c.range:e["!ref"];if(c.header===1)a=1;else if(c.header==="A")a=2;else if(Array.isArray(c.header))a=3;else if(c.header==null)a=0;switch(typeof l){case"string":o=Fa(l);break;case"number":o=Fa(e["!ref"]);o.s.r=l;break;default:o=l;}if(a>0)n=0;var u=Ta(o.s.r);var h=[];var d=[];var v=0,p=0;var m=Array.isArray(e);var b=o.s.r,g=0;var w={};if(m&&!e[b])e[b]=[];var k=c.skipHidden&&e["!cols"]||[];var T=c.skipHidden&&e["!rows"]||[];for(g=o.s.c;g<=o.e.c;++g){if((k[g]||{}).hidden)continue;h[g]=_a(g);t=m?e[b][g]:e[h[g]+u];switch(a){case 1:i[g]=g-o.s.c;break;case 2:i[g]=h[g];break;case 3:i[g]=c.header[g-o.s.c];break;default:if(t==null)t={w:"__EMPTY",t:"s"};f=s=Pa(t,null,c);p=w[s]||0;if(!p)w[s]=1;else{do{f=s+"_"+p++}while(w[f]);w[s]=p;w[f]=1}i[g]=f;}}for(b=o.s.r+n;b<=o.e.r;++b){if((T[b]||{}).hidden)continue;var E=Tw(e,o,b,h,a,i,m,c);if(E.isempty===false||(a===1?c.blankrows!==false:!!c.blankrows))d[v++]=E.row}d.length=v;return d}var yw=/"/g;function Sw(e,r,t,a,n,i,s,f){var o=true;var c=[],l="",u=Ta(t);for(var h=r.s.c;h<=r.e.c;++h){if(!a[h])continue;var d=f.dense?(e[t]||[])[h]:e[a[h]+u];if(d==null)l="";else if(d.v!=null){o=false;l=""+(f.rawNumbers&&d.t=="n"?d.v:Pa(d,null,f));for(var v=0,p=0;v!==l.length;++v)if((p=l.charCodeAt(v))===n||p===i||p===34||f.forceQuotes){l='"'+l.replace(yw,'""')+'"';break}if(l=="ID")l='"ID"'}else if(d.f!=null&&!d.F){o=false;l="="+d.f;if(l.indexOf(",")>=0)l='"'+l.replace(yw,'""')+'"'}else l="";c.push(l)}if(f.blankrows===false&&o)return null;return c.join(s)}function _w(e,r){var t=[];var a=r==null?{}:r;if(e==null||e["!ref"]==null)return"";var n=Fa(e["!ref"]);var i=a.FS!==undefined?a.FS:",",s=i.charCodeAt(0);var f=a.RS!==undefined?a.RS:"\n",o=f.charCodeAt(0);var c=new RegExp((i=="|"?"\\|":i)+"+$");var l="",u=[];a.dense=Array.isArray(e);var h=a.skipHidden&&e["!cols"]||[];var d=a.skipHidden&&e["!rows"]||[];for(var v=n.s.c;v<=n.e.c;++v)if(!(h[v]||{}).hidden)u[v]=_a(v);var p=0;for(var m=n.s.r;m<=n.e.r;++m){if((d[m]||{}).hidden)continue;l=Sw(e,n,m,u,s,o,i,a);if(l==null){continue}if(a.strip)l=l.replace(c,"");if(l||a.blankrows!==false)t.push((p++?f:"")+l)}delete a.dense;return t.join("")}function Aw(e,r){if(!r)r={};r.FS="\t";r.RS="\n";var t=_w(e,r);if(typeof a=="undefined"||r.type=="string")return t;var n=a.utils.encode(1200,t,"str");return String.fromCharCode(255)+String.fromCharCode(254)+n}function xw(e){var r="",t,a="";if(e==null||e["!ref"]==null)return[];var n=Fa(e["!ref"]),i="",s=[],f;var o=[];var c=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=_a(f);for(var l=n.s.r;l<=n.e.r;++l){i=Ta(l);for(f=n.s.c;f<=n.e.c;++f){r=s[f]+i;t=c?(e[l]||[])[f]:e[r];a="";if(t===undefined)continue;else if(t.F!=null){r=t.F;if(!t.f)continue;a=t.f;if(r.indexOf(":")==-1)r=r+":"+r}if(t.f!=null)a=t.f;else if(t.t=="z")continue;else if(t.t=="n"&&t.v!=null)a=""+t.v;else if(t.t=="b")a=t.v?"TRUE":"FALSE";else if(t.w!==undefined)a="'"+t.w;else if(t.v===undefined)continue;else if(t.t=="s")a="'"+t.v;else a=""+t.v;o[o.length]=r+"="+a}}return o}function Cw(e,r,t){var a=t||{};var n=+!a.skipHeader;var i=e||{};var s=0,f=0;if(i&&a.origin!=null){if(typeof a.origin=="number")s=a.origin;else{var o=typeof a.origin=="string"?Ra(a.origin):a.origin;s=o.r;f=o.c}}var c;var l={s:{c:0,r:0},e:{c:f,r:s+r.length-1+n}};if(i["!ref"]){var u=Fa(i["!ref"]);l.e.c=Math.max(l.e.c,u.e.c);l.e.r=Math.max(l.e.r,u.e.r);if(s==-1){s=u.e.r+1;l.e.r=s+r.length-1+n}}else{if(s==-1){s=0;l.e.r=r.length-1+n}}var h=a.header||[],d=0;r.forEach(function(e,r){rr(e).forEach(function(t){if((d=h.indexOf(t))==-1)h[d=h.length]=t;var o=e[t];var l="z";var u="";var v=Oa({c:f+d,r:s+r+n});c=Ow(i,v);if(o&&typeof o==="object"&&!(o instanceof Date)){i[v]=o}else{if(typeof o=="number")l="n";else if(typeof o=="boolean")l="b";else if(typeof o=="string")l="s";else if(o instanceof Date){l="d";if(!a.cellDates){l="n";o=fr(o)}u=a.dateNF||X[14]}else if(o===null&&a.nullError){l="e";o=0}if(!c)i[v]=c={t:l,v:o};else{c.t=l;c.v=o;delete c.w;delete c.R;if(u)c.z=u}if(u)c.z=u}})});l.e.c=Math.max(l.e.c,f+h.length-1);var v=Ta(s);if(n)for(d=0;d<h.length;++d)i[_a(d+f)+v]={t:"s",v:h[d]};i["!ref"]=Na(l);return i}function Rw(e,r){return Cw(null,e,r)}function Ow(e,r,t){if(typeof r=="string"){if(Array.isArray(e)){var a=Ra(r);if(!e[a.r])e[a.r]=[];return e[a.r][a.c]||(e[a.r][a.c]={t:"z"})}return e[r]||(e[r]={t:"z"})}if(typeof r!="number")return Ow(e,Oa(r));return Ow(e,Oa({r:r,c:t||0}))}function Iw(e,r){if(typeof r=="number"){if(r>=0&&e.SheetNames.length>r)return r;throw new Error("Cannot find sheet # "+r)}else if(typeof r=="string"){var t=e.SheetNames.indexOf(r);if(t>-1)return t;throw new Error("Cannot find sheet name |"+r+"|")}else throw new Error("Cannot find sheet |"+r+"|")}function Nw(){return{SheetNames:[],Sheets:{}}}function Fw(e,r,t,a){var n=1;if(!t)for(;n<=65535;++n,t=undefined)if(e.SheetNames.indexOf(t="Sheet"+n)==-1)break;if(!t||e.SheetNames.length>=65535)throw new Error("Too many worksheets");if(a&&e.SheetNames.indexOf(t)>=0){var i=t.match(/(^.*?)(\d+)$/);n=i&&+i[2]||0;var s=i&&i[1]||t;for(++n;n<=65535;++n)if(e.SheetNames.indexOf(t=s+n)==-1)break}Jp(t);if(e.SheetNames.indexOf(t)>=0)throw new Error("Worksheet with name |"+t+"| already exists!");e.SheetNames.push(t);e.Sheets[t]=r;return t}function Dw(e,r,t){if(!e.Workbook)e.Workbook={};if(!e.Workbook.Sheets)e.Workbook.Sheets=[];var a=Iw(e,r);if(!e.Workbook.Sheets[a])e.Workbook.Sheets[a]={};switch(t){case 0:;case 1:;case 2:break;default:throw new Error("Bad sheet visibility setting "+t);}e.Workbook.Sheets[a].Hidden=t}function Pw(e,r){e.z=r;return e}function Lw(e,r,t){if(!r){delete e.l}else{e.l={Target:r};if(t)e.l.Tooltip=t}return e}function Mw(e,r,t){return Lw(e,"#"+r,t)}function Uw(e,r,t){if(!e.c)e.c=[];e.c.push({t:r,a:t||"SheetJS"})}function Bw(e,r,t,a){var n=typeof r!="string"?r:Fa(r);var i=typeof r=="string"?r:Na(r);for(var s=n.s.r;s<=n.e.r;++s)for(var f=n.s.c;f<=n.e.c;++f){var o=Ow(e,s,f);o.t="n";o.F=i;delete o.v;if(s==n.s.r&&f==n.s.c){o.f=t;if(a)o.D=true}}return e}var Ww={encode_col:_a,encode_row:Ta,encode_cell:Oa,encode_range:Na,decode_col:Sa,decode_row:ka,split_cell:Ca,decode_cell:Ra,decode_range:Ia,format_cell:Pa,sheet_add_aoa:Ma,sheet_add_json:Cw,sheet_add_dom:Gb,aoa_to_sheet:Ua,json_to_sheet:Rw,table_to_sheet:jb,table_to_book:Xb,sheet_to_csv:_w,sheet_to_txt:Aw,sheet_to_json:Ew,sheet_to_html:Vb,sheet_to_formulae:xw,sheet_to_row_object_array:Ew,sheet_get_cell:Ow,book_new:Nw,book_append_sheet:Fw,book_set_sheet_visibility:Dw,cell_set_number_format:Pw,cell_set_hyperlink:Lw,cell_set_internal_link:Mw,cell_add_comment:Uw,sheet_set_array_formula:Bw,consts:{SHEET_VISIBLE:0,SHEET_HIDDEN:1,SHEET_VERY_HIDDEN:2}};var Hw;function zw(e){Hw=e}function Vw(e,r){var t=Hw();var a=r==null?{}:r;if(e==null||e["!ref"]==null){t.push(null);return t}var n=Fa(e["!ref"]);var i=a.FS!==undefined?a.FS:",",s=i.charCodeAt(0);var f=a.RS!==undefined?a.RS:"\n",o=f.charCodeAt(0);var c=new RegExp((i=="|"?"\\|":i)+"+$");var l="",u=[];a.dense=Array.isArray(e);var h=a.skipHidden&&e["!cols"]||[];var d=a.skipHidden&&e["!rows"]||[];for(var v=n.s.c;v<=n.e.c;++v)if(!(h[v]||{}).hidden)u[v]=_a(v);var p=n.s.r;var m=false,b=0;t._read=function(){if(!m){m=true;return t.push("\ufeff")}while(p<=n.e.r){++p;if((d[p-1]||{}).hidden)continue;l=Sw(e,n,p-1,u,s,o,i,a);if(l!=null){if(a.strip)l=l.replace(c,"");if(l||a.blankrows!==false)return t.push((b++?f:"")+l)}}return t.push(null)};return t}function Gw(e,r){var t=Hw();var a=r||{};var n=a.header!=null?a.header:Bb;var i=a.footer!=null?a.footer:Wb;t.push(n);var s=Ia(e["!ref"]);a.dense=Array.isArray(e);t.push(zb(e,s,a));var f=s.s.r;var o=false;t._read=function(){if(f>s.e.r){if(!o){o=true;t.push("</table>"+i)}return t.push(null)}while(f<=s.e.r){t.push(Ub(e,s,f,a));++f;break}};return t}function jw(e,r){var t=Hw({objectMode:true});if(e==null||e["!ref"]==null){t.push(null);return t}var a={t:"n",v:0},n=0,i=1,s=[],f=0,o="";var c={s:{r:0,c:0},e:{r:0,c:0}};var l=r||{};var u=l.range!=null?l.range:e["!ref"];if(l.header===1)n=1;else if(l.header==="A")n=2;else if(Array.isArray(l.header))n=3;switch(typeof u){case"string":c=Fa(u);break;case"number":c=Fa(e["!ref"]);c.s.r=u;break;default:c=u;}if(n>0)i=0;var h=Ta(c.s.r);var d=[];var v=0;var p=Array.isArray(e);var m=c.s.r,b=0;var g={};if(p&&!e[m])e[m]=[];var w=l.skipHidden&&e["!cols"]||[];var k=l.skipHidden&&e["!rows"]||[];for(b=c.s.c;b<=c.e.c;++b){if((w[b]||{}).hidden)continue;d[b]=_a(b);a=p?e[m][b]:e[d[b]+h];switch(n){case 1:s[b]=b-c.s.c;break;case 2:s[b]=d[b];break;case 3:s[b]=l.header[b-c.s.c];break;default:if(a==null)a={w:"__EMPTY",t:"s"};o=f=Pa(a,null,l);v=g[f]||0;if(!v)g[f]=1;else{do{o=f+"_"+v++}while(g[o]);g[f]=v;g[o]=1}s[b]=o;}}m=c.s.r+i;t._read=function(){while(m<=c.e.r){if((k[m-1]||{}).hidden)continue;var r=Tw(e,c,m,d,n,s,p,l);++m;if(r.isempty===false||(n===1?l.blankrows!==false:!!l.blankrows)){t.push(r.row);return}}return t.push(null)};return t}var Xw={to_json:jw,to_html:Gw,to_csv:Vw,set_readable:zw};if(typeof vb!=="undefined")e.parse_xlscfb=vb;e.parse_zip=Xg;e.read=iw;e.readFile=sw;e.readFileSync=sw;e.write=mw;e.writeFile=gw;e.writeFileSync=gw;e.writeFileAsync=kw;e.utils=Ww;e.writeXLSX=pw;e.writeFileXLSX=ww;e.SSF=Ve;if(typeof Xw!=="undefined")e.stream=Xw;if(typeof Ke!=="undefined")e.CFB=Ke;if(typeof require!=="undefined"){var $w=undefined;if(($w||{}).Readable)zw($w.Readable)}}if(typeof exports!=="undefined")make_xlsx_lib(exports);else if(typeof module!=="undefined"&&module.exports)make_xlsx_lib(module.exports);else if(typeof define==="function"&&define.amd)define("xlsx",function(){if(!XLSX.version)make_xlsx_lib(XLSX);return XLSX});else make_xlsx_lib(XLSX);if(typeof window!=="undefined"&&!window.XLSX)try{window.XLSX=XLSX}catch(e){}
 
 </script>
-<script id="data-json" type="application/json">{"marca": "CHALUPO", "mes": "SEPTIEMBRE", "generado": "10/09/2026 14:00", "fecha_ultimo_corte": "2026-09-08", "rango_fechas": ["2026-09-01", "2026-09-08"], "kpis": {"total_registros": 6, "pdv_cubiertos": 5, "var_total_dia": 0.0, "var_pdv_dia": 0.0, "valor_ayer_total": 1, "valor_ayer_pdv": 1, "por_indicador": {"EXHIBICIONES LINEALES": {"total": 6, "color": "#2E7D32", "var_dia": 0.0, "valor_ayer": 1}, "EXHIBICIONES NEGOCIADAS": {"total": 0, "color": "#1F4E78", "var_dia": null, "valor_ayer": 0}, "EXHIBICIONES GRATIS": {"total": 0, "color": "#ED7D31", "var_dia": null, "valor_ayer": 0}, "PROMOCIONES POS": {"total": 0, "color": "#C0392B", "var_dia": null, "valor_ayer": 0}, "FOTO CATEGORIA": {"total": 0, "color": "#8E44AD", "var_dia": null, "valor_ayer": 0}}}, "serie_temporal": [{"fecha": "2026-09-01", "valor": 1}, {"fecha": "2026-09-04", "valor": 3}, {"fecha": "2026-09-07", "valor": 1}, {"fecha": "2026-09-08", "valor": 1}], "top_cadenas": [["MERCALDAS", 5], ["LA MONTAÑA", 1]], "distribucion_tipo": [["EXHIBICIONES LINEALES", 6]], "ranking_ciudades": [["MANIZALES", 5], ["CALI", 1]], "indicadores_orden": ["EXHIBICIONES LINEALES", "EXHIBICIONES NEGOCIADAS", "EXHIBICIONES GRATIS", "PROMOCIONES POS", "FOTO CATEGORIA"], "colores": {"EXHIBICIONES LINEALES": "#2E7D32", "EXHIBICIONES NEGOCIADAS": "#1F4E78", "EXHIBICIONES GRATIS": "#ED7D31", "PROMOCIONES POS": "#C0392B", "FOTO CATEGORIA": "#8E44AD"}, "registros": [{"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6785", "punto_venta": "MERCALDAS - MANIZALES PALMAS - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-01", "fecha_disp": "01/09/2026", "dia_semana": "MAR", "id_tarea": 296397, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/DgmGXwn2fQAgy39nULJBobonZy0mc9M5Ou4Sa0Mbc=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/899cc36c-5cac-41b4-86f5-9aa663e98d5d/1053802050/FOTO_10821_430010821_1053802050.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6782", "punto_venta": "MERCALDAS - MANIZALES ENEA - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "SANDRA PIEDAD RAMIREZ CARDONA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 302494, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/jxPaZMsSn5g9tV1rRp932n5m0cSqiZxpzYV8LuICf2c=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/dd124128-3f6a-4dcb-aca2-7d66c2acd9d4/24331911/FOTO_10818_430010818_24331911.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6784", "punto_venta": "MERCALDAS - MANIZALES PALERMO - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 302997, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/9ZXnzAdipvDb0DWyiGzVFLSZx6onPFmrydRypmtcrsQ=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/0bc350c8-0b24-493a-9e8e-8655a16d2bb6/1053802050/FOTO_10820_430010820_1053802050.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6786", "punto_venta": "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "SANDRA PIEDAD RAMIREZ CARDONA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 303092, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/xuCWfoXicfSyf0sfLzyhsc6317pzqMMXuBAb084zRU=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/7de97c9a-7bc5-4879-ad7a-84e169acb29f/24331911/FOTO_10822_430010822_24331911.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6737", "punto_venta": "LA MONTAÑA - SEXTA - CALI", "canal": "AUTOSERVICIOS", "cadena": "LA MONTAÑA", "coordinador": "ANDERSON ROMERO ", "ciudad": "CALI", "colaborador": "CRISTIAN ESTIVEN GONZALEZ TRUQUE", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-07", "fecha_disp": "07/09/2026", "dia_semana": "LUN", "id_tarea": 306554, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/7elJtQeUhTLVCJvo7g57kSro3PlEPngzulYtMuJWhM=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/86f5aaef-9f45-43f7-8649-bd25214c3567/1143978721/FOTO_11519_430011519_1143978721.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6785", "punto_venta": "MERCALDAS - MANIZALES PALMAS - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-08", "fecha_disp": "08/09/2026", "dia_semana": "MAR", "id_tarea": 308188, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/Q93c5BqJyZwQaFUYRSI2Z49ZeI6JpYTHy6h5fBI2bQQ=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/4b98c317-ca13-4aa9-89c2-694af93c9e5a/1053802050/FOTO_10821_430010821_1053802050.jpeg"}], "detalle": [{"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6785", "punto_venta": "MERCALDAS - MANIZALES PALMAS - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-08", "fecha_disp": "08/09/2026", "dia_semana": "MAR", "id_tarea": 308188, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/Q93c5BqJyZwQaFUYRSI2Z49ZeI6JpYTHy6h5fBI2bQQ=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/4b98c317-ca13-4aa9-89c2-694af93c9e5a/1053802050/FOTO_10821_430010821_1053802050.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6737", "punto_venta": "LA MONTAÑA - SEXTA - CALI", "canal": "AUTOSERVICIOS", "cadena": "LA MONTAÑA", "coordinador": "ANDERSON ROMERO ", "ciudad": "CALI", "colaborador": "CRISTIAN ESTIVEN GONZALEZ TRUQUE", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-07", "fecha_disp": "07/09/2026", "dia_semana": "LUN", "id_tarea": 306554, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/7elJtQeUhTLVCJvo7g57kSro3PlEPngzulYtMuJWhM=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/86f5aaef-9f45-43f7-8649-bd25214c3567/1143978721/FOTO_11519_430011519_1143978721.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6782", "punto_venta": "MERCALDAS - MANIZALES ENEA - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "SANDRA PIEDAD RAMIREZ CARDONA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 302494, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/jxPaZMsSn5g9tV1rRp932n5m0cSqiZxpzYV8LuICf2c=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/dd124128-3f6a-4dcb-aca2-7d66c2acd9d4/24331911/FOTO_10818_430010818_24331911.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6784", "punto_venta": "MERCALDAS - MANIZALES PALERMO - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 302997, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/9ZXnzAdipvDb0DWyiGzVFLSZx6onPFmrydRypmtcrsQ=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/0bc350c8-0b24-493a-9e8e-8655a16d2bb6/1053802050/FOTO_10820_430010820_1053802050.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6786", "punto_venta": "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "SANDRA PIEDAD RAMIREZ CARDONA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 303092, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/xuCWfoXicfSyf0sfLzyhsc6317pzqMMXuBAb084zRU=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/7de97c9a-7bc5-4879-ad7a-84e169acb29f/24331911/FOTO_10822_430010822_24331911.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6785", "punto_venta": "MERCALDAS - MANIZALES PALMAS - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-01", "fecha_disp": "01/09/2026", "dia_semana": "MAR", "id_tarea": 296397, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/DgmGXwn2fQAgy39nULJBobonZy0mc9M5Ou4Sa0Mbc=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/899cc36c-5cac-41b4-86f5-9aa663e98d5d/1053802050/FOTO_10821_430010821_1053802050.jpeg"}]}</script>
+<script id="data-json" type="application/json">{"marca": "CHALUPO", "mes": "SEPTIEMBRE", "generado": "10/09/2026 15:43", "fecha_ultimo_corte": "2026-09-08", "rango_fechas": ["2026-09-01", "2026-09-08"], "kpis": {"total_registros": 6, "pdv_cubiertos": 5, "var_total_dia": 0.0, "var_pdv_dia": 0.0, "valor_ayer_total": 1, "valor_ayer_pdv": 1, "por_indicador": {"EXHIBICIONES LINEALES": {"total": 6, "color": "#2E7D32", "var_dia": 0.0, "valor_ayer": 1}, "EXHIBICIONES NEGOCIADAS": {"total": 0, "color": "#1F4E78", "var_dia": null, "valor_ayer": 0}, "EXHIBICIONES GRATIS": {"total": 0, "color": "#ED7D31", "var_dia": null, "valor_ayer": 0}, "PROMOCIONES POS": {"total": 0, "color": "#C0392B", "var_dia": null, "valor_ayer": 0}, "FOTO CATEGORIA": {"total": 0, "color": "#8E44AD", "var_dia": null, "valor_ayer": 0}}}, "serie_temporal": [{"fecha": "2026-09-01", "valor": 1}, {"fecha": "2026-09-04", "valor": 3}, {"fecha": "2026-09-07", "valor": 1}, {"fecha": "2026-09-08", "valor": 1}], "top_cadenas": [["MERCALDAS", 5], ["LA MONTAÑA", 1]], "distribucion_tipo": [["EXHIBICIONES LINEALES", 6]], "ranking_ciudades": [["MANIZALES", 5], ["CALI", 1]], "indicadores_orden": ["EXHIBICIONES LINEALES", "EXHIBICIONES NEGOCIADAS", "EXHIBICIONES GRATIS", "PROMOCIONES POS", "FOTO CATEGORIA"], "colores": {"EXHIBICIONES LINEALES": "#2E7D32", "EXHIBICIONES NEGOCIADAS": "#1F4E78", "EXHIBICIONES GRATIS": "#ED7D31", "PROMOCIONES POS": "#C0392B", "FOTO CATEGORIA": "#8E44AD"}, "registros": [{"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6785", "punto_venta": "MERCALDAS - MANIZALES PALMAS - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-01", "fecha_disp": "01/09/2026", "dia_semana": "MAR", "id_tarea": 296397, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/DgmGXwn2fQAgy39nULJBobonZy0mc9M5Ou4Sa0Mbc=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/899cc36c-5cac-41b4-86f5-9aa663e98d5d/1053802050/FOTO_10821_430010821_1053802050.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6782", "punto_venta": "MERCALDAS - MANIZALES ENEA - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "SANDRA PIEDAD RAMIREZ CARDONA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 302494, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/jxPaZMsSn5g9tV1rRp932n5m0cSqiZxpzYV8LuICf2c=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/dd124128-3f6a-4dcb-aca2-7d66c2acd9d4/24331911/FOTO_10818_430010818_24331911.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6784", "punto_venta": "MERCALDAS - MANIZALES PALERMO - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 302997, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/9ZXnzAdipvDb0DWyiGzVFLSZx6onPFmrydRypmtcrsQ=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/0bc350c8-0b24-493a-9e8e-8655a16d2bb6/1053802050/FOTO_10820_430010820_1053802050.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6786", "punto_venta": "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "SANDRA PIEDAD RAMIREZ CARDONA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 303092, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/xuCWfoXicfSyf0sfLzyhsc6317pzqMMXuBAb084zRU=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/7de97c9a-7bc5-4879-ad7a-84e169acb29f/24331911/FOTO_10822_430010822_24331911.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6737", "punto_venta": "LA MONTAÑA - SEXTA - CALI", "canal": "AUTOSERVICIOS", "cadena": "LA MONTAÑA", "coordinador": "ANDERSON ROMERO ", "ciudad": "CALI", "colaborador": "CRISTIAN ESTIVEN GONZALEZ TRUQUE", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-07", "fecha_disp": "07/09/2026", "dia_semana": "LUN", "id_tarea": 306554, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/7elJtQeUhTLVCJvo7g57kSro3PlEPngzulYtMuJWhM=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/86f5aaef-9f45-43f7-8649-bd25214c3567/1143978721/FOTO_11519_430011519_1143978721.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6785", "punto_venta": "MERCALDAS - MANIZALES PALMAS - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-08", "fecha_disp": "08/09/2026", "dia_semana": "MAR", "id_tarea": 308188, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/Q93c5BqJyZwQaFUYRSI2Z49ZeI6JpYTHy6h5fBI2bQQ=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/4b98c317-ca13-4aa9-89c2-694af93c9e5a/1053802050/FOTO_10821_430010821_1053802050.jpeg"}], "detalle": [{"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6785", "punto_venta": "MERCALDAS - MANIZALES PALMAS - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-08", "fecha_disp": "08/09/2026", "dia_semana": "MAR", "id_tarea": 308188, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/Q93c5BqJyZwQaFUYRSI2Z49ZeI6JpYTHy6h5fBI2bQQ=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/4b98c317-ca13-4aa9-89c2-694af93c9e5a/1053802050/FOTO_10821_430010821_1053802050.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6737", "punto_venta": "LA MONTAÑA - SEXTA - CALI", "canal": "AUTOSERVICIOS", "cadena": "LA MONTAÑA", "coordinador": "ANDERSON ROMERO ", "ciudad": "CALI", "colaborador": "CRISTIAN ESTIVEN GONZALEZ TRUQUE", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-07", "fecha_disp": "07/09/2026", "dia_semana": "LUN", "id_tarea": 306554, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/7elJtQeUhTLVCJvo7g57kSro3PlEPngzulYtMuJWhM=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/86f5aaef-9f45-43f7-8649-bd25214c3567/1143978721/FOTO_11519_430011519_1143978721.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6782", "punto_venta": "MERCALDAS - MANIZALES ENEA - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "SANDRA PIEDAD RAMIREZ CARDONA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 302494, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/jxPaZMsSn5g9tV1rRp932n5m0cSqiZxpzYV8LuICf2c=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/dd124128-3f6a-4dcb-aca2-7d66c2acd9d4/24331911/FOTO_10818_430010818_24331911.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6784", "punto_venta": "MERCALDAS - MANIZALES PALERMO - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 302997, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/9ZXnzAdipvDb0DWyiGzVFLSZx6onPFmrydRypmtcrsQ=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/0bc350c8-0b24-493a-9e8e-8655a16d2bb6/1053802050/FOTO_10820_430010820_1053802050.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6786", "punto_venta": "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "SANDRA PIEDAD RAMIREZ CARDONA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-04", "fecha_disp": "04/09/2026", "dia_semana": "VIE", "id_tarea": 303092, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/xuCWfoXicfSyf0sfLzyhsc6317pzqMMXuBAb084zRU=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/7de97c9a-7bc5-4879-ad7a-84e169acb29f/24331911/FOTO_10822_430010822_24331911.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER6785", "punto_venta": "MERCALDAS - MANIZALES PALMAS - MANIZALES", "canal": "AUTOSERVICIOS", "cadena": "MERCALDAS", "coordinador": "JHON JAIRO BONILLA ", "ciudad": "MANIZALES", "colaborador": "LUISA FERNANDA  VASQUEZ ARIAS", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-01", "fecha_disp": "01/09/2026", "dia_semana": "MAR", "id_tarea": 296397, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/DgmGXwn2fQAgy39nULJBobonZy0mc9M5Ou4Sa0Mbc=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/899cc36c-5cac-41b4-86f5-9aa663e98d5d/1053802050/FOTO_10821_430010821_1053802050.jpeg"}]}</script>
 <script id="noimpl-json" type="application/json">{}</script>
 <script id="encuestas-json" type="application/json">{"marca": "CHALUPO", "total": 12, "encuestas": 1, "pdv": 4, "preguntas": 2, "respuestas": 4, "g_encuestas": [{"k": "CHALUPO", "v": 12}], "g_cadenas": [{"k": "MERCALDAS", "v": 12}], "g_usuarios": [{"k": "1053802050", "v": 6}, {"k": "24331911", "v": 6}], "g_tipos": [{"k": "MUEBLE", "v": 4}, {"k": "PRODUCTO", "v": 4}, {"k": "CARTELERIA", "v": 4}], "g_fechas": [{"k": "01/09/2026", "v": 3}, {"k": "04/09/2026", "v": 9}], "cols": ["Fecha", "Semana", "Encuesta", "Cadena", "Código", "Punto de Venta", "Tipo", "Mercaderista", "Pregunta", "Respuesta", "Observación", "Fuente", "REGISTRO FOTOGRAFICO"], "idx": {"fecha": 0, "semana": 1, "encuesta": 2, "cadena": 3, "codigo": 4, "pdv": 5, "tipo": 6, "usuario": 7, "pregunta": 8, "respuesta": 9, "observacion": 10, "fuente": 11, "foto": 12}, "rows": [["01/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6785", "MERCALDAS - MANIZALES PALMAS - MANIZALES - NMER6785", "MUEBLE", "1053802050", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/DgmGXwn2fQAgy39nULJBobonZy0mc9M5Ou4Sa0Mbc="], ["01/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6785", "MERCALDAS - MANIZALES PALMAS - MANIZALES - NMER6785", "PRODUCTO", "1053802050", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/VtEn6ICeEO6aChv2nTtWmvjvT9fgCNdbsQaishYUU="], ["01/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6785", "MERCALDAS - MANIZALES PALMAS - MANIZALES - NMER6785", "CARTELERIA", "1053802050", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/wHHvCnKAcu1QfC4fF1xielwUk0TwNxCZpbqPwmjp4Y="], ["04/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6782", "MERCALDAS - MANIZALES ENEA - MANIZALES - NMER6782", "MUEBLE", "24331911", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/jxPaZMsSn5g9tV1rRp932n5m0cSqiZxpzYV8LuICf2c="], ["04/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6782", "MERCALDAS - MANIZALES ENEA - MANIZALES - NMER6782", "PRODUCTO", "24331911", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/jaIhnfemFLyygcMojJQCrcg4lLsrpjxxff1Wzsytz0="], ["04/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6782", "MERCALDAS - MANIZALES ENEA - MANIZALES - NMER6782", "CARTELERIA", "24331911", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/3Z4e8JGjrU2vRaXEieTL7CV6HBdIfNjM4n0mTBZcWTk="], ["04/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6786", "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES - NMER6786", "MUEBLE", "24331911", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/xuCWfoXicfSyf0sfLzyhsc6317pzqMMXuBAb084zRU="], ["04/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6786", "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES - NMER6786", "PRODUCTO", "24331911", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/m8hCCbr8SQmDO5UBxWtLBmgYXj24NS78MD17WmHSA="], ["04/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6786", "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES - NMER6786", "CARTELERIA", "24331911", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/SNE1g1OnEefY1gsGO2jLoD43nqAwVCVXpPkCnh0Qn7Q="], ["04/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6784", "MERCALDAS - MANIZALES PALERMO - MANIZALES - NMER6784", "MUEBLE", "1053802050", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/9ZXnzAdipvDb0DWyiGzVFLSZx6onPFmrydRypmtcrsQ="], ["04/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6784", "MERCALDAS - MANIZALES PALERMO - MANIZALES - NMER6784", "PRODUCTO", "1053802050", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/Ys1prqWGtzhFPKtNxVFvBTqla70NFYkQk0kssFEcI="], ["04/09/2026", "36", "CHALUPO", "MERCALDAS", "NMER6784", "MERCALDAS - MANIZALES PALERMO - MANIZALES - NMER6784", "CARTELERIA", "1053802050", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/AQNhwIdE7PYs72StmRVZ4UzijYsDeP3jFtDDVaSZCc="]], "corta_fecha": {}}</script>
 <script id="precios-json" type="application/json">{"marca": "CHALUPO", "archivo": "CHALUPO_CHEQUEO_PRECIOS.xlsm", "mes": "I. SEP", "total": 10, "moda": 10200.0, "prom": 14040.8, "max": 29400.0, "min": 10200.0, "pdv": 4, "productos": 3, "categorias": 1, "descuentos": 0, "r_productos": [{"k": "TARRO CON 10 MINI BARQUILLOS DE SABORES DIFERENTES (165 GRAMOS)", "n": 3, "moda": 29400.0, "prom": 23000.0, "max": 29400.0, "min": 10200.0, "extra": "2200000330642", "cat": "CHALUPO - HELADOS/CONGELADOS", "ean": "2200000330642"}, {"k": "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR CHOCOLATE (90GRAMOS)", "n": 4, "moda": 10200.0, "prom": 10202.0, "max": 10208.0, "min": 10200.0, "extra": "2200000332677", "cat": "CHALUPO - HELADOS/CONGELADOS", "ean": "2200000332677"}, {"k": "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR PIE DE LIMÓN (90GRAMOS)", "n": 3, "moda": 10200.0, "prom": 10200.0, "max": 10200.0, "min": 10200.0, "extra": "2200000332684", "cat": "CHALUPO - HELADOS/CONGELADOS", "ean": "2200000332684"}], "r_pdv": [{"k": "MERCALDAS - MANIZALES ENEA - MANIZALES - NMER6782", "n": 3, "moda": 29400.0, "prom": 16602.67, "max": 29400.0, "min": 10200.0, "extra": "", "ciudad": "MANIZALES", "cod": "NMER6782"}, {"k": "MERCALDAS - MANIZALES PALMAS - MANIZALES - NMER6785", "n": 3, "moda": 10200.0, "prom": 16600.0, "max": 29400.0, "min": 10200.0, "extra": "", "ciudad": "MANIZALES", "cod": "NMER6785"}, {"k": "MERCALDAS - MANIZALES PALERMO - MANIZALES - NMER6784", "n": 2, "moda": 10200.0, "prom": 10200.0, "max": 10200.0, "min": 10200.0, "extra": "", "ciudad": "MANIZALES", "cod": "NMER6784"}, {"k": "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES - NMER6786", "n": 2, "moda": 10200.0, "prom": 10200.0, "max": 10200.0, "min": 10200.0, "extra": "", "ciudad": "MANIZALES", "cod": "NMER6786"}], "r_categorias": [{"k": "CHALUPO - HELADOS/CONGELADOS", "n": 10, "moda": 10200.0, "prom": 14040.8, "max": 29400.0, "min": 10200.0, "extra": ""}], "r_cadenas": [{"k": "MERCALDAS", "n": 10, "moda": 10200.0, "prom": 14040.8, "max": 29400.0, "min": 10200.0, "extra": ""}], "r_ciudades": [{"k": "MANIZALES", "n": 10, "moda": 10200.0, "prom": 14040.8, "max": 29400.0, "min": 10200.0, "extra": ""}], "r_fechas": [{"k": "01/09/2026", "n": 3, "moda": 10200.0, "prom": 16600.0, "max": 29400.0, "min": 10200.0, "extra": ""}, {"k": "04/09/2026", "n": 7, "moda": 10200.0, "prom": 12944.0, "max": 29400.0, "min": 10200.0, "extra": ""}], "cols": ["Fecha", "Semana", "Cadena", "Canal", "COD PLF", "Punto de Venta", "Ciudad", "Zona", "Mercaderista", "EAN", "Producto", "Categoría", "Precio", "Tipo de precio", "REGISTRO FOTOGRAFICO"], "idx": {"fecha": 0, "semana": 1, "cadena": 2, "canal": 3, "codigo": 4, "pdv": 5, "ciudad": 6, "zona": 7, "equipo": 8, "ean": 9, "producto": 10, "categoria": 11, "precio": 12, "subtipo": 13, "foto": 14}, "rows": [["01/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6785", "MERCALDAS - MANIZALES PALMAS - MANIZALES - NMER6785", "MANIZALES", "CALDAS", "LUISA FERNANDA  VASQUEZ ARIAS", "2200000330642", "TARRO CON 10 MINI BARQUILLOS DE SABORES DIFERENTES (165 GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", 29400.0, "PRECIO NORMAL", ""], ["01/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6785", "MERCALDAS - MANIZALES PALMAS - MANIZALES - NMER6785", "MANIZALES", "CALDAS", "LUISA FERNANDA  VASQUEZ ARIAS", "2200000332677", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR CHOCOLATE (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", 10200.0, "PRECIO NORMAL", ""], ["01/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6785", "MERCALDAS - MANIZALES PALMAS - MANIZALES - NMER6785", "MANIZALES", "CALDAS", "LUISA FERNANDA  VASQUEZ ARIAS", "2200000332684", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR PIE DE LIMÓN (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", 10200.0, "PRECIO NORMAL", ""], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6782", "MERCALDAS - MANIZALES ENEA - MANIZALES - NMER6782", "MANIZALES", "CALDAS", "SANDRA PIEDAD RAMIREZ CARDONA", "2200000332684", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR PIE DE LIMÓN (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", 10200.0, "PRECIO NORMAL", ""], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6782", "MERCALDAS - MANIZALES ENEA - MANIZALES - NMER6782", "MANIZALES", "CALDAS", "SANDRA PIEDAD RAMIREZ CARDONA", "2200000330642", "TARRO CON 10 MINI BARQUILLOS DE SABORES DIFERENTES (165 GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", 29400.0, "PRECIO NORMAL", ""], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6782", "MERCALDAS - MANIZALES ENEA - MANIZALES - NMER6782", "MANIZALES", "CALDAS", "SANDRA PIEDAD RAMIREZ CARDONA", "2200000332677", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR CHOCOLATE (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", 10208.0, "PRECIO NORMAL", ""], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6784", "MERCALDAS - MANIZALES PALERMO - MANIZALES - NMER6784", "MANIZALES", "CALDAS", "LUISA FERNANDA  VASQUEZ ARIAS", "2200000330642", "TARRO CON 10 MINI BARQUILLOS DE SABORES DIFERENTES (165 GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", 10200.0, "PRECIO NORMAL", ""], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6784", "MERCALDAS - MANIZALES PALERMO - MANIZALES - NMER6784", "MANIZALES", "CALDAS", "LUISA FERNANDA  VASQUEZ ARIAS", "2200000332677", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR CHOCOLATE (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", 10200.0, "PRECIO NORMAL", ""], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6786", "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES - NMER6786", "MANIZALES", "CALDAS", "SANDRA PIEDAD RAMIREZ CARDONA", "2200000332677", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR CHOCOLATE (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", 10200.0, "PRECIO NORMAL", ""], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6786", "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES - NMER6786", "MANIZALES", "CALDAS", "SANDRA PIEDAD RAMIREZ CARDONA", "2200000332684", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR PIE DE LIMÓN (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", 10200.0, "PRECIO NORMAL", ""]]}</script>
+<script id="agotados-json" type="application/json">{"marca": "CHALUPO", "archivo": "CHALUPO_AGOTADOS_PRESENCIA.xlsx", "mes": "I. SEP", "total": 12, "agotados": 3, "pct_agotado": 25.0, "causales": [{"k": "agotado", "etiqueta": "Producto agotado", "n": 3, "pct": 25.0}, {"k": "nocodif", "etiqueta": "Producto no codificado", "n": 0, "pct": 0.0}, {"k": "inactivo", "etiqueta": "Producto inactivo", "n": 0, "pct": 0.0}, {"k": "inexac", "etiqueta": "Inexactitud de inventario", "n": 0, "pct": 0.0}], "pdv": 4, "productos": 3, "categorias": 1, "g_problemas": [{"k": "PRODUCTO AGOTADO", "v": 3}], "r_categorias": [{"k": "CHALUPO - HELADOS/CONGELADOS", "n": 12, "a": 3, "pct": 25.0, "extra": {}}], "r_productos": [{"k": "TARRO CON 10 MINI BARQUILLOS DE SABORES DIFERENTES (165 GRAMOS)", "n": 4, "a": 2, "pct": 50.0, "extra": {"ean": "2200000330642", "categoria": "CHALUPO - HELADOS/CONGELADOS"}}, {"k": "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR PIE DE LIMÓN (90GRAMOS)", "n": 4, "a": 1, "pct": 25.0, "extra": {"ean": "2200000332684", "categoria": "CHALUPO - HELADOS/CONGELADOS"}}, {"k": "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR CHOCOLATE (90GRAMOS)", "n": 4, "a": 0, "pct": 0.0, "extra": {"ean": "2200000332677", "categoria": "CHALUPO - HELADOS/CONGELADOS"}}], "r_cadenas": [{"k": "MERCALDAS", "n": 12, "a": 3, "pct": 25.0, "extra": {}}], "r_pdv": [{"k": "MERCALDAS - MANIZALES PALERMO - MANIZALES - NMER6784", "n": 3, "a": 2, "pct": 66.67, "extra": {"codigo": "NMER6784", "cadena": "MERCALDAS"}}, {"k": "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES - NMER6786", "n": 3, "a": 1, "pct": 33.33, "extra": {"codigo": "NMER6786", "cadena": "MERCALDAS"}}, {"k": "MERCALDAS - MANIZALES PALMAS - MANIZALES - NMER6785", "n": 3, "a": 0, "pct": 0.0, "extra": {"codigo": "NMER6785", "cadena": "MERCALDAS"}}, {"k": "MERCALDAS - MANIZALES ENEA - MANIZALES - NMER6782", "n": 3, "a": 0, "pct": 0.0, "extra": {"codigo": "NMER6782", "cadena": "MERCALDAS"}}], "r_equipos": [{"k": "LUISA FERNANDA  VASQUEZ ARIAS", "n": 6, "a": 2, "pct": 33.33, "extra": {}}, {"k": "SANDRA PIEDAD RAMIREZ CARDONA", "n": 6, "a": 1, "pct": 16.67, "extra": {}}], "r_fechas": [{"k": "01/09/2026", "n": 3, "a": 0, "pct": 0.0, "extra": {}}, {"k": "04/09/2026", "n": 9, "a": 3, "pct": 33.33, "extra": {}}], "cols": ["Fecha", "Semana", "Cadena", "Canal", "COD PLF", "Punto de Venta", "Ciudad", "Departamento", "Mercaderista", "EAN", "Producto", "Categoría", "Disponible", "Problema", "Tiene fleje", "REGISTRO FOTOGRAFICO"], "idx": {"fecha": 0, "semana": 1, "cadena": 2, "canal": 3, "codigo": 4, "pdv": 5, "ciudad": 6, "depto": 7, "equipo": 8, "ean": 9, "producto": 10, "categoria": 11, "disponible": 12, "problema": 13, "fleje": 14, "foto": 15}, "rows": [["01/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6785", "MERCALDAS - MANIZALES PALMAS - MANIZALES - NMER6785", "", "", "LUISA FERNANDA  VASQUEZ ARIAS", "2200000330642", "TARRO CON 10 MINI BARQUILLOS DE SABORES DIFERENTES (165 GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "Si", "", "Si", "http://plf.co.teamcore.net/imagenes/id/1375072"], ["01/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6785", "MERCALDAS - MANIZALES PALMAS - MANIZALES - NMER6785", "", "", "LUISA FERNANDA  VASQUEZ ARIAS", "2200000332677", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR CHOCOLATE (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "Si", "", "Si", "http://plf.co.teamcore.net/imagenes/id/1375072"], ["01/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6785", "MERCALDAS - MANIZALES PALMAS - MANIZALES - NMER6785", "", "", "LUISA FERNANDA  VASQUEZ ARIAS", "2200000332684", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR PIE DE LIMÓN (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "Si", "", "Si", "http://plf.co.teamcore.net/imagenes/id/1375072"], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6782", "MERCALDAS - MANIZALES ENEA - MANIZALES - NMER6782", "", "", "SANDRA PIEDAD RAMIREZ CARDONA", "2200000330642", "TARRO CON 10 MINI BARQUILLOS DE SABORES DIFERENTES (165 GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "Si", "", "Si", "http://plf.co.teamcore.net/imagenes/id/1391482"], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6782", "MERCALDAS - MANIZALES ENEA - MANIZALES - NMER6782", "", "", "SANDRA PIEDAD RAMIREZ CARDONA", "2200000332677", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR CHOCOLATE (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "Si", "", "Si", "http://plf.co.teamcore.net/imagenes/id/1391482"], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6782", "MERCALDAS - MANIZALES ENEA - MANIZALES - NMER6782", "", "", "SANDRA PIEDAD RAMIREZ CARDONA", "2200000332684", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR PIE DE LIMÓN (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "Si", "", "Si", "http://plf.co.teamcore.net/imagenes/id/1391482"], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6784", "MERCALDAS - MANIZALES PALERMO - MANIZALES - NMER6784", "", "", "LUISA FERNANDA  VASQUEZ ARIAS", "2200000330642", "TARRO CON 10 MINI BARQUILLOS DE SABORES DIFERENTES (165 GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "No", "PRODUCTO AGOTADO", "No", "http://plf.co.teamcore.net/imagenes/id/1389358"], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6784", "MERCALDAS - MANIZALES PALERMO - MANIZALES - NMER6784", "", "", "LUISA FERNANDA  VASQUEZ ARIAS", "2200000332677", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR CHOCOLATE (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "Si", "", "Si", "http://plf.co.teamcore.net/imagenes/id/1389358"], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6784", "MERCALDAS - MANIZALES PALERMO - MANIZALES - NMER6784", "", "", "LUISA FERNANDA  VASQUEZ ARIAS", "2200000332684", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR PIE DE LIMÓN (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "No", "PRODUCTO AGOTADO", "No", "http://plf.co.teamcore.net/imagenes/id/1389358"], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6786", "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES - NMER6786", "", "", "SANDRA PIEDAD RAMIREZ CARDONA", "2200000330642", "TARRO CON 10 MINI BARQUILLOS DE SABORES DIFERENTES (165 GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "No", "PRODUCTO AGOTADO", "No", "http://plf.co.teamcore.net/imagenes/id/1393668"], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6786", "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES - NMER6786", "", "", "SANDRA PIEDAD RAMIREZ CARDONA", "2200000332677", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR CHOCOLATE (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "Si", "", "Si", "http://plf.co.teamcore.net/imagenes/id/1393668"], ["04/09/2026", "36", "MERCALDAS", "AUTOSERVICIOS", "NMER6786", "MERCALDAS - MANIZALES SAN MARCEL - MANIZALES - NMER6786", "", "", "SANDRA PIEDAD RAMIREZ CARDONA", "2200000332684", "BARQUILLOS RELLENOS DE HELADO POR 2 UNIDADES SABOR PIE DE LIMÓN (90GRAMOS)", "CHALUPO - HELADOS/CONGELADOS", "Si", "", "Si", "http://plf.co.teamcore.net/imagenes/id/1393668"]]}</script>
+<script id="facing-json" type="application/json">{}</script>
 <script>
 const RAW = JSON.parse(document.getElementById('data-json').textContent);
 let filtro = { indicador:"", canal:"", cadena:"", coordinador:"", ciudad:"", fecha:"", colaborador:"", pdv:"", detalle:"" };
@@ -1939,6 +2077,15 @@ function cambiarVista(vista) {
   });
   if (vista === 'precios') renderPrecios();
   if (vista === 'bdprecios') renderPreciosTabla();
+
+  ['agotados','bdagotados','facing','bdfacing'].forEach(v => {
+    const el = document.getElementById('vista-' + v);
+    if (el) el.style.display = (vista === v) ? '' : 'none';
+  });
+  if (vista === 'agotados')   indRender('agotados');
+  if (vista === 'bdagotados') indTablaBD('agotados');
+  if (vista === 'facing')     indRender('facing');
+  if (vista === 'bdfacing')   indTablaBD('facing');
 }
 
 function renderGaleria() {
@@ -3707,6 +3854,452 @@ function exportarPreciosResumen() {
 }
 
 prMostrarNav();
+
+
+/* ============ INDICADORES AGOTADOS y FACING (motor compartido) ============ */
+const IND = {
+  agotados: {
+    datos: (() => { try { return JSON.parse(document.getElementById('agotados-json').textContent); } catch(e) { return {}; } })(),
+    titulo: '% Agotado', unidad: 'pct',
+    campos: { categoria:'Categoria', producto:'Producto', cadena:'Cadena', canal:'Canal',
+              ciudad:'Ciudad', pdv:'Punto de Venta', equipo:'Mercaderista', problema:'Causal', fecha:'Fecha' },
+    ejeEquipo: '% Agotado por mercaderista',
+    sel: {}, busq: '', busqPdv: '', listo: false,
+  },
+  facing: {
+    datos: (() => { try { return JSON.parse(document.getElementById('facing-json').textContent); } catch(e) { return {}; } })(),
+    titulo: '% Facing', unidad: 'pct',
+    campos: { categoria:'Categoria', tipo:'Tipo', cadena:'Cadena', canal:'Canal',
+              ciudad:'Ciudad', pdv:'Punto de Venta', equipo:'Mercaderista', fecha:'Fecha' },
+    ejeEquipo: '% Facing por mercaderista',
+    sel: {}, busq: '', busqPdv: '', listo: false,
+  },
+};
+
+function indHay(k) { const d = IND[k].datos; return d && d.total > 0; }
+
+function indMostrarNav() {
+  Object.keys(IND).forEach(k => {
+    if (!indHay(k)) return;
+    ['nav-' + k, 'nav-bd' + k].forEach(id => {
+      const a = document.getElementById(id); if (a) a.style.display = '';
+    });
+  });
+}
+
+function indPct(v) { return (v === null || v === undefined || isNaN(v)) ? '-' : v.toFixed(2).replace('.', ',') + '%'; }
+function indNum(v) { return (v === null || v === undefined) ? '-' : Math.round(v).toLocaleString('es-CO'); }
+
+function indBase(k, excepto) {
+  const c = IND[k], d = c.datos, ix = d.idx, campos = Object.keys(c.campos);
+  return d.rows.filter(r => campos.every(f => {
+    if (f === excepto) return true;
+    if (!c.sel[f]) return true;
+    return String(r[ix[f]]) === c.sel[f];
+  }));
+}
+
+/* metrica del capitulo sobre un conjunto de filas */
+function indMetrica(k, filas) {
+  const ix = IND[k].datos.idx;
+  if (k === 'agotados') {
+    const n = filas.length;
+    const a = filas.filter(r => String(r[ix.disponible]).trim().toUpperCase() === 'NO').length;
+    return { n, num: a, pct: n ? 100 * a / n : 0 };
+  }
+  const caras = filas.reduce((s, r) => s + r[ix.caras], 0);
+  const prop = filas.reduce((s, r) => s + r[ix.propios], 0);
+  return { n: filas.length, caras, propias: prop, competencia: caras - prop,
+           pct: caras ? 100 * prop / caras : 0 };
+}
+
+function indAgrupar(k, filas, i, extras) {
+  const ix = IND[k].datos.idx, m = new Map();
+  filas.forEach(r => {
+    const key = r[i] || '(sin dato)';
+    if (!m.has(key)) m.set(key, { fs: [], extra: {} });
+    const o = m.get(key);
+    o.fs.push(r);
+    (extras || []).forEach(e => { if (!o.extra[e] && r[ix[e]]) o.extra[e] = r[ix[e]]; });
+  });
+  const out = [];
+  m.forEach((o, key) => {
+    const met = indMetrica(k, o.fs);
+    out.push(Object.assign({ k: key, extra: o.extra }, met));
+  });
+  out.sort((a, b) => b.pct - a.pct);
+  return out;
+}
+
+function indFiltrar(k, campo, valor) {
+  if (!valor) return;
+  const c = IND[k];
+  c.sel[campo] = (c.sel[campo] === valor) ? '' : valor;
+  if (campo === 'categoria') {
+    ['sel-cat-' + k, 'sel-cat-' + k + '-bd'].forEach(id => {
+      const sel = document.getElementById(id); if (sel) sel.value = c.sel.categoria || '';
+    });
+  }
+  indRender(k);
+}
+
+function indQuitar(k, campo) {
+  IND[k].sel[campo] = '';
+  if (campo === 'categoria') {
+    ['sel-cat-' + k, 'sel-cat-' + k + '-bd'].forEach(id => {
+      const sel = document.getElementById(id); if (sel) sel.value = '';
+    });
+  }
+  indRender(k);
+}
+
+function indLimpiar(k) {
+  IND[k].sel = {};
+  ['sel-cat-' + k, 'sel-cat-' + k + '-bd'].forEach(id => {
+    const sel = document.getElementById(id); if (sel) sel.value = '';
+  });
+  indRender(k);
+}
+
+function indChips(k) {
+  const c = IND[k], d = c.datos;
+  const activos = Object.keys(c.campos).filter(f => c.sel[f]);
+  const corto = t => String(t).length > 44 ? String(t).slice(0,42) + '…' : t;
+  const html = !activos.length
+    ? `<span class="titulo">${d.mes || ''} · ${d.archivo || ''} — haz clic en cualquier barra para filtrar</span>`
+    : '<span class="titulo">Filtros activos</span>'
+      + activos.map(f => `<span class="chip">${c.campos[f]}: <b>${corto(c.sel[f])}</b>`
+          + `<span class="x" title="Quitar" onclick="indQuitar('${k}','${f}')">&times;</span></span>`).join('')
+      + `<button class="chip-limpiar" onclick="indLimpiar('${k}')">Limpiar todo</button>`;
+  [k + '-chips', k + '-chips-bd'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.innerHTML = html;
+  });
+}
+
+function indKpis(k) {
+  const c = IND[k], d = c.datos, ix = d.idx, filas = indBase(k);
+  const m = indMetrica(k, filas);
+  const uni = i => new Set(filas.map(r => r[ix[i]]).filter(Boolean)).size;
+  let t;
+  if (k === 'agotados') {
+    const cau = (texto) => {
+      const n = filas.filter(r => String(r[ix.problema]).trim().toUpperCase() === texto).length;
+      return filas.length ? 100 * n / filas.length : 0;
+    };
+    t = [
+      { v: indPct(m.pct),               e: '% Agotado (no disponible)', c: '#C0392B' },
+      { v: indNum(m.n),                 e: 'Chequeos de presencia',     c: '#1F4E78' },
+      { v: indNum(m.num),               e: 'SKU agotados',              c: '#ED7D31' },
+      { v: indPct(cau('PRODUCTO AGOTADO')),        e: '% Producto agotado',   c: '#E8B33A' },
+      { v: indPct(cau('PRODUCTO NO CODIFICADO')),  e: '% No codificado',      c: '#8E44AD' },
+      { v: uni('codigo'),               e: 'PDV chequeados',            c: '#2E7D32' },
+    ];
+  } else {
+    t = [
+      { v: indPct(m.pct),                    e: '% Facing propio',                    c: '#1F4E78' },
+      { v: indPct(m.pct / (d.meta/100)),     e: `% Cumplimiento (meta ${indPct(d.meta)})`, c: '#3BBFCF' },
+      { v: indNum(m.propias),                e: 'Caras propias',                      c: '#2E7D32' },
+      { v: indNum(m.competencia),            e: 'Caras competencia',                  c: '#C0392B' },
+      { v: indNum(m.caras),                  e: 'Total caras medidas',                c: '#ED7D31' },
+      { v: uni('codigo'),                    e: 'PDV medidos',                        c: '#8E44AD' },
+    ];
+  }
+  const cont = document.getElementById(k + '-kpis');
+  if (cont) cont.innerHTML = t.map(x => `
+    <div class="kpi-card" style="--color:${x.c}">
+      <div class="top"><div><div class="valor">${x.v}</div><div class="etiqueta">${x.e}</div></div></div>
+    </div>`).join('');
+}
+
+function indChart(k, id, tipo, pares, campo, horizontal, opciones) {
+  opciones = opciones || {};
+  const cv = document.getElementById(id);
+  if (!cv) return;
+  if (charts[id]) charts[id].destroy();
+  const esLinea = tipo === 'line';
+  const valores = pares.map(p => String(p[0]));
+  const sel = IND[k].sel[campo];
+  if (opciones.altoPorItem) {
+    cv.parentElement.style.height = Math.max(250, pares.length * opciones.altoPorItem + 60) + 'px';
+  }
+  charts[id] = new Chart(cv, {
+    type: tipo,
+    data: { labels: valores.map(v => opciones.completo ? encLineas(v, opciones.anchoTexto || 34) : v), datasets: [{
+      label: IND[k].titulo, data: pares.map(p => p[1]),
+      backgroundColor: esLinea ? CORP_LINEA_FONDO
+        : (sel ? valores.map(v => v === sel ? CORP_SELECCION : CORP_BARRA_ATENUADA) : CORP_BARRA),
+      borderColor: esLinea ? CORP_LINEA : undefined,
+      borderWidth: esLinea ? 2 : 0, borderRadius: esLinea ? 0 : 5,
+      fill: esLinea, tension: 0.3, pointRadius: 3, pointBackgroundColor: CORP_LINEA,
+    }]},
+    options: {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true, maintainAspectRatio: false,
+      onClick: (evt, els) => { if (els && els.length) indFiltrar(k, campo, valores[els[0].index]); },
+      onHover: (evt, els) => { evt.native.target.style.cursor = (els && els.length) ? 'pointer' : 'default'; },
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { title: it => valores[it[0].dataIndex],
+                                label: it => IND[k].titulo + ': ' + indPct(it.raw) } },
+        datalabels: { anchor:'end', align: horizontal ? 'end' : 'top', offset: horizontal ? 2 : 4,
+          color: esLinea ? '#1F4E78' : '#33414F', font:{ size:10, weight:'bold' },
+          formatter: v => indPct(v) } },
+      scales: {
+        x: { ticks:{ font:{size:10}, autoSkip:false, maxRotation: horizontal ? 0 : 35,
+                     callback: function(v) { return horizontal ? v + '%' : this.getLabelForValue(v); } },
+             grid:{display:!horizontal} },
+        y: { ticks:{ font:{size:10}, autoSkip:false,
+                     callback: function(v) { return horizontal ? this.getLabelForValue(v) : v + '%'; } },
+             grid:{display:horizontal}, beginAtZero:true,
+             afterFit: opciones.anchoEje ? (sc) => { sc.width = opciones.anchoEje; } : undefined },
+      },
+      layout: { padding: { right: horizontal ? 56 : 8, top: 16 } },
+    },
+  });
+}
+
+function indGraficos(k) {
+  const ix = IND[k].datos.idx;
+  const par = res => res.map(x => [x.k, +x.pct.toFixed(2)]);
+  indChart(k, 'chart-' + k + '-cat', 'bar', par(indAgrupar(k, indBase(k, 'categoria'), ix.categoria)),
+           'categoria', true, { completo:true, anchoEje:270, anchoTexto:30, altoPorItem:30 });
+  indChart(k, 'chart-' + k + '-cad', 'bar', par(indAgrupar(k, indBase(k, 'cadena'), ix.cadena)),
+           'cadena', true, { completo:true, anchoEje:190, anchoTexto:22, altoPorItem:30 });
+  indChart(k, 'chart-' + k + '-eq', 'bar', par(indAgrupar(k, indBase(k, 'equipo'), ix.equipo)).slice(0, 15),
+           'equipo', true, { completo:true, anchoEje:280, anchoTexto:30, altoPorItem:30 });
+  const fech = indAgrupar(k, indBase(k, 'fecha'), ix.fecha);
+  const nf = x => { const p = String(x.k).split('/'); return (p[2]||'')+(p[1]||'')+(p[0]||''); };
+  fech.sort((a,b) => nf(a).localeCompare(nf(b)));
+  indChart(k, 'chart-' + k + '-fec', 'line', par(fech), 'fecha', false);
+  const t3 = document.getElementById(k + '-t3');
+  if (t3) t3.textContent = IND[k].ejeEquipo;
+}
+
+const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/'/g,'&#39;');
+
+/* tabla 1: agotados -> categoria+producto con subtotal ; facing -> categoria */
+function indTabla1(k) {
+  const c = IND[k], ix = c.datos.idx;
+  const head = document.getElementById(k + '-t1-head');
+  const body = document.getElementById(k + '-t1-body');
+  if (!head || !body) return;
+  const filas = indBase(k);
+  let html = '';
+  if (k === 'agotados') {
+    head.innerHTML = '<tr><th>Categoria</th><th>EAN</th><th>Producto</th><th>Chequeos</th>'
+                   + '<th>Agotados</th><th>% Agotado</th></tr>';
+    const porCat = new Map();
+    filas.forEach(r => {
+      const cc = r[ix.categoria] || '(sin categoria)';
+      if (!porCat.has(cc)) porCat.set(cc, []);
+      porCat.get(cc).push(r);
+    });
+    const cats = [...porCat.entries()].map(([cc, fs]) => ({ cc, fs, m: indMetrica(k, fs) }))
+                    .sort((a,b) => b.m.pct - a.m.pct);
+    cats.forEach(({ cc, fs, m }) => {
+      indAgrupar(k, fs, ix.producto, ['ean']).forEach((p, i) => {
+        html += '<tr>'
+          + `<td class="pr-cat" onclick="indFiltrar('${k}','categoria','${esc(cc)}')">${i === 0 ? esc(cc) : ''}</td>`
+          + `<td>${p.extra.ean || ''}</td>`
+          + `<td class="txt pr-cat" onclick="indFiltrar('${k}','producto','${esc(p.k)}')">${esc(p.k)}</td>`
+          + `<td class="num">${indNum(p.n)}</td><td class="num">${indNum(p.num)}</td>`
+          + `<td class="num">${indPct(p.pct)}</td></tr>`;
+      });
+      html += `<tr class="subtotal"><td colspan="3">Total ${esc(cc)}</td>`
+            + `<td class="num">${indNum(m.n)}</td><td class="num">${indNum(m.num)}</td>`
+            + `<td class="num">${indPct(m.pct)}</td></tr>`;
+    });
+    const info = document.getElementById(k + '-t1-info');
+    if (info) info.textContent = `${cats.length} categoria(s) — clic en la categoria o el producto para filtrar.`;
+  } else {
+    head.innerHTML = '<tr><th>Categoria</th><th>Tipo</th><th>Caras propias</th><th>Caras competencia</th>'
+                   + '<th>Total caras</th><th>% Facing</th><th>% Cumplimiento</th></tr>';
+    const res = indAgrupar(k, filas, ix.categoria, ['tipo']);
+    const meta = c.datos.meta / 100;
+    res.forEach(x => {
+      html += '<tr>'
+        + `<td class="txt pr-cat" onclick="indFiltrar('${k}','categoria','${esc(x.k)}')">${esc(x.k)}</td>`
+        + `<td>${x.extra.tipo || ''}</td>`
+        + `<td class="num">${indNum(x.propias)}</td><td class="num">${indNum(x.competencia)}</td>`
+        + `<td class="num">${indNum(x.caras)}</td><td class="num">${indPct(x.pct)}</td>`
+        + `<td class="num">${indPct(x.pct / meta)}</td></tr>`;
+    });
+    const m = indMetrica(k, filas);
+    html += `<tr class="subtotal"><td colspan="2">TOTAL</td>`
+          + `<td class="num">${indNum(m.propias)}</td><td class="num">${indNum(m.competencia)}</td>`
+          + `<td class="num">${indNum(m.caras)}</td><td class="num">${indPct(m.pct)}</td>`
+          + `<td class="num">${indPct(m.pct / meta)}</td></tr>`;
+    const info = document.getElementById(k + '-t1-info');
+    if (info) info.textContent = `${res.length} categoria(s) — el % de cumplimiento se calcula sobre la meta de ${indPct(c.datos.meta)}.`;
+  }
+  body.innerHTML = html || `<tr><td colspan="7" class="vacio">No hay registros con los filtros actuales.</td></tr>`;
+}
+
+/* tabla 2: por punto de venta */
+function indTabla2(k) {
+  const c = IND[k], ix = c.datos.idx;
+  const head = document.getElementById(k + '-t2-head');
+  const body = document.getElementById(k + '-t2-body');
+  if (!head || !body) return;
+  let res = indAgrupar(k, indBase(k), ix.pdv, ['codigo','ciudad','cadena']);
+  const q = (c.busqPdv || '').toLowerCase();
+  if (q) res = res.filter(p => (p.k + ' ' + (p.extra.codigo||'') + ' ' + (p.extra.ciudad||'') + ' ' + (p.extra.cadena||'')).toLowerCase().includes(q));
+  if (k === 'agotados') {
+    head.innerHTML = '<tr><th>COD PLF</th><th>Punto de Venta</th><th>Ciudad</th><th>Cadena</th>'
+                   + '<th>Chequeos</th><th>Agotados</th><th>% Agotado</th></tr>';
+    body.innerHTML = res.length ? res.map(p => '<tr>'
+        + `<td>${p.extra.codigo || ''}</td>`
+        + `<td class="txt pr-cat" onclick="indFiltrar('${k}','pdv','${esc(p.k)}')">${esc(p.k)}</td>`
+        + `<td>${p.extra.ciudad || ''}</td><td>${p.extra.cadena || ''}</td>`
+        + `<td class="num">${indNum(p.n)}</td><td class="num">${indNum(p.num)}</td>`
+        + `<td class="num">${indPct(p.pct)}</td></tr>`).join('')
+      : '<tr><td colspan="7" class="vacio">No hay puntos de venta con los filtros actuales.</td></tr>';
+  } else {
+    const meta = c.datos.meta / 100;
+    head.innerHTML = '<tr><th>COD PLF</th><th>Punto de Venta</th><th>Ciudad</th><th>Cadena</th>'
+                   + '<th>Propias</th><th>Competencia</th><th>Total</th><th>% Facing</th><th>% Cumpl.</th></tr>';
+    body.innerHTML = res.length ? res.map(p => '<tr>'
+        + `<td>${p.extra.codigo || ''}</td>`
+        + `<td class="txt pr-cat" onclick="indFiltrar('${k}','pdv','${esc(p.k)}')">${esc(p.k)}</td>`
+        + `<td>${p.extra.ciudad || ''}</td><td>${p.extra.cadena || ''}</td>`
+        + `<td class="num">${indNum(p.propias)}</td><td class="num">${indNum(p.competencia)}</td>`
+        + `<td class="num">${indNum(p.caras)}</td><td class="num">${indPct(p.pct)}</td>`
+        + `<td class="num">${indPct(p.pct / meta)}</td></tr>`).join('')
+      : '<tr><td colspan="9" class="vacio">No hay puntos de venta con los filtros actuales.</td></tr>';
+  }
+  const info = document.getElementById(k + '-t2-info');
+  if (info) info.textContent = `${res.length} punto(s) de venta — ordenados de mayor a menor ${IND[k].titulo}.`;
+}
+
+function indSelectores(k) {
+  const c = IND[k], ix = c.datos.idx;
+  const cats = indAgrupar(k, indBase(k, 'categoria'), ix.categoria);
+  const html = '<option value="">Todas las categorias (' + indNum(c.datos.total) + ' registros)</option>'
+    + cats.map(x => `<option value="${String(x.k).replace(/"/g,'&quot;')}">${x.k} (${indPct(x.pct)})</option>`).join('');
+  ['sel-cat-' + k, 'sel-cat-' + k + '-bd'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = html;
+    sel.value = c.sel.categoria || '';
+  });
+}
+
+function indFilasBD(k) {
+  const c = IND[k], q = (c.busq || '').toLowerCase();
+  const base = indBase(k);
+  if (!q) return base;
+  return base.filter(r => r.some(x => x !== null && x !== undefined && String(x).toLowerCase().includes(q)));
+}
+
+function indTablaBD(k) {
+  if (!indHay(k)) return;
+  indSelectores(k); indChips(k);
+  const c = IND[k], d = c.datos, ix = d.idx, cols = d.cols;
+  const iFoto = cols.indexOf('REGISTRO FOTOGRAFICO');
+  const head = document.getElementById(k + '-head');
+  const body = document.getElementById(k + '-body');
+  if (!head || !body) return;
+  head.innerHTML = '<tr>' + cols.map((x,i) => `<th>${i === iFoto ? 'Evidencia' : x}</th>`).join('') + '</tr>';
+  const filas = indFilasBD(k);
+  const tope = filas.slice(0, 1500);
+  body.innerHTML = tope.length ? tope.map(r => '<tr>' + cols.map((x,i) => {
+      const v = r[i];
+      if (i === iFoto) return v ? `<td><a href="${v}" target="_blank" rel="noopener" style="color:#1a7a86;font-weight:600;">Ver foto</a></td>` : '<td>-</td>';
+      if (i === ix.producto || i === ix.pdv) return `<td class="txt">${v || ''}</td>`;
+      if (typeof v === 'number') return `<td class="num">${indNum(v)}</td>`;
+      return `<td>${v === null || v === undefined ? '' : v}</td>`;
+    }).join('') + '</tr>').join('')
+    : `<tr><td colspan="${cols.length}" class="vacio">No hay registros con los filtros actuales.</td></tr>`;
+  const info = document.getElementById(k + '-info');
+  if (info) {
+    info.textContent = `Mostrando ${indNum(tope.length)} de ${indNum(filas.length)} registros`
+      + (filas.length > tope.length ? ' (usa el buscador o descarga a Excel para ver el resto)' : '')
+      + ` — total del mes: ${indNum(d.total)} · fuente: ${d.archivo || ''}`;
+  }
+}
+
+function indRender(k) {
+  if (!indHay(k)) return;
+  const c = IND[k];
+  if (!c.listo) {
+    ['sel-cat-' + k, 'sel-cat-' + k + '-bd'].forEach(id => {
+      const sel = document.getElementById(id);
+      if (sel) sel.addEventListener('change', (e) => { c.sel.categoria = e.target.value; indRender(k); });
+    });
+    const b1 = document.getElementById('buscador-' + k);
+    if (b1) b1.addEventListener('input', (e) => { c.busq = e.target.value; indTablaBD(k); });
+    const b2 = document.getElementById('buscador-' + k + '-pdv');
+    if (b2) b2.addEventListener('input', (e) => { c.busqPdv = e.target.value; indTabla2(k); });
+    c.listo = true;
+  }
+  indSelectores(k);
+  indChips(k);
+  indKpis(k);
+  indGraficos(k);
+  indTabla1(k);
+  indTabla2(k);
+  indTablaBD(k);
+}
+
+function indExportarBD(k) {
+  if (!indHay(k)) return;
+  const d = IND[k].datos, filas = indFilasBD(k);
+  if (!filas.length) { alert('No hay registros para exportar.'); return; }
+  const iFoto = d.cols.indexOf('REGISTRO FOTOGRAFICO');
+  const enc = d.cols.map((c,i) => i === iFoto ? 'Link Evidencia' : c);
+  const hoja = XLSX.utils.aoa_to_sheet([enc, ...filas]);
+  hoja['!cols'] = enc.map(c => ({ wch: Math.min(Math.max(String(c).length + 4, 12), 46) }));
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, k === 'agotados' ? 'Agotados' : 'Facing');
+  XLSX.writeFile(libro, `${k === 'agotados' ? 'Agotados' : 'Facing'}_${RAW.marca || d.marca}_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+function indExportarResumen(k) {
+  if (!indHay(k)) return;
+  const c = IND[k], d = c.datos, ix = d.idx, filas = indBase(k);
+  const libro = XLSX.utils.book_new();
+  if (k === 'agotados') {
+    const f1 = [];
+    const porCat = new Map();
+    filas.forEach(r => {
+      const cc = r[ix.categoria] || '(sin categoria)';
+      if (!porCat.has(cc)) porCat.set(cc, []);
+      porCat.get(cc).push(r);
+    });
+    porCat.forEach((fs, cc) => {
+      indAgrupar(k, fs, ix.producto, ['ean']).forEach(p =>
+        f1.push([cc, p.extra.ean || '', p.k, p.n, p.num, +p.pct.toFixed(2)]));
+      const m = indMetrica(k, fs);
+      f1.push(['Total ' + cc, '', '', m.n, m.num, +m.pct.toFixed(2)]);
+    });
+    const h1 = XLSX.utils.aoa_to_sheet([['Categoria','EAN','Producto','Chequeos','Agotados','% Agotado'], ...f1]);
+    h1['!cols'] = [{wch:32},{wch:16},{wch:44},{wch:11},{wch:11},{wch:12}];
+    XLSX.utils.book_append_sheet(libro, h1, 'Categoria-Producto');
+    const f2 = indAgrupar(k, filas, ix.pdv, ['codigo','ciudad','cadena']).map(p =>
+      [p.extra.codigo||'', p.k, p.extra.ciudad||'', p.extra.cadena||'', p.n, p.num, +p.pct.toFixed(2)]);
+    const h2 = XLSX.utils.aoa_to_sheet([['COD PLF','Punto de Venta','Ciudad','Cadena','Chequeos','Agotados','% Agotado'], ...f2]);
+    h2['!cols'] = [{wch:14},{wch:48},{wch:18},{wch:18},{wch:11},{wch:11},{wch:12}];
+    XLSX.utils.book_append_sheet(libro, h2, 'Por PDV');
+    XLSX.writeFile(libro, `ResultadosAgotados_${RAW.marca || d.marca}_${new Date().toISOString().slice(0,10)}.xlsx`);
+  } else {
+    const meta = d.meta / 100;
+    const f1 = indAgrupar(k, filas, ix.categoria, ['tipo']).map(x =>
+      [x.k, x.extra.tipo||'', x.propias, x.competencia, x.caras, +x.pct.toFixed(2), +(x.pct/meta).toFixed(2)]);
+    const m = indMetrica(k, filas);
+    f1.push(['TOTAL','', m.propias, m.competencia, m.caras, +m.pct.toFixed(2), +(m.pct/meta).toFixed(2)]);
+    const h1 = XLSX.utils.aoa_to_sheet([['Categoria','Tipo','Caras propias','Caras competencia','Total caras','% Facing','% Cumplimiento'], ...f1]);
+    h1['!cols'] = [{wch:34},{wch:14},{wch:15},{wch:18},{wch:14},{wch:12},{wch:16}];
+    XLSX.utils.book_append_sheet(libro, h1, 'Por Categoria');
+    const f2 = indAgrupar(k, filas, ix.pdv, ['codigo','ciudad','cadena']).map(p =>
+      [p.extra.codigo||'', p.k, p.extra.ciudad||'', p.extra.cadena||'', p.propias, p.competencia, p.caras,
+       +p.pct.toFixed(2), +(p.pct/meta).toFixed(2)]);
+    const h2 = XLSX.utils.aoa_to_sheet([['COD PLF','Punto de Venta','Ciudad','Cadena','Propias','Competencia','Total','% Facing','% Cumpl.'], ...f2]);
+    h2['!cols'] = [{wch:14},{wch:48},{wch:18},{wch:18},{wch:11},{wch:13},{wch:11},{wch:12},{wch:12}];
+    XLSX.utils.book_append_sheet(libro, h2, 'Por PDV');
+    XLSX.writeFile(libro, `ResultadosFacing_${RAW.marca || d.marca}_${new Date().toISOString().slice(0,10)}.xlsx`);
+  }
+}
+
+indMostrarNav();
 
 inicializarFiltros();
 render();
