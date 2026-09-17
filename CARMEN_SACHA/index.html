@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard CARMEN SACHA - AGOSTO</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Dashboard CARMEN SACHA - SEPTIEMBRE</title>
 <style>
   :root {
     --azul:#1F4E78; --azul2:#16324f; --verde:#2E7D32; --naranja:#ED7D31;
@@ -88,6 +91,58 @@
   .btn-nav { background:var(--azul); color:#fff; border:none; padding:8px 18px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600; }
   .btn-nav:disabled { background:#C9D3E0; cursor:not-allowed; }
   .bd-info { margin-top:10px; font-size:12px; color:#7A8699; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 0 16px; }
+  .chips .titulo { font-size:11.5px; font-weight:700; color:#7A8699; text-transform:uppercase; letter-spacing:.4px; }
+  .chip { display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid #CBD8E4;
+          border-left:3px solid var(--azul); border-radius:16px; padding:4px 10px 4px 11px;
+          font-size:12px; color:#22303F; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+  .chip b { font-weight:700; }
+  .chip .x { cursor:pointer; font-weight:700; color:#9AA8B8; font-size:14px; line-height:1; }
+  .chip .x:hover { color:var(--rojo); }
+  .chip-limpiar { background:var(--naranja); color:#fff; border:none; border-radius:16px; padding:5px 12px;
+                  font-size:12px; font-weight:600; cursor:pointer; }
+  canvas.clicable { cursor:pointer; }
+  .preg-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(430px,1fr)); gap:16px; }
+  .preg-card { border:1px solid var(--borde); border-radius:12px; padding:14px 16px 12px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+  .preg-card h3 { margin:0 0 3px; font-size:13px; color:var(--azul); line-height:1.4; }
+  .preg-card .meta { font-size:11px; color:#7A8699; margin-bottom:11px; padding-bottom:8px; border-bottom:1px solid var(--borde); }
+  .preg-lista { max-height:300px; overflow-y:auto; padding-right:6px; }
+  .preg-lista::-webkit-scrollbar { width:7px; }
+  .preg-lista::-webkit-scrollbar-thumb { background:#CBD8E4; border-radius:4px; }
+  .preg-item { margin-bottom:9px; cursor:pointer; border-radius:6px; padding:2px 4px; }
+  .preg-item:hover { background:#F2F7FB; }
+  .preg-item.sel { background:#EAF3FA; }
+  .preg-top { display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:4px; }
+  .preg-etq { font-size:11.8px; color:var(--texto); line-height:1.35; word-break:break-word; }
+  .preg-item.sel .preg-etq { font-weight:700; color:var(--azul); }
+  .preg-val { font-size:11px; font-weight:700; color:#33414F; white-space:nowrap; }
+  .preg-val small { color:#7A8699; font-weight:600; }
+  .preg-track { height:9px; background:#EDF1F6; border-radius:6px; overflow:hidden; }
+  .preg-barra { height:100%; background:#3BBFCF; border-radius:6px; transition:width .25s; }
+  .preg-item.sel .preg-barra { background:#1F4E78; }
+  .preg-vacio { grid-column:1/-1; text-align:center; color:#8A9AB4; font-size:12px; padding:26px 0; }
+  .cf-estado { display:inline-block; padding:2px 9px; border-radius:12px; font-size:10.5px; font-weight:700; white-space:nowrap; }
+  .cf-e0 { background:#FCE8E8; color:#9B1C1C; }
+  .cf-e1 { background:#FDEBDD; color:#9C4A0A; }
+  .cf-e2 { background:#FEF6DC; color:#8A6100; }
+  .cf-e3 { background:#E7F1FB; color:#1F4E78; }
+  .cf-e4 { background:#E5F5EA; color:#1B7A3D; }
+  .cf-dias { font-weight:700; }
+  .cf-und { font-weight:700; text-align:right; }
+  #cf-tabla table td, #cf-tabla table th { white-space:nowrap; }
+  #cf-tabla table td.cf-prod { white-space:normal; min-width:230px; }
+  .tabla-res table { font-size:11.5px; }
+  .tabla-res table th { white-space:nowrap; }
+  .tabla-res table td { white-space:nowrap; }
+  .tabla-res table td.txt { white-space:normal; min-width:240px; }
+  .tabla-res .num { text-align:right; font-variant-numeric:tabular-nums; }
+  .tabla-res tr.subtotal { background:#EAF3FA; font-weight:700; }
+  .tabla-res tr.subtotal td { border-top:1px solid #BFD4E6; }
+  .pr-cat { cursor:pointer; }
+  .pr-cat:hover { color:var(--azul); font-weight:700; }
+  .selector-enc { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
+  .selector-enc label { font-size:11.5px; font-weight:700; color:#7A8699; text-transform:uppercase; letter-spacing:.4px; }
+  .selector-enc select { padding:7px 10px; border-radius:7px; border:1px solid #CBD8E4; background:#fff; font-size:12.5px; color:var(--texto); min-width:340px; max-width:100%; }
 </style>
 </head>
 <body>
@@ -95,9 +150,19 @@
   <div class="sidebar">
     <div class="brand"><div class="logo">CA</div> Dashboard CARMEN SACHA</div>
     <nav>
-      <a class="active" data-vista="resumen" onclick="cambiarVista('resumen')">📊 Resumen</a>
+      <a class="active" data-vista="resumen" onclick="cambiarVista('resumen')">📊 Indicador Exhibiciones</a>
       <a data-vista="fotos" onclick="cambiarVista('fotos')">🖼️ Registro Fotografico</a>
-      <a data-vista="basedatos" onclick="cambiarVista('basedatos')">🗄️ Base de Datos</a>
+      <a data-vista="basedatos" onclick="cambiarVista('basedatos')">🗄️ Base de Datos Exhibiciones</a>
+      <a data-vista="noexh" id="nav-noexh" onclick="cambiarVista('noexh')" style="display:none;">🚫 No Implem. Exhibiciones</a>
+      <a data-vista="nopos" id="nav-nopos" onclick="cambiarVista('nopos')" style="display:none;">🚫 No Implem. Descuentos POS</a>
+      <a data-vista="encuestas" id="nav-encuestas" onclick="cambiarVista('encuestas')" style="display:none;">📋 Encuestas</a>
+      <a data-vista="bdencuestas" id="nav-bdencuestas" onclick="cambiarVista('bdencuestas')" style="display:none;">🗄️ Base de Datos Encuestas</a>
+      <a data-vista="precios" id="nav-precios" onclick="cambiarVista('precios')" style="display:none;">💲 Indicador Precios</a>
+      <a data-vista="bdprecios" id="nav-bdprecios" onclick="cambiarVista('bdprecios')" style="display:none;">🗄️ Base de Datos Precios</a>
+      <a data-vista="agotados" id="nav-agotados" onclick="cambiarVista('agotados')" style="display:none;">📦 Indicador Agotados</a>
+      <a data-vista="bdagotados" id="nav-bdagotados" onclick="cambiarVista('bdagotados')" style="display:none;">🗄️ Base de Datos Agotados</a>
+      <a data-vista="facing" id="nav-facing" onclick="cambiarVista('facing')" style="display:none;">📐 Indicador Facing</a>
+      <a data-vista="bdfacing" id="nav-bdfacing" onclick="cambiarVista('bdfacing')" style="display:none;">🗄️ Base de Datos Facing</a>
     </nav>
     <div class="filtros-tit">Filtros</div>
     <div class="filtro-grupo"><label>Indicador</label><select id="f-indicador"><option value="">Todos</option></select></div>
@@ -117,40 +182,41 @@
     <div class="topbar">
       <div>
         <h1>Dashboard Mercaderismo CARMEN SACHA</h1>
-        <div class="sub">Seguimiento de actividades en punto de venta — AGOSTO</div>
+        <div class="sub">Seguimiento de actividades en punto de venta — SEPTIEMBRE</div>
       </div>
-      <div class="corte">Ultimo corte: <b id="fecha-corte">-</b><br>Generado: 01/09/2026 07:00</div>
+      <div class="corte">Ultimo corte: <b id="fecha-corte">-</b><br>Generado: 17/09/2026 07:35</div>
     </div>
 
     <div id="vista-resumen" class="vista">
+      <div class="chips" id="chips-filtros"></div>
       <div class="kpis" id="kpis"></div>
 
       <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
         <div class="panel">
           <h2>Tendencia diaria de actividades</h2>
-          <div class="chart-box"><canvas id="chart-tendencia"></canvas></div>
+          <div class="chart-box"><canvas id="chart-tendencia" class="clicable"></canvas></div>
         </div>
         <div class="panel">
           <h2>Top cadenas</h2>
-          <div class="chart-box"><canvas id="chart-cadenas"></canvas></div>
+          <div class="chart-box"><canvas id="chart-cadenas" class="clicable"></canvas></div>
         </div>
       </div>
 
       <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
         <div class="panel">
           <h2>Top 5 PDV con mas exhibiciones</h2>
-          <div class="chart-box tall"><canvas id="chart-top-pdv"></canvas></div>
+          <div class="chart-box tall"><canvas id="chart-top-pdv" class="clicable"></canvas></div>
         </div>
         <div class="panel">
           <h2>Ranking de coordinadores (exhibiciones)</h2>
-          <div class="chart-box tall"><canvas id="chart-coordinadores"></canvas></div>
+          <div class="chart-box tall"><canvas id="chart-coordinadores" class="clicable"></canvas></div>
         </div>
       </div>
 
       <div class="grid-mid" style="grid-template-columns: 1fr 1.1fr; align-items:stretch;">
         <div class="panel">
           <h2>Ranking de mercaderistas (exhibiciones implementadas)</h2>
-          <div class="chart-box" style="height:520px;"><canvas id="chart-mercaderistas"></canvas></div>
+          <div class="chart-box" style="height:520px;"><canvas id="chart-mercaderistas" class="clicable"></canvas></div>
         </div>
         <div class="panel">
           <h2>Desglose por indicador y mercaderista</h2>
@@ -221,9 +287,356 @@
         <div class="bd-info" id="bd-info"></div>
       </div>
     </div>
+
+    <div id="vista-noexh" class="vista" style="display:none;">
+      <div class="chips" id="noexh-chips"></div>
+      <div class="kpis" id="noexh-kpis"></div>
+      <div class="grid-mid" style="grid-template-columns: 1.15fr 1fr;">
+        <div class="panel">
+          <h2>Motivos de no implementacion</h2>
+          <div class="chart-box tall"><canvas id="chart-noexh-motivos" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>No implementados por cadena</h2>
+          <div class="chart-box tall"><canvas id="chart-noexh-cadenas" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2>Tendencia diaria</h2>
+          <div class="chart-box"><canvas id="chart-noexh-fechas" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Top mercaderistas</h2>
+          <div class="chart-box tall"><canvas id="chart-noexh-equipos" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="tabla-wrap">
+        <h2>Detalle — Exhibiciones Negociadas</h2>
+        <div class="buscador">
+          <input type="text" id="buscador-noexh" placeholder="Buscar PDV, cadena, motivo, mercaderista...">
+          <button class="btn-exportar" onclick="exportarNoImpl('noexh')">⬇ Descargar detalle a Excel</button>
+        </div>
+        <div class="tabla-scroll" style="max-height:600px;">
+          <table><thead id="noexh-head"></thead><tbody id="noexh-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="noexh-info"></div>
+      </div>
+    </div>
+
+    <div id="vista-nopos" class="vista" style="display:none;">
+      <div class="chips" id="nopos-chips"></div>
+      <div class="kpis" id="nopos-kpis"></div>
+      <div class="grid-mid" style="grid-template-columns: 1.15fr 1fr;">
+        <div class="panel">
+          <h2>Motivos de no implementacion</h2>
+          <div class="chart-box tall"><canvas id="chart-nopos-motivos" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>No implementados por cadena</h2>
+          <div class="chart-box tall"><canvas id="chart-nopos-cadenas" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2>Tendencia diaria</h2>
+          <div class="chart-box"><canvas id="chart-nopos-fechas" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Top mercaderistas</h2>
+          <div class="chart-box tall"><canvas id="chart-nopos-equipos" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="tabla-wrap">
+        <h2>Detalle — Descuentos POS</h2>
+        <div class="buscador">
+          <input type="text" id="buscador-nopos" placeholder="Buscar PDV, cadena, motivo, mercaderista...">
+          <button class="btn-exportar" onclick="exportarNoImpl('nopos')">⬇ Descargar detalle a Excel</button>
+        </div>
+        <div class="tabla-scroll" style="max-height:600px;">
+          <table><thead id="nopos-head"></thead><tbody id="nopos-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="nopos-info"></div>
+      </div>
+    </div>
+
+    <div id="vista-encuestas" class="vista" style="display:none;">
+      <div class="selector-enc">
+        <label for="sel-encuesta">Encuesta</label>
+        <select id="sel-encuesta"><option value="">Todas las encuestas</option></select>
+      </div>
+      <div class="chips" id="encuestas-chips"></div>
+      <div class="kpis" id="encuestas-kpis"></div>
+      <div class="grid-mid" style="grid-template-columns: 1.15fr 1fr;">
+        <div class="panel">
+          <h2>Mediciones por encuesta</h2>
+          <div class="chart-box tall"><canvas id="chart-enc-encuestas" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Mediciones por cadena</h2>
+          <div class="chart-box tall"><canvas id="chart-enc-cadenas" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2>Tendencia diaria</h2>
+          <div class="chart-box"><canvas id="chart-enc-fechas" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Top mercaderistas</h2>
+          <div class="chart-box tall"><canvas id="chart-enc-usuarios" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="panel" id="panel-cf" style="display:none;">
+        <h2>Control de fechas de vencimiento (corta fecha)</h2>
+        <div class="bd-info" id="cf-info" style="margin:-6px 0 14px;"></div>
+        <div class="kpis" id="cf-kpis" style="margin-bottom:18px;"></div>
+        <div class="grid-mid" style="grid-template-columns: 1fr 1.1fr; margin-bottom:6px;">
+          <div class="panel" style="box-shadow:none; border:1px solid var(--borde);">
+            <h2 style="font-size:14px;">Unidades por estado de vencimiento</h2>
+            <div class="chart-box"><canvas id="chart-cf-estados" class="clicable"></canvas></div>
+          </div>
+          <div class="panel" style="box-shadow:none; border:1px solid var(--borde);">
+            <h2 style="font-size:14px;">Unidades por producto</h2>
+            <div class="chart-box tall"><canvas id="chart-cf-productos" class="clicable"></canvas></div>
+          </div>
+        </div>
+        <div class="buscador">
+          <input type="text" id="buscador-cf" placeholder="Buscar producto, lote, PDV, cadena...">
+          <button class="btn-exportar" onclick="exportarCortaFecha()">⬇ Descargar control de vencimientos a Excel</button>
+        </div>
+        <div class="tabla-scroll" id="cf-tabla" style="max-height:520px;">
+          <table><thead id="cf-head"></thead><tbody id="cf-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="cf-pie"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Resultados por pregunta</h2>
+        <div class="bd-info" id="enc-preguntas-info" style="margin:-6px 0 14px;"></div>
+        <div class="preg-grid" id="enc-preguntas"></div>
+      </div>
+    </div>
+
+    <div id="vista-bdencuestas" class="vista" style="display:none;">
+      <div class="tabla-wrap">
+        <h2>Base de Datos Encuestas</h2>
+        <div class="selector-enc">
+          <label for="sel-encuesta-bd">Encuesta</label>
+          <select id="sel-encuesta-bd"><option value="">Todas las encuestas</option></select>
+        </div>
+        <div class="chips" id="encuestas-chips-bd"></div>
+        <div class="buscador">
+          <input type="text" id="buscador-encuestas" placeholder="Buscar encuesta, PDV, cadena, pregunta, respuesta, mercaderista...">
+          <button class="btn-exportar" onclick="exportarEncuestas()">⬇ Descargar Base de Datos de Encuestas a Excel</button>
+        </div>
+        <div class="tabla-scroll" style="max-height:600px;">
+          <table><thead id="encuestas-head"></thead><tbody id="encuestas-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="encuestas-info"></div>
+      </div>
+    </div>
+
+    <div id="vista-precios" class="vista" style="display:none;">
+      <div class="selector-enc">
+        <label for="sel-categoria-pr">Categoria</label>
+        <select id="sel-categoria-pr"><option value="">Todas las categorias</option></select>
+      </div>
+      <div class="chips" id="precios-chips"></div>
+      <div class="kpis" id="precios-kpis"></div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2>Precio promedio por producto</h2>
+          <div class="chart-box tall"><canvas id="chart-pr-productos" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Precio promedio por categoria</h2>
+          <div class="chart-box tall"><canvas id="chart-pr-categorias" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2>Precio promedio por cadena</h2>
+          <div class="chart-box"><canvas id="chart-pr-cadenas" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Tendencia diaria del precio promedio</h2>
+          <div class="chart-box"><canvas id="chart-pr-fechas" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Resultados por categoria y producto</h2>
+        <div class="bd-info" id="pr-cat-info" style="margin:-6px 0 12px;"></div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="pr-cat-head"></thead><tbody id="pr-cat-body"></tbody></table>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Resultados por punto de venta</h2>
+        <div class="buscador">
+          <input type="text" id="buscador-pr-pdv" placeholder="Buscar PDV, codigo, ciudad...">
+          <button class="btn-exportar" onclick="exportarPreciosResumen()">⬇ Descargar resultados a Excel</button>
+        </div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="pr-pdv-head"></thead><tbody id="pr-pdv-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="pr-pdv-info"></div>
+      </div>
+    </div>
+
+    <div id="vista-bdprecios" class="vista" style="display:none;">
+      <div class="tabla-wrap">
+        <h2>Base de Datos Precios</h2>
+        <div class="selector-enc">
+          <label for="sel-categoria-pr-bd">Categoria</label>
+          <select id="sel-categoria-pr-bd"><option value="">Todas las categorias</option></select>
+        </div>
+        <div class="chips" id="precios-chips-bd"></div>
+        <div class="buscador">
+          <input type="text" id="buscador-precios" placeholder="Buscar producto, EAN, PDV, cadena, ciudad...">
+          <button class="btn-exportar" onclick="exportarPrecios()">⬇ Descargar Base de Datos de Precios a Excel</button>
+        </div>
+        <div class="tabla-scroll tabla-res" style="max-height:600px;">
+          <table><thead id="precios-head"></thead><tbody id="precios-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="precios-info"></div>
+      </div>
+    </div>
+
+    <div id="vista-agotados" class="vista" style="display:none;">
+      <div class="selector-enc">
+        <label for="sel-cat-agotados">Categoria</label>
+        <select id="sel-cat-agotados"><option value="">Todas las categorias</option></select>
+      </div>
+      <div class="chips" id="agotados-chips"></div>
+      <div class="kpis" id="agotados-kpis"></div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2>% Agotado por categoria</h2>
+          <div class="chart-box tall"><canvas id="chart-agotados-cat" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>% Agotado por cadena</h2>
+          <div class="chart-box tall"><canvas id="chart-agotados-cad" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2 id="agotados-t3">% Agotado por equipo</h2>
+          <div class="chart-box tall"><canvas id="chart-agotados-eq" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Tendencia diaria</h2>
+          <div class="chart-box"><canvas id="chart-agotados-fec" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Resultados por categoria y producto</h2>
+        <div class="bd-info" id="agotados-t1-info" style="margin:-6px 0 12px;"></div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="agotados-t1-head"></thead><tbody id="agotados-t1-body"></tbody></table>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Resultados por punto de venta</h2>
+        <div class="buscador">
+          <input type="text" id="buscador-agotados-pdv" placeholder="Buscar PDV, codigo, ciudad, cadena...">
+          <button class="btn-exportar" onclick="indExportarResumen('agotados')">⬇ Descargar resultados a Excel</button>
+        </div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="agotados-t2-head"></thead><tbody id="agotados-t2-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="agotados-t2-info"></div>
+      </div>
+    </div>
+
+    <div id="vista-bdagotados" class="vista" style="display:none;">
+      <div class="tabla-wrap">
+        <h2>Base de Datos % Agotado</h2>
+        <div class="selector-enc">
+          <label for="sel-cat-agotados-bd">Categoria</label>
+          <select id="sel-cat-agotados-bd"><option value="">Todas las categorias</option></select>
+        </div>
+        <div class="chips" id="agotados-chips-bd"></div>
+        <div class="buscador">
+          <input type="text" id="buscador-agotados" placeholder="Buscar producto, PDV, cadena, ciudad...">
+          <button class="btn-exportar" onclick="indExportarBD('agotados')">⬇ Descargar Base de Datos a Excel</button>
+        </div>
+        <div class="tabla-scroll tabla-res" style="max-height:600px;">
+          <table><thead id="agotados-head"></thead><tbody id="agotados-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="agotados-info"></div>
+      </div>
+    </div>
+
+    <div id="vista-facing" class="vista" style="display:none;">
+      <div class="selector-enc">
+        <label for="sel-cat-facing">Categoria</label>
+        <select id="sel-cat-facing"><option value="">Todas las categorias</option></select>
+      </div>
+      <div class="chips" id="facing-chips"></div>
+      <div class="kpis" id="facing-kpis"></div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2>% Facing por categoria</h2>
+          <div class="chart-box tall"><canvas id="chart-facing-cat" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>% Facing por cadena</h2>
+          <div class="chart-box tall"><canvas id="chart-facing-cad" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2 id="facing-t3">% Facing por equipo</h2>
+          <div class="chart-box tall"><canvas id="chart-facing-eq" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Tendencia diaria</h2>
+          <div class="chart-box"><canvas id="chart-facing-fec" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Resultados por categoria</h2>
+        <div class="bd-info" id="facing-t1-info" style="margin:-6px 0 12px;"></div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="facing-t1-head"></thead><tbody id="facing-t1-body"></tbody></table>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Resultados por punto de venta</h2>
+        <div class="buscador">
+          <input type="text" id="buscador-facing-pdv" placeholder="Buscar PDV, codigo, ciudad, cadena...">
+          <button class="btn-exportar" onclick="indExportarResumen('facing')">⬇ Descargar resultados a Excel</button>
+        </div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="facing-t2-head"></thead><tbody id="facing-t2-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="facing-t2-info"></div>
+      </div>
+    </div>
+
+    <div id="vista-bdfacing" class="vista" style="display:none;">
+      <div class="tabla-wrap">
+        <h2>Base de Datos % Facing</h2>
+        <div class="selector-enc">
+          <label for="sel-cat-facing-bd">Categoria</label>
+          <select id="sel-cat-facing-bd"><option value="">Todas las categorias</option></select>
+        </div>
+        <div class="chips" id="facing-chips-bd"></div>
+        <div class="buscador">
+          <input type="text" id="buscador-facing" placeholder="Buscar producto, PDV, cadena, ciudad...">
+          <button class="btn-exportar" onclick="indExportarBD('facing')">⬇ Descargar Base de Datos a Excel</button>
+        </div>
+        <div class="tabla-scroll tabla-res" style="max-height:600px;">
+          <table><thead id="facing-head"></thead><tbody id="facing-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="facing-info"></div>
+      </div>
+    </div>
   </div>
 </div>
-<footer>Datos actualizados: 01/09/2026 07:00 &nbsp;|&nbsp; Generado automaticamente — Indicadores por Marca PLF</footer>
+<footer>Datos actualizados: 17/09/2026 07:35 &nbsp;|&nbsp; Generado automaticamente — Indicadores por Marca PLF</footer>
 
 <script>/*!
  * Chart.js v4.4.4
@@ -1615,7 +2028,12 @@ T=Gr(p[0],false);k=p.index+p[0].length}break;case"s":break;case"database-range":
 if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Error("Unsupported ZIP file")}var a=Nr(e);var n=Kn(Or(e,"[Content_Types].xml"));var i=false;var s,f;if(n.workbooks.length===0){f="xl/workbook.xml";if(Rr(e,f,true))n.workbooks.push(f)}if(n.workbooks.length===0){f="xl/workbook.bin";if(!Rr(e,f,true))throw new Error("Could not find workbook");n.workbooks.push(f);i=true}if(n.workbooks[0].slice(-3)=="bin")i=true;var o={};var c={};if(!r.bookSheets&&!r.bookProps){Cd=[];if(n.sst)try{Cd=Tm(Rr(e,jg(n.sst)),n.sst,r)}catch(l){if(r.WTF)throw l}if(r.cellStyles&&n.themes.length)o=km(Or(e,n.themes[0].replace(/^\//,""),true)||"",n.themes[0],r);if(n.style)c=wm(Rr(e,jg(n.style)),n.style,o,r)}n.links.map(function(t){try{var a=Qn(Or(e,Zn(jg(t))),t);return Sm(Rr(e,jg(t)),a,t,r)}catch(n){}});var u=vm(Rr(e,jg(n.workbooks[0])),n.workbooks[0],r);var h={},d="";if(n.coreprops.length){d=Rr(e,jg(n.coreprops[0]),true);if(d)h=ui(d);if(n.extprops.length!==0){d=Rr(e,jg(n.extprops[0]),true);if(d)bi(d,h,r)}}var v={};if(!r.bookSheets||r.bookProps){if(n.custprops.length!==0){d=Or(e,jg(n.custprops[0]),true);if(d)v=ki(d,r)}}var p={};if(r.bookSheets||r.bookProps){if(u.Sheets)s=u.Sheets.map(function I(e){return e.name});else if(h.Worksheets&&h.SheetNames.length>0)s=h.SheetNames;if(r.bookProps){p.Props=h;p.Custprops=v}if(r.bookSheets&&typeof s!=="undefined")p.SheetNames=s;if(r.bookSheets?p.SheetNames:r.bookProps)return p}s={};var m={};if(r.bookDeps&&n.calcchain)m=ym(Rr(e,jg(n.calcchain)),n.calcchain,r);var b=0;var g={};var w,k;{var T=u.Sheets;h.Worksheets=T.length;h.SheetNames=[];for(var E=0;E!=T.length;++E){h.SheetNames[E]=T[E].name}}var y=i?"bin":"xml";var S=n.workbooks[0].lastIndexOf("/");var _=(n.workbooks[0].slice(0,S+1)+"_rels/"+n.workbooks[0].slice(S+1)+".rels").replace(/^\//,"");if(!xr(e,_))_="xl/_rels/workbook."+y+".rels";var A=Qn(Or(e,_,true),_.replace(/_rels.*/,"s5s"));if((n.metadata||[]).length>=1){r.xlmeta=_m(Rr(e,jg(n.metadata[0])),n.metadata[0],r)}if((n.people||[]).length>=1){r.people=lu(Rr(e,jg(n.people[0])),r)}if(A)A=Vg(A,u.Sheets);var x=Rr(e,"xl/worksheets/sheet.xml",true)?1:0;e:for(b=0;b!=h.Worksheets;++b){var C="sheet";if(A&&A[b]){w="xl/"+A[b][1].replace(/[\/]?xl\//,"");if(!xr(e,w))w=A[b][1];if(!xr(e,w))w=_.replace(/_rels\/.*$/,"")+A[b][1];C=A[b][2]}else{w="xl/worksheets/sheet"+(b+1-x)+"."+y;w=w.replace(/sheet0\./,"sheet.")}k=w.replace(/^(.*)(\/)([^\/]*)$/,"$1/_rels/$3.rels");if(r&&r.sheets!=null)switch(typeof r.sheets){case"number":if(b!=r.sheets)continue e;break;case"string":if(h.SheetNames[b].toLowerCase()!=r.sheets.toLowerCase())continue e;break;default:if(Array.isArray&&Array.isArray(r.sheets)){var R=false;for(var O=0;O!=r.sheets.length;++O){if(typeof r.sheets[O]=="number"&&r.sheets[O]==b)R=1;if(typeof r.sheets[O]=="string"&&r.sheets[O].toLowerCase()==h.SheetNames[b].toLowerCase())R=1}if(!R)continue e};}Gg(e,w,k,h.SheetNames[b],b,g,s,C,r,u,o,c)}p={Directory:n,Workbook:u,Props:h,Custprops:v,Deps:m,Sheets:s,SheetNames:h.SheetNames,Strings:Cd,Styles:c,Themes:o,SSF:gr(X)};if(r&&r.bookFiles){if(e.files){p.keys=a;p.files=e.files}else{p.keys=[];p.files={};e.FullPaths.forEach(function(r,t){r=r.replace(/^Root Entry[\/]/,"");p.keys.push(r);p.files[r]=e.FileIndex[t]})}}if(r&&r.bookVBA){if(n.vba.length>0)p.vbaraw=Rr(e,jg(n.vba[0]),true);else if(n.defaults&&n.defaults.bin===gu)p.vbaraw=Rr(e,"xl/vbaProject.bin",true)}return p}function $g(e,r){var t=r||{};var a="Workbook",n=Ke.find(e,a);try{a="/!DataSpaces/Version";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);Ko(n.content);a="/!DataSpaces/DataSpaceMap";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);var i=qo(n.content);if(i.length!==1||i[0].comps.length!==1||i[0].comps[0].t!==0||i[0].name!=="StrongEncryptionDataSpace"||i[0].comps[0].v!=="EncryptedPackage")throw new Error("ECMA-376 Encrypted file bad "+a);a="/!DataSpaces/DataSpaceInfo/StrongEncryptionDataSpace";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);var s=Zo(n.content);if(s.length!=1||s[0]!="StrongEncryptionTransform")throw new Error("ECMA-376 Encrypted file bad "+a);a="/!DataSpaces/TransformInfo/StrongEncryptionTransform/!Primary";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);ec(n.content)}catch(f){}a="/EncryptionInfo";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);var o=ac(n.content);a="/EncryptedPackage";n=Ke.find(e,a);if(!n||!n.content)throw new Error("ECMA-376 Encrypted file missing "+a);if(o[0]==4&&typeof decrypt_agile!=="undefined")return decrypt_agile(o[1],n.content,t.password||"",t);if(o[0]==2&&typeof decrypt_std76!=="undefined")return decrypt_std76(o[1],n.content,t.password||"",t);throw new Error("File is password-protected")}function Yg(e,r){if(r.bookType=="ods")return tg(e,r);if(r.bookType=="numbers")return Ug(e,r);if(r.bookType=="xlsb")return Kg(e,r);return Jg(e,r)}function Kg(e,r){au=1024;if(e&&!e.SSF){e.SSF=gr(X)}if(e&&e.SSF){ze();He(e.SSF);r.revssf=nr(e.SSF);r.revssf[e.SSF[65535]]=0;r.ssf=e.SSF}r.rels={};r.wbrels={};r.Strings=[];r.Strings.Count=0;r.Strings.Unique=0;if(Od)r.revStrings=new Map;else{r.revStrings={};r.revStrings.foo=[];delete r.revStrings.foo}var t=r.bookType=="xlsb"?"bin":"xml";var a=Tu.indexOf(r.bookType)>-1;var n=Yn();Hg(r=r||{});var i=Dr();var s="",f=0;r.cellXfs=[];Dd(r.cellXfs,{},{revssf:{General:0}});if(!e.Props)e.Props={};s="docProps/core.xml";Fr(i,s,di(e.Props,r));n.coreprops.push(s);ri(r.rels,2,s,qn.CORE_PROPS);s="docProps/app.xml";if(e.Props&&e.Props.SheetNames){}else if(!e.Workbook||!e.Workbook.Sheets)e.Props.SheetNames=e.SheetNames;else{var o=[];for(var c=0;c<e.SheetNames.length;++c)if((e.Workbook.Sheets[c]||{}).Hidden!=2)o.push(e.SheetNames[c]);e.Props.SheetNames=o}e.Props.Worksheets=e.Props.SheetNames.length;Fr(i,s,gi(e.Props,r));n.extprops.push(s);ri(r.rels,3,s,qn.EXT_PROPS);if(e.Custprops!==e.Props&&rr(e.Custprops||{}).length>0){s="docProps/custom.xml";Fr(i,s,Ti(e.Custprops,r));n.custprops.push(s);ri(r.rels,4,s,qn.CUST_PROPS)}for(f=1;f<=e.SheetNames.length;++f){var l={"!id":{}};var u=e.Sheets[e.SheetNames[f-1]];var h=(u||{})["!type"]||"sheet";switch(h){case"chart":;default:s="xl/worksheets/sheet"+f+"."+t;Fr(i,s,xm(f-1,s,r,e,l));n.sheets.push(s);ri(r.wbrels,-1,"worksheets/sheet"+f+"."+t,qn.WS[0]);}if(u){var d=u["!comments"];var v=false;var p="";if(d&&d.length>0){p="xl/comments"+f+"."+t;Fr(i,p,Im(d,p,r));n.comments.push(p);ri(l,-1,"../comments"+f+"."+t,qn.CMNT);v=true}if(u["!legacy"]){if(v)Fr(i,"xl/drawings/vmlDrawing"+f+".vml",nu(f,u["!comments"]))}delete u["!comments"];delete u["!legacy"]}if(l["!id"].rId1)Fr(i,Zn(s),ei(l))}if(r.Strings!=null&&r.Strings.length>0){s="xl/sharedStrings."+t;Fr(i,s,Om(r.Strings,s,r));n.strs.push(s);ri(r.wbrels,-1,"sharedStrings."+t,qn.SST)}s="xl/workbook."+t;Fr(i,s,Am(e,s,r));n.workbooks.push(s);ri(r.rels,1,s,qn.WB);s="xl/theme/theme1.xml";Fr(i,s,Il(e.Themes,r));n.themes.push(s);ri(r.wbrels,-1,"theme/theme1.xml",qn.THEME);s="xl/styles."+t;Fr(i,s,Rm(e,s,r));n.styles.push(s);ri(r.wbrels,-1,"styles."+t,qn.STY);if(e.vbaraw&&a){s="xl/vbaProject.bin";Fr(i,s,e.vbaraw);n.vba.push(s);ri(r.wbrels,-1,"vbaProject.bin",qn.VBA)}s="xl/metadata."+t;Fr(i,s,Nm(s));n.metadata.push(s);ri(r.wbrels,-1,"metadata."+t,qn.XLMETA);Fr(i,"[Content_Types].xml",Jn(n,r));Fr(i,"_rels/.rels",ei(r.rels));Fr(i,"xl/_rels/workbook."+t+".rels",ei(r.wbrels));delete r.revssf;delete r.ssf;return i}function Jg(e,r){au=1024;if(e&&!e.SSF){e.SSF=gr(X)}if(e&&e.SSF){ze();He(e.SSF);r.revssf=nr(e.SSF);r.revssf[e.SSF[65535]]=0;r.ssf=e.SSF}r.rels={};r.wbrels={};r.Strings=[];r.Strings.Count=0;r.Strings.Unique=0;if(Od)r.revStrings=new Map;else{r.revStrings={};r.revStrings.foo=[];delete r.revStrings.foo}var t="xml";var a=Tu.indexOf(r.bookType)>-1;var n=Yn();Hg(r=r||{});var i=Dr();var s="",f=0;r.cellXfs=[];Dd(r.cellXfs,{},{revssf:{General:0}});if(!e.Props)e.Props={};s="docProps/core.xml";Fr(i,s,di(e.Props,r));n.coreprops.push(s);ri(r.rels,2,s,qn.CORE_PROPS);s="docProps/app.xml";if(e.Props&&e.Props.SheetNames){}else if(!e.Workbook||!e.Workbook.Sheets)e.Props.SheetNames=e.SheetNames;else{var o=[];for(var c=0;c<e.SheetNames.length;++c)if((e.Workbook.Sheets[c]||{}).Hidden!=2)o.push(e.SheetNames[c]);e.Props.SheetNames=o}e.Props.Worksheets=e.Props.SheetNames.length;Fr(i,s,gi(e.Props,r));n.extprops.push(s);ri(r.rels,3,s,qn.EXT_PROPS);if(e.Custprops!==e.Props&&rr(e.Custprops||{}).length>0){s="docProps/custom.xml";Fr(i,s,Ti(e.Custprops,r));n.custprops.push(s);ri(r.rels,4,s,qn.CUST_PROPS)}var l=["SheetJ5"];r.tcid=0;for(f=1;f<=e.SheetNames.length;++f){var u={"!id":{}};var h=e.Sheets[e.SheetNames[f-1]];var d=(h||{})["!type"]||"sheet";switch(d){case"chart":;default:s="xl/worksheets/sheet"+f+"."+t;Fr(i,s,pv(f-1,r,e,u));n.sheets.push(s);ri(r.wbrels,-1,"worksheets/sheet"+f+"."+t,qn.WS[0]);}if(h){var v=h["!comments"];var p=false;var m="";if(v&&v.length>0){var b=false;v.forEach(function(e){e[1].forEach(function(e){if(e.T==true)b=true})});if(b){m="xl/threadedComments/threadedComment"+f+"."+t;Fr(i,m,cu(v,l,r));n.threadedcomments.push(m);ri(u,-1,"../threadedComments/threadedComment"+f+"."+t,qn.TCMNT)}m="xl/comments"+f+"."+t;Fr(i,m,fu(v,r));n.comments.push(m);ri(u,-1,"../comments"+f+"."+t,qn.CMNT);p=true}if(h["!legacy"]){if(p)Fr(i,"xl/drawings/vmlDrawing"+f+".vml",nu(f,h["!comments"]))}delete h["!comments"];delete h["!legacy"]}if(u["!id"].rId1)Fr(i,Zn(s),ei(u))}if(r.Strings!=null&&r.Strings.length>0){s="xl/sharedStrings."+t;Fr(i,s,Ho(r.Strings,r));n.strs.push(s);ri(r.wbrels,-1,"sharedStrings."+t,qn.SST)}s="xl/workbook."+t;Fr(i,s,rm(e,r));n.workbooks.push(s);ri(r.rels,1,s,qn.WB);s="xl/theme/theme1.xml";Fr(i,s,Il(e.Themes,r));n.themes.push(s);ri(r.wbrels,-1,"theme/theme1.xml",qn.THEME);s="xl/styles."+t;Fr(i,s,$c(e,r));n.styles.push(s);ri(r.wbrels,-1,"styles."+t,qn.STY);if(e.vbaraw&&a){s="xl/vbaProject.bin";Fr(i,s,e.vbaraw);n.vba.push(s);ri(r.wbrels,-1,"vbaProject.bin",qn.VBA)}s="xl/metadata."+t;Fr(i,s,Jl());n.metadata.push(s);ri(r.wbrels,-1,"metadata."+t,qn.XLMETA);if(l.length>1){s="xl/persons/person.xml";Fr(i,s,uu(l,r));n.people.push(s);ri(r.wbrels,-1,"persons/person.xml",qn.PEOPLE)}Fr(i,"[Content_Types].xml",Jn(n,r));Fr(i,"_rels/.rels",ei(r.rels));Fr(i,"xl/_rels/workbook."+t+".rels",ei(r.wbrels));delete r.revssf;delete r.ssf;return i}function qg(e,r){var t="";switch((r||{}).type||"base64"){case"buffer":return[e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]];case"base64":t=k(e.slice(0,12));break;case"binary":t=e;break;case"array":return[e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]];default:throw new Error("Unrecognized type "+(r&&r.type||"undefined"));}return[t.charCodeAt(0),t.charCodeAt(1),t.charCodeAt(2),t.charCodeAt(3),t.charCodeAt(4),t.charCodeAt(5),t.charCodeAt(6),t.charCodeAt(7)]}function Zg(e,r){if(Ke.find(e,"EncryptedPackage"))return $g(e,r);return vb(e,r)}function Qg(e,r){var t,a=e;var n=r||{};if(!n.type)n.type=T&&Buffer.isBuffer(e)?"buffer":"base64";t=Pr(a,n);return Xg(t,n)}function ew(e,r){var t=0;e:while(t<e.length)switch(e.charCodeAt(t)){case 10:;case 13:;case 32:++t;break;case 60:return jm(e.slice(t),r);default:break e;}return Ao.to_workbook(e,r)}function rw(e,r){var t="",a=qg(e,r);switch(r.type){case"base64":t=k(e);break;case"binary":t=e;break;case"buffer":t=e.toString("binary");break;case"array":t=br(e);break;default:throw new Error("Unrecognized type "+r.type);}if(a[0]==239&&a[1]==187&&a[2]==191)t=ct(t);r.type="binary";return ew(t,r)}function tw(e,r){var t=e;if(r.type=="base64")t=k(t);t=a.utils.decode(1200,t.slice(2),"str");r.type="binary";return ew(t,r)}function aw(e){return!e.match(/[^\x00-\x7F]/)?e:lt(e)}function nw(e,r,t,a){if(a){t.type="string";return Ao.to_workbook(e,t)}return Ao.to_workbook(r,t)}function iw(e,r){c();var t=r||{};if(typeof ArrayBuffer!=="undefined"&&e instanceof ArrayBuffer)return iw(new Uint8Array(e),(t=gr(t),t.type="array",t));if(typeof Uint8Array!=="undefined"&&e instanceof Uint8Array&&!t.type)t.type=typeof Deno!=="undefined"?"buffer":"array";var a=e,n=[0,0,0,0],i=false;if(t.cellStyles){t.cellNF=true;t.sheetStubs=true}Rd={};if(t.dateNF)Rd.dateNF=t.dateNF;if(!t.type)t.type=T&&Buffer.isBuffer(e)?"buffer":"base64";if(t.type=="file"){t.type=T?"buffer":"binary";a=er(e);if(typeof Uint8Array!=="undefined"&&!T)t.type="array"}if(t.type=="string"){i=true;t.type="binary";t.codepage=65001;a=aw(e)}if(t.type=="array"&&typeof Uint8Array!=="undefined"&&e instanceof Uint8Array&&typeof ArrayBuffer!=="undefined"){var s=new ArrayBuffer(3),f=new Uint8Array(s);f.foo="bar";if(!f.foo){t=gr(t);t.type="array";return iw(R(a),t)}}switch((n=qg(a,t))[0]){case 208:if(n[1]===207&&n[2]===17&&n[3]===224&&n[4]===161&&n[5]===177&&n[6]===26&&n[7]===225)return Zg(Ke.read(a,t),t);break;case 9:if(n[1]<=8)return vb(a,t);break;case 60:return jm(a,t);case 73:if(n[1]===73&&n[2]===42&&n[3]===0)throw new Error("TIFF Image File is not a spreadsheet");if(n[1]===68)return xo(a,t);break;case 84:if(n[1]===65&&n[2]===66&&n[3]===76)return So.to_workbook(a,t);break;case 80:return n[1]===75&&n[2]<9&&n[3]<9?Qg(a,t):nw(e,a,t,i);case 239:return n[3]===60?jm(a,t):nw(e,a,t,i);case 255:if(n[1]===254){return tw(a,t)}else if(n[1]===0&&n[2]===2&&n[3]===0)return Co.to_workbook(a,t);break;case 0:if(n[1]===0){if(n[2]>=2&&n[3]===0)return Co.to_workbook(a,t);if(n[2]===0&&(n[3]===8||n[3]===9))return Co.to_workbook(a,t)}break;case 3:;case 131:;case 139:;case 140:return Eo.to_workbook(a,t);case 123:if(n[1]===92&&n[2]===114&&n[3]===116)return mc.to_workbook(a,t);break;case 10:;case 13:;case 32:return rw(a,t);case 137:if(n[1]===80&&n[2]===78&&n[3]===71)throw new Error("PNG Image File is not a spreadsheet");break;}if(To.indexOf(n[0])>-1&&n[2]<=12&&n[3]<=31)return Eo.to_workbook(a,t);return nw(e,a,t,i)}function sw(e,r){var t=r||{};t.type="file";return iw(e,t)}function fw(e,r){switch(r.type){case"base64":;case"binary":break;case"buffer":;case"array":r.type="";break;case"file":return Qe(r.file,Ke.write(e,{type:T?"buffer":""}));case"string":throw new Error("'string' output type invalid for '"+r.bookType+"' files");default:throw new Error("Unrecognized type "+r.type);}return Ke.write(e,r)}function ow(e,r){var t=gr(r||{});var a=Yg(e,t);return lw(a,t)}function cw(e,r){var t=gr(r||{});var a=Jg(e,t);return lw(a,t)}function lw(e,r){var t={};var a=T?"nodebuffer":typeof Uint8Array!=="undefined"?"array":"string";if(r.compression)t.compression="DEFLATE";if(r.password)t.type=a;else switch(r.type){case"base64":t.type="base64";break;case"binary":t.type="string";break;case"string":throw new Error("'string' output type invalid for '"+r.bookType+"' files");case"buffer":;case"file":t.type=a;break;default:throw new Error("Unrecognized type "+r.type);}var n=e.FullPaths?Ke.write(e,{fileType:"zip",type:{nodebuffer:"buffer",string:"binary"}[t.type]||t.type,compression:!!r.compression}):e.generate(t);if(typeof Deno!=="undefined"){if(typeof n=="string"){if(r.type=="binary"||r.type=="base64")return n;n=new Uint8Array(A(n))}}if(r.password&&typeof encrypt_agile!=="undefined")return fw(encrypt_agile(n,r.password),r);if(r.type==="file")return Qe(r.file,n);return r.type=="string"?ct(n):n}function uw(e,r){var t=r||{};var a=pb(e,t);return fw(a,t)}function hw(e,r,t){if(!t)t="";var a=t+e;switch(r.type){case"base64":return w(lt(a));case"binary":return lt(a);case"string":return e;case"file":return Qe(r.file,a,"utf8");case"buffer":{if(T)return E(a,"utf8");else if(typeof TextEncoder!=="undefined")return(new TextEncoder).encode(a);else return hw(a,{type:"binary"}).split("").map(function(e){return e.charCodeAt(0)})};}throw new Error("Unrecognized type "+r.type)}function dw(e,r){switch(r.type){case"base64":return w(e);case"binary":return e;case"string":return e;case"file":return Qe(r.file,e,"binary");case"buffer":{if(T)return E(e,"binary");else return e.split("").map(function(e){return e.charCodeAt(0)})};}throw new Error("Unrecognized type "+r.type)}function vw(e,r){switch(r.type){case"string":;case"base64":;case"binary":var t="";for(var a=0;a<e.length;++a)t+=String.fromCharCode(e[a]);return r.type=="base64"?w(t):r.type=="string"?ct(t):t;case"file":return Qe(r.file,e);case"buffer":return e;default:throw new Error("Unrecognized type "+r.type);}}function pw(e,r){c();Zp(e);var t=gr(r||{});if(t.cellStyles){t.cellNF=true;t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=pw(e,t);t.type="array";return A(a)}return cw(e,t)}function mw(e,r){c();Zp(e);var t=gr(r||{});if(t.cellStyles){t.cellNF=true;t.sheetStubs=true}if(t.type=="array"){t.type="binary";var a=mw(e,t);t.type="array";return A(a)}var n=0;if(t.sheet){if(typeof t.sheet=="number")n=t.sheet;else n=e.SheetNames.indexOf(t.sheet);if(!e.SheetNames[n])throw new Error("Sheet not found: "+t.sheet+" : "+typeof t.sheet)}switch(t.bookType||"xlsb"){case"xml":;case"xlml":return hw(nb(e,t),t);case"slk":;case"sylk":return hw(yo.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"htm":;case"html":return hw(Vb(e.Sheets[e.SheetNames[n]],t),t);case"txt":return dw(Aw(e.Sheets[e.SheetNames[n]],t),t);case"csv":return hw(_w(e.Sheets[e.SheetNames[n]],t),t,"\ufeff");case"dif":return hw(So.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"dbf":return vw(Eo.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"prn":return hw(Ao.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"rtf":return hw(mc.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"eth":return hw(_o.from_sheet(e.Sheets[e.SheetNames[n]],t),t);case"fods":return hw(tg(e,t),t);case"wk1":return vw(Co.sheet_to_wk1(e.Sheets[e.SheetNames[n]],t),t);case"wk3":return vw(Co.book_to_wk3(e,t),t);case"biff2":if(!t.biff)t.biff=2;case"biff3":if(!t.biff)t.biff=3;case"biff4":if(!t.biff)t.biff=4;return vw(Lb(e,t),t);case"biff5":if(!t.biff)t.biff=5;case"biff8":;case"xla":;case"xls":if(!t.biff)t.biff=8;return uw(e,t);case"xlsx":;case"xlsm":;case"xlam":;case"xlsb":;case"numbers":;case"ods":return ow(e,t);default:throw new Error("Unrecognized bookType |"+t.bookType+"|");}}function bw(e){if(e.bookType)return;var r={xls:"biff8",htm:"html",slk:"sylk",socialcalc:"eth",Sh33tJS:"WTF"};var t=e.file.slice(e.file.lastIndexOf(".")).toLowerCase();if(t.match(/^\.[a-z]+$/))e.bookType=t.slice(1);e.bookType=r[e.bookType]||e.bookType}function gw(e,r,t){var a=t||{};a.type="file";a.file=r;bw(a);return mw(e,a)}function ww(e,r,t){var a=t||{};a.type="file";a.file=r;bw(a);return pw(e,a)}function kw(e,r,t,a){var n=t||{};n.type="file";n.file=e;bw(n);n.type="buffer";var i=a;if(!(i instanceof Function))i=t;return Je.writeFile(e,mw(r,n),i)}function Tw(e,r,t,a,n,i,s,f){var o=Ta(t);var c=f.defval,l=f.raw||!Object.prototype.hasOwnProperty.call(f,"raw");var u=true;var h=n===1?[]:{};if(n!==1){if(Object.defineProperty)try{Object.defineProperty(h,"__rowNum__",{value:t,enumerable:false})}catch(d){h.__rowNum__=t}else h.__rowNum__=t}if(!s||e[t])for(var v=r.s.c;v<=r.e.c;++v){var p=s?e[t][v]:e[a[v]+o];if(p===undefined||p.t===undefined){if(c===undefined)continue;if(i[v]!=null){h[i[v]]=c}continue}var m=p.v;switch(p.t){case"z":if(m==null)break;continue;case"e":m=m==0?null:void 0;break;case"s":;case"d":;case"b":;case"n":break;default:throw new Error("unrecognized type "+p.t);}if(i[v]!=null){if(m==null){if(p.t=="e"&&m===null)h[i[v]]=null;else if(c!==undefined)h[i[v]]=c;else if(l&&m===null)h[i[v]]=null;else continue}else{h[i[v]]=l&&(p.t!=="n"||p.t==="n"&&f.rawNumbers!==false)?m:Pa(p,m,f)}if(m!=null)u=false}}return{row:h,isempty:u}}function Ew(e,r){if(e==null||e["!ref"]==null)return[];var t={t:"n",v:0},a=0,n=1,i=[],s=0,f="";var o={s:{r:0,c:0},e:{r:0,c:0}};var c=r||{};var l=c.range!=null?c.range:e["!ref"];if(c.header===1)a=1;else if(c.header==="A")a=2;else if(Array.isArray(c.header))a=3;else if(c.header==null)a=0;switch(typeof l){case"string":o=Fa(l);break;case"number":o=Fa(e["!ref"]);o.s.r=l;break;default:o=l;}if(a>0)n=0;var u=Ta(o.s.r);var h=[];var d=[];var v=0,p=0;var m=Array.isArray(e);var b=o.s.r,g=0;var w={};if(m&&!e[b])e[b]=[];var k=c.skipHidden&&e["!cols"]||[];var T=c.skipHidden&&e["!rows"]||[];for(g=o.s.c;g<=o.e.c;++g){if((k[g]||{}).hidden)continue;h[g]=_a(g);t=m?e[b][g]:e[h[g]+u];switch(a){case 1:i[g]=g-o.s.c;break;case 2:i[g]=h[g];break;case 3:i[g]=c.header[g-o.s.c];break;default:if(t==null)t={w:"__EMPTY",t:"s"};f=s=Pa(t,null,c);p=w[s]||0;if(!p)w[s]=1;else{do{f=s+"_"+p++}while(w[f]);w[s]=p;w[f]=1}i[g]=f;}}for(b=o.s.r+n;b<=o.e.r;++b){if((T[b]||{}).hidden)continue;var E=Tw(e,o,b,h,a,i,m,c);if(E.isempty===false||(a===1?c.blankrows!==false:!!c.blankrows))d[v++]=E.row}d.length=v;return d}var yw=/"/g;function Sw(e,r,t,a,n,i,s,f){var o=true;var c=[],l="",u=Ta(t);for(var h=r.s.c;h<=r.e.c;++h){if(!a[h])continue;var d=f.dense?(e[t]||[])[h]:e[a[h]+u];if(d==null)l="";else if(d.v!=null){o=false;l=""+(f.rawNumbers&&d.t=="n"?d.v:Pa(d,null,f));for(var v=0,p=0;v!==l.length;++v)if((p=l.charCodeAt(v))===n||p===i||p===34||f.forceQuotes){l='"'+l.replace(yw,'""')+'"';break}if(l=="ID")l='"ID"'}else if(d.f!=null&&!d.F){o=false;l="="+d.f;if(l.indexOf(",")>=0)l='"'+l.replace(yw,'""')+'"'}else l="";c.push(l)}if(f.blankrows===false&&o)return null;return c.join(s)}function _w(e,r){var t=[];var a=r==null?{}:r;if(e==null||e["!ref"]==null)return"";var n=Fa(e["!ref"]);var i=a.FS!==undefined?a.FS:",",s=i.charCodeAt(0);var f=a.RS!==undefined?a.RS:"\n",o=f.charCodeAt(0);var c=new RegExp((i=="|"?"\\|":i)+"+$");var l="",u=[];a.dense=Array.isArray(e);var h=a.skipHidden&&e["!cols"]||[];var d=a.skipHidden&&e["!rows"]||[];for(var v=n.s.c;v<=n.e.c;++v)if(!(h[v]||{}).hidden)u[v]=_a(v);var p=0;for(var m=n.s.r;m<=n.e.r;++m){if((d[m]||{}).hidden)continue;l=Sw(e,n,m,u,s,o,i,a);if(l==null){continue}if(a.strip)l=l.replace(c,"");if(l||a.blankrows!==false)t.push((p++?f:"")+l)}delete a.dense;return t.join("")}function Aw(e,r){if(!r)r={};r.FS="\t";r.RS="\n";var t=_w(e,r);if(typeof a=="undefined"||r.type=="string")return t;var n=a.utils.encode(1200,t,"str");return String.fromCharCode(255)+String.fromCharCode(254)+n}function xw(e){var r="",t,a="";if(e==null||e["!ref"]==null)return[];var n=Fa(e["!ref"]),i="",s=[],f;var o=[];var c=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=_a(f);for(var l=n.s.r;l<=n.e.r;++l){i=Ta(l);for(f=n.s.c;f<=n.e.c;++f){r=s[f]+i;t=c?(e[l]||[])[f]:e[r];a="";if(t===undefined)continue;else if(t.F!=null){r=t.F;if(!t.f)continue;a=t.f;if(r.indexOf(":")==-1)r=r+":"+r}if(t.f!=null)a=t.f;else if(t.t=="z")continue;else if(t.t=="n"&&t.v!=null)a=""+t.v;else if(t.t=="b")a=t.v?"TRUE":"FALSE";else if(t.w!==undefined)a="'"+t.w;else if(t.v===undefined)continue;else if(t.t=="s")a="'"+t.v;else a=""+t.v;o[o.length]=r+"="+a}}return o}function Cw(e,r,t){var a=t||{};var n=+!a.skipHeader;var i=e||{};var s=0,f=0;if(i&&a.origin!=null){if(typeof a.origin=="number")s=a.origin;else{var o=typeof a.origin=="string"?Ra(a.origin):a.origin;s=o.r;f=o.c}}var c;var l={s:{c:0,r:0},e:{c:f,r:s+r.length-1+n}};if(i["!ref"]){var u=Fa(i["!ref"]);l.e.c=Math.max(l.e.c,u.e.c);l.e.r=Math.max(l.e.r,u.e.r);if(s==-1){s=u.e.r+1;l.e.r=s+r.length-1+n}}else{if(s==-1){s=0;l.e.r=r.length-1+n}}var h=a.header||[],d=0;r.forEach(function(e,r){rr(e).forEach(function(t){if((d=h.indexOf(t))==-1)h[d=h.length]=t;var o=e[t];var l="z";var u="";var v=Oa({c:f+d,r:s+r+n});c=Ow(i,v);if(o&&typeof o==="object"&&!(o instanceof Date)){i[v]=o}else{if(typeof o=="number")l="n";else if(typeof o=="boolean")l="b";else if(typeof o=="string")l="s";else if(o instanceof Date){l="d";if(!a.cellDates){l="n";o=fr(o)}u=a.dateNF||X[14]}else if(o===null&&a.nullError){l="e";o=0}if(!c)i[v]=c={t:l,v:o};else{c.t=l;c.v=o;delete c.w;delete c.R;if(u)c.z=u}if(u)c.z=u}})});l.e.c=Math.max(l.e.c,f+h.length-1);var v=Ta(s);if(n)for(d=0;d<h.length;++d)i[_a(d+f)+v]={t:"s",v:h[d]};i["!ref"]=Na(l);return i}function Rw(e,r){return Cw(null,e,r)}function Ow(e,r,t){if(typeof r=="string"){if(Array.isArray(e)){var a=Ra(r);if(!e[a.r])e[a.r]=[];return e[a.r][a.c]||(e[a.r][a.c]={t:"z"})}return e[r]||(e[r]={t:"z"})}if(typeof r!="number")return Ow(e,Oa(r));return Ow(e,Oa({r:r,c:t||0}))}function Iw(e,r){if(typeof r=="number"){if(r>=0&&e.SheetNames.length>r)return r;throw new Error("Cannot find sheet # "+r)}else if(typeof r=="string"){var t=e.SheetNames.indexOf(r);if(t>-1)return t;throw new Error("Cannot find sheet name |"+r+"|")}else throw new Error("Cannot find sheet |"+r+"|")}function Nw(){return{SheetNames:[],Sheets:{}}}function Fw(e,r,t,a){var n=1;if(!t)for(;n<=65535;++n,t=undefined)if(e.SheetNames.indexOf(t="Sheet"+n)==-1)break;if(!t||e.SheetNames.length>=65535)throw new Error("Too many worksheets");if(a&&e.SheetNames.indexOf(t)>=0){var i=t.match(/(^.*?)(\d+)$/);n=i&&+i[2]||0;var s=i&&i[1]||t;for(++n;n<=65535;++n)if(e.SheetNames.indexOf(t=s+n)==-1)break}Jp(t);if(e.SheetNames.indexOf(t)>=0)throw new Error("Worksheet with name |"+t+"| already exists!");e.SheetNames.push(t);e.Sheets[t]=r;return t}function Dw(e,r,t){if(!e.Workbook)e.Workbook={};if(!e.Workbook.Sheets)e.Workbook.Sheets=[];var a=Iw(e,r);if(!e.Workbook.Sheets[a])e.Workbook.Sheets[a]={};switch(t){case 0:;case 1:;case 2:break;default:throw new Error("Bad sheet visibility setting "+t);}e.Workbook.Sheets[a].Hidden=t}function Pw(e,r){e.z=r;return e}function Lw(e,r,t){if(!r){delete e.l}else{e.l={Target:r};if(t)e.l.Tooltip=t}return e}function Mw(e,r,t){return Lw(e,"#"+r,t)}function Uw(e,r,t){if(!e.c)e.c=[];e.c.push({t:r,a:t||"SheetJS"})}function Bw(e,r,t,a){var n=typeof r!="string"?r:Fa(r);var i=typeof r=="string"?r:Na(r);for(var s=n.s.r;s<=n.e.r;++s)for(var f=n.s.c;f<=n.e.c;++f){var o=Ow(e,s,f);o.t="n";o.F=i;delete o.v;if(s==n.s.r&&f==n.s.c){o.f=t;if(a)o.D=true}}return e}var Ww={encode_col:_a,encode_row:Ta,encode_cell:Oa,encode_range:Na,decode_col:Sa,decode_row:ka,split_cell:Ca,decode_cell:Ra,decode_range:Ia,format_cell:Pa,sheet_add_aoa:Ma,sheet_add_json:Cw,sheet_add_dom:Gb,aoa_to_sheet:Ua,json_to_sheet:Rw,table_to_sheet:jb,table_to_book:Xb,sheet_to_csv:_w,sheet_to_txt:Aw,sheet_to_json:Ew,sheet_to_html:Vb,sheet_to_formulae:xw,sheet_to_row_object_array:Ew,sheet_get_cell:Ow,book_new:Nw,book_append_sheet:Fw,book_set_sheet_visibility:Dw,cell_set_number_format:Pw,cell_set_hyperlink:Lw,cell_set_internal_link:Mw,cell_add_comment:Uw,sheet_set_array_formula:Bw,consts:{SHEET_VISIBLE:0,SHEET_HIDDEN:1,SHEET_VERY_HIDDEN:2}};var Hw;function zw(e){Hw=e}function Vw(e,r){var t=Hw();var a=r==null?{}:r;if(e==null||e["!ref"]==null){t.push(null);return t}var n=Fa(e["!ref"]);var i=a.FS!==undefined?a.FS:",",s=i.charCodeAt(0);var f=a.RS!==undefined?a.RS:"\n",o=f.charCodeAt(0);var c=new RegExp((i=="|"?"\\|":i)+"+$");var l="",u=[];a.dense=Array.isArray(e);var h=a.skipHidden&&e["!cols"]||[];var d=a.skipHidden&&e["!rows"]||[];for(var v=n.s.c;v<=n.e.c;++v)if(!(h[v]||{}).hidden)u[v]=_a(v);var p=n.s.r;var m=false,b=0;t._read=function(){if(!m){m=true;return t.push("\ufeff")}while(p<=n.e.r){++p;if((d[p-1]||{}).hidden)continue;l=Sw(e,n,p-1,u,s,o,i,a);if(l!=null){if(a.strip)l=l.replace(c,"");if(l||a.blankrows!==false)return t.push((b++?f:"")+l)}}return t.push(null)};return t}function Gw(e,r){var t=Hw();var a=r||{};var n=a.header!=null?a.header:Bb;var i=a.footer!=null?a.footer:Wb;t.push(n);var s=Ia(e["!ref"]);a.dense=Array.isArray(e);t.push(zb(e,s,a));var f=s.s.r;var o=false;t._read=function(){if(f>s.e.r){if(!o){o=true;t.push("</table>"+i)}return t.push(null)}while(f<=s.e.r){t.push(Ub(e,s,f,a));++f;break}};return t}function jw(e,r){var t=Hw({objectMode:true});if(e==null||e["!ref"]==null){t.push(null);return t}var a={t:"n",v:0},n=0,i=1,s=[],f=0,o="";var c={s:{r:0,c:0},e:{r:0,c:0}};var l=r||{};var u=l.range!=null?l.range:e["!ref"];if(l.header===1)n=1;else if(l.header==="A")n=2;else if(Array.isArray(l.header))n=3;switch(typeof u){case"string":c=Fa(u);break;case"number":c=Fa(e["!ref"]);c.s.r=u;break;default:c=u;}if(n>0)i=0;var h=Ta(c.s.r);var d=[];var v=0;var p=Array.isArray(e);var m=c.s.r,b=0;var g={};if(p&&!e[m])e[m]=[];var w=l.skipHidden&&e["!cols"]||[];var k=l.skipHidden&&e["!rows"]||[];for(b=c.s.c;b<=c.e.c;++b){if((w[b]||{}).hidden)continue;d[b]=_a(b);a=p?e[m][b]:e[d[b]+h];switch(n){case 1:s[b]=b-c.s.c;break;case 2:s[b]=d[b];break;case 3:s[b]=l.header[b-c.s.c];break;default:if(a==null)a={w:"__EMPTY",t:"s"};o=f=Pa(a,null,l);v=g[f]||0;if(!v)g[f]=1;else{do{o=f+"_"+v++}while(g[o]);g[f]=v;g[o]=1}s[b]=o;}}m=c.s.r+i;t._read=function(){while(m<=c.e.r){if((k[m-1]||{}).hidden)continue;var r=Tw(e,c,m,d,n,s,p,l);++m;if(r.isempty===false||(n===1?l.blankrows!==false:!!l.blankrows)){t.push(r.row);return}}return t.push(null)};return t}var Xw={to_json:jw,to_html:Gw,to_csv:Vw,set_readable:zw};if(typeof vb!=="undefined")e.parse_xlscfb=vb;e.parse_zip=Xg;e.read=iw;e.readFile=sw;e.readFileSync=sw;e.write=mw;e.writeFile=gw;e.writeFileSync=gw;e.writeFileAsync=kw;e.utils=Ww;e.writeXLSX=pw;e.writeFileXLSX=ww;e.SSF=Ve;if(typeof Xw!=="undefined")e.stream=Xw;if(typeof Ke!=="undefined")e.CFB=Ke;if(typeof require!=="undefined"){var $w=undefined;if(($w||{}).Readable)zw($w.Readable)}}if(typeof exports!=="undefined")make_xlsx_lib(exports);else if(typeof module!=="undefined"&&module.exports)make_xlsx_lib(module.exports);else if(typeof define==="function"&&define.amd)define("xlsx",function(){if(!XLSX.version)make_xlsx_lib(XLSX);return XLSX});else make_xlsx_lib(XLSX);if(typeof window!=="undefined"&&!window.XLSX)try{window.XLSX=XLSX}catch(e){}
 
 </script>
-<script id="data-json" type="application/json">{"marca": "CARMEN SACHA", "mes": "AGOSTO", "generado": "01/09/2026 07:00", "fecha_ultimo_corte": "2026-08-26", "rango_fechas": ["2026-08-01", "2026-08-26"], "kpis": {"total_registros": 21, "pdv_cubiertos": 10, "var_total_dia": 0.0, "var_pdv_dia": 0.0, "valor_ayer_total": 1, "valor_ayer_pdv": 1, "por_indicador": {"EXHIBICIONES LINEALES": {"total": 21, "color": "#2E7D32", "var_dia": 0.0, "valor_ayer": 1}, "EXHIBICIONES NEGOCIADAS": {"total": 0, "color": "#1F4E78", "var_dia": null, "valor_ayer": 0}, "EXHIBICIONES GRATIS": {"total": 0, "color": "#ED7D31", "var_dia": null, "valor_ayer": 0}, "PROMOCIONES POS": {"total": 0, "color": "#C0392B", "var_dia": null, "valor_ayer": 0}, "FOTO CATEGORIA": {"total": 0, "color": "#8E44AD", "var_dia": null, "valor_ayer": 0}}}, "serie_temporal": [{"fecha": "2026-08-01", "valor": 5}, {"fecha": "2026-08-04", "valor": 1}, {"fecha": "2026-08-05", "valor": 2}, {"fecha": "2026-08-06", "valor": 3}, {"fecha": "2026-08-08", "valor": 4}, {"fecha": "2026-08-13", "valor": 2}, {"fecha": "2026-08-14", "valor": 1}, {"fecha": "2026-08-19", "valor": 1}, {"fecha": "2026-08-22", "valor": 1}, {"fecha": "2026-08-26", "valor": 1}], "top_cadenas": [["EXITO", 21]], "distribucion_tipo": [["EXHIBICIONES LINEALES", 21]], "ranking_ciudades": [["BOGOTA", 12], ["MEDELLIN", 5], ["RIONEGRO", 2], ["BARRANQUILLA", 1], ["CALI", 1]], "indicadores_orden": ["EXHIBICIONES LINEALES", "EXHIBICIONES NEGOCIADAS", "EXHIBICIONES GRATIS", "PROMOCIONES POS", "FOTO CATEGORIA"], "colores": {"EXHIBICIONES LINEALES": "#2E7D32", "EXHIBICIONES NEGOCIADAS": "#1F4E78", "EXHIBICIONES GRATIS": "#ED7D31", "PROMOCIONES POS": "#C0392B", "FOTO CATEGORIA": "#8E44AD"}, "registros": [{"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1396", "punto_venta": "EXITO - EXITO BARRANQUILLA - BARRANQUILLA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "VIVIANA PATRICIA POLANIA PEREZ", "ciudad": "BARRANQUILLA", "colaborador": "ADRIANA CASTRO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-01", "fecha_disp": "01/08/2026", "dia_semana": "SÁB", "id_tarea": 251291, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/JULAFdZQ7xpouDyQLVqEoEatUeaPwIGu1TOdykfhV28=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/e5ac0e44-81fa-4ff3-aec9-7af90defe9e3/1143456956/FOTO_8423_620008423_1143456956.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1495", "punto_venta": "EXITO - EXITO COUNTRY - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-01", "fecha_disp": "01/08/2026", "dia_semana": "SÁB", "id_tarea": 251402, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/ak0qeQV1j6b6CTV4ES98wjQ52Q2MaCUx3eySJR28A=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/1d4cf863-50dd-41fc-a049-69a9ad383be1/1033700554/FOTO_8455_620008455_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1597", "punto_venta": "EXITO - CARULLA CALLE 140 - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-01", "fecha_disp": "01/08/2026", "dia_semana": "SÁB", "id_tarea": 251436, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/wGcwdOLdTmKCqjhBTA4MuFKwyU4b8YoN6xjcmezFr0=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/d31cc277-a37c-4697-ac88-b85bc1bcced5/1033700554/FOTO_8517_620008517_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1608", "punto_venta": "EXITO - CARULLA NIZA - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-01", "fecha_disp": "01/08/2026", "dia_semana": "SÁB", "id_tarea": 251299, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/hqNfSAUXFHW1B1X3Xqss2eu5EI6X7SnyjHszRQNCtlE=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/7813dd7e-ca6f-447f-87be-99e4c78c8228/1033700554/FOTO_8528_620008528_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1694", "punto_venta": "EXITO - CARULLA PANCE CALI - CALI", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "ANDERSON ROMERO ", "ciudad": "CALI", "colaborador": "MONICA MARIA SOLORZANO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-01", "fecha_disp": "01/08/2026", "dia_semana": "SÁB", "id_tarea": 251032, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/n4dff3EeKNMpobjyb5lqnOKrNMB9liW0dF8DjSLiY=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/a756c122-9f62-423e-b4ee-93f09cae1c3a/38460284/FOTO_8570_620008570_38460284.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1597", "punto_venta": "EXITO - CARULLA CALLE 140 - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-04", "fecha_disp": "04/08/2026", "dia_semana": "MAR", "id_tarea": 255312, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/ZYhyWB4A1lYgJOeUOfUU4jrPq2nSMyXGxeOBRHKrg=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/21729e33-2bf7-443f-b151-a9631d4d34bd/1033700554/FOTO_8517_620008517_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1495", "punto_venta": "EXITO - EXITO COUNTRY - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-05", "fecha_disp": "05/08/2026", "dia_semana": "MIÉ", "id_tarea": 256530, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/XLRFI03IAZ3Y8suo1enlBenlupCK4u31fGsC2ICTc=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/a3885ca7-efc4-48c4-ad19-cfe15994098f/1033700554/FOTO_8455_620008455_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1597", "punto_venta": "EXITO - CARULLA CALLE 140 - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-05", "fecha_disp": "05/08/2026", "dia_semana": "MIÉ", "id_tarea": 256941, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/4WPki9oycPdqItqAukLaXXhxxdYMr9ZwLCc38aPk=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/9394b941-d7e9-4d6b-b65a-5a3c84f28f13/1033700554/FOTO_8517_620008517_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1370", "punto_venta": "EXITO - EXITO DEL ESTE - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "VIVIANA PATRICIA POLANIA PEREZ", "ciudad": "MEDELLIN", "colaborador": "MARIANA FLORES RUEDA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-06", "fecha_disp": "06/08/2026", "dia_semana": "JUE", "id_tarea": 257988, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/f0WX9fCnPn6NA9gJzBNOUeNIxrgvk8UR280FUBdKUw=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/3452d54d-735d-42db-a829-200503424de4/1027663270/FOTO_8409_620008409_1027663270.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1488", "punto_venta": "EXITO - CARULLA OVIEDO - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "VIVIANA PATRICIA POLANIA PEREZ", "ciudad": "MEDELLIN", "colaborador": "ANA GABRIEL VANEGAS LOPEZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-06", "fecha_disp": "06/08/2026", "dia_semana": "JUE", "id_tarea": 258255, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/83wIpHd06cHBO0PrEtNFoVnDuwk4IXBvvBgG0tWUNA=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/0a94730f-a60d-494d-8609-cc7b1cfb49df/1000440938/FOTO_8451_620008451_1000440938.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1489", "punto_venta": "EXITO - CARULLA PALMAS - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "CARLOS ANDRES SUAREZ", "ciudad": "MEDELLIN", "colaborador": "LINA PATRICIA JARAMILLO LOPERA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-06", "fecha_disp": "06/08/2026", "dia_semana": "JUE", "id_tarea": 258890, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/kE38IHyjuGic2rFqg3mUlbpzFgaNjedg9t6CMDSSAhA=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/98dc9dae-8777-4e69-8ed2-014dbeb4c13f/1152689210/FOTO_8452_620008452_1152689210.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1489", "punto_venta": "EXITO - CARULLA PALMAS - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "CARLOS ANDRES SUAREZ", "ciudad": "MEDELLIN", "colaborador": "LINA PATRICIA JARAMILLO LOPERA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-08", "fecha_disp": "08/08/2026", "dia_semana": "SÁB", "id_tarea": 260338, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/mLjDsyHGZck4rYYUMpYRACCTRYU1GalTwf8WOVKe8=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/0a624cb1-fedc-49ab-b05a-194865dd55fc/1152689210/FOTO_8452_620008452_1152689210.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1495", "punto_venta": "EXITO - EXITO COUNTRY - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-08", "fecha_disp": "08/08/2026", "dia_semana": "SÁB", "id_tarea": 261616, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/jyI3DIDfJ93SsRxkuMuxleOgXM4JlyuTbnLz8Pds=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/6cf15d6c-0c24-496b-892d-023c10fd0267/5003753/FOTO_8455_620008455_5003753.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1591", "punto_venta": "EXITO - CARULLA LLANO GRANDE - RIONEGRO-ANTIOQUIA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "DANIELA RAIGOZA RINCON", "ciudad": "RIONEGRO", "colaborador": "MARIA CAROLINA MARTINEZ FLOREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-08", "fecha_disp": "08/08/2026", "dia_semana": "SÁB", "id_tarea": 260642, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/y3hmY0JMTo9X6zYpA3Yce1gUQk0OMgDLQzHKSZWLgw=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/06c14a58-1ed3-47d0-a346-2ad482d510c7/1193562462/FOTO_8511_620008511_1193562462.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1597", "punto_venta": "EXITO - CARULLA CALLE 140 - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-08", "fecha_disp": "08/08/2026", "dia_semana": "SÁB", "id_tarea": 261608, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/ktM3mv1IdUOj6vkQiuqKxMZ2gsvT1eo9tvWVeyGi4U=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/4447db8a-065d-4670-a16f-e10cc70055f7/5003753/FOTO_8517_620008517_5003753.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1488", "punto_venta": "EXITO - CARULLA OVIEDO - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "VIVIANA PATRICIA POLANIA PEREZ", "ciudad": "MEDELLIN", "colaborador": "ANA GABRIEL VANEGAS LOPEZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-13", "fecha_disp": "13/08/2026", "dia_semana": "JUE", "id_tarea": 268851, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/FIz8BSKct0uhLQRGdijd3BogtA8gEFffGuTgSw6oL9M=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/cc597bfe-0e68-45b3-bd40-e0454d19398d/1000440938/FOTO_8451_620008451_1000440938.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1495", "punto_venta": "EXITO - EXITO COUNTRY - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-13", "fecha_disp": "13/08/2026", "dia_semana": "JUE", "id_tarea": 268246, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/w45F1194xfERC5i5P0CMS5ysf8IpbUJRsPzPx4IuuI=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/d82244d9-2852-4ecd-8482-c8fcea18cba3/5003753/FOTO_8455_620008455_5003753.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1541", "punto_venta": "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "LAURA VIVIANA LATORRE PERDOMO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-14", "fecha_disp": "14/08/2026", "dia_semana": "VIE", "id_tarea": 270415, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/cZge9pcA4CKacvLDXrTWosiByX3FkDuAZSkfnPvyrI=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/6ad0ea58-20ca-4998-b07a-00f9d408794e/53130675/FOTO_8488_620008488_53130675.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1541", "punto_venta": "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "LAURA VIVIANA LATORRE PERDOMO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-19", "fecha_disp": "19/08/2026", "dia_semana": "MIÉ", "id_tarea": 276471, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/FnnM0HZvIOzdk6mVqOdXjqxmWt3KYTlHaeG1Vg66Y=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/44d4b3fc-ecf5-4fd4-ab7a-98b0823ff90a/53130675/FOTO_8488_620008488_53130675.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1591", "punto_venta": "EXITO - CARULLA LLANO GRANDE - RIONEGRO-ANTIOQUIA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "DANIELA RAIGOZA RINCON", "ciudad": "RIONEGRO", "colaborador": "MARIA CAROLINA MARTINEZ FLOREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-22", "fecha_disp": "22/08/2026", "dia_semana": "SÁB", "id_tarea": 282375, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/7L5oiHxQ4MhVNcwDuMuUwYyBLAcjKId83FyZj2N3AY=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/3db44a7e-a504-4573-973a-17ad068ca18a/1193562462/FOTO_8511_620008511_1193562462.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1608", "punto_venta": "EXITO - CARULLA NIZA - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-26", "fecha_disp": "26/08/2026", "dia_semana": "MIÉ", "id_tarea": 287416, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/JX0pnwLDHzDzYWk3mBmwlKtADuv93sir7Dg4vxi2Jw=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/558af142-4996-4243-bb2b-897c8ec601d7/5003753/FOTO_8528_620008528_5003753.jpeg"}], "detalle": [{"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1608", "punto_venta": "EXITO - CARULLA NIZA - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-26", "fecha_disp": "26/08/2026", "dia_semana": "MIÉ", "id_tarea": 287416, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/JX0pnwLDHzDzYWk3mBmwlKtADuv93sir7Dg4vxi2Jw=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/558af142-4996-4243-bb2b-897c8ec601d7/5003753/FOTO_8528_620008528_5003753.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1591", "punto_venta": "EXITO - CARULLA LLANO GRANDE - RIONEGRO-ANTIOQUIA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "DANIELA RAIGOZA RINCON", "ciudad": "RIONEGRO", "colaborador": "MARIA CAROLINA MARTINEZ FLOREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-22", "fecha_disp": "22/08/2026", "dia_semana": "SÁB", "id_tarea": 282375, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/7L5oiHxQ4MhVNcwDuMuUwYyBLAcjKId83FyZj2N3AY=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/3db44a7e-a504-4573-973a-17ad068ca18a/1193562462/FOTO_8511_620008511_1193562462.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1541", "punto_venta": "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "LAURA VIVIANA LATORRE PERDOMO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-19", "fecha_disp": "19/08/2026", "dia_semana": "MIÉ", "id_tarea": 276471, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/FnnM0HZvIOzdk6mVqOdXjqxmWt3KYTlHaeG1Vg66Y=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/44d4b3fc-ecf5-4fd4-ab7a-98b0823ff90a/53130675/FOTO_8488_620008488_53130675.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1541", "punto_venta": "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "LAURA VIVIANA LATORRE PERDOMO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-14", "fecha_disp": "14/08/2026", "dia_semana": "VIE", "id_tarea": 270415, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/cZge9pcA4CKacvLDXrTWosiByX3FkDuAZSkfnPvyrI=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/6ad0ea58-20ca-4998-b07a-00f9d408794e/53130675/FOTO_8488_620008488_53130675.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1488", "punto_venta": "EXITO - CARULLA OVIEDO - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "VIVIANA PATRICIA POLANIA PEREZ", "ciudad": "MEDELLIN", "colaborador": "ANA GABRIEL VANEGAS LOPEZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-13", "fecha_disp": "13/08/2026", "dia_semana": "JUE", "id_tarea": 268851, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/FIz8BSKct0uhLQRGdijd3BogtA8gEFffGuTgSw6oL9M=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/cc597bfe-0e68-45b3-bd40-e0454d19398d/1000440938/FOTO_8451_620008451_1000440938.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1495", "punto_venta": "EXITO - EXITO COUNTRY - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-13", "fecha_disp": "13/08/2026", "dia_semana": "JUE", "id_tarea": 268246, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/w45F1194xfERC5i5P0CMS5ysf8IpbUJRsPzPx4IuuI=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/d82244d9-2852-4ecd-8482-c8fcea18cba3/5003753/FOTO_8455_620008455_5003753.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1489", "punto_venta": "EXITO - CARULLA PALMAS - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "CARLOS ANDRES SUAREZ", "ciudad": "MEDELLIN", "colaborador": "LINA PATRICIA JARAMILLO LOPERA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-08", "fecha_disp": "08/08/2026", "dia_semana": "SÁB", "id_tarea": 260338, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/mLjDsyHGZck4rYYUMpYRACCTRYU1GalTwf8WOVKe8=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/0a624cb1-fedc-49ab-b05a-194865dd55fc/1152689210/FOTO_8452_620008452_1152689210.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1495", "punto_venta": "EXITO - EXITO COUNTRY - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-08", "fecha_disp": "08/08/2026", "dia_semana": "SÁB", "id_tarea": 261616, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/jyI3DIDfJ93SsRxkuMuxleOgXM4JlyuTbnLz8Pds=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/6cf15d6c-0c24-496b-892d-023c10fd0267/5003753/FOTO_8455_620008455_5003753.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1591", "punto_venta": "EXITO - CARULLA LLANO GRANDE - RIONEGRO-ANTIOQUIA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "DANIELA RAIGOZA RINCON", "ciudad": "RIONEGRO", "colaborador": "MARIA CAROLINA MARTINEZ FLOREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-08", "fecha_disp": "08/08/2026", "dia_semana": "SÁB", "id_tarea": 260642, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/y3hmY0JMTo9X6zYpA3Yce1gUQk0OMgDLQzHKSZWLgw=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/06c14a58-1ed3-47d0-a346-2ad482d510c7/1193562462/FOTO_8511_620008511_1193562462.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1597", "punto_venta": "EXITO - CARULLA CALLE 140 - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-08", "fecha_disp": "08/08/2026", "dia_semana": "SÁB", "id_tarea": 261608, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/ktM3mv1IdUOj6vkQiuqKxMZ2gsvT1eo9tvWVeyGi4U=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/4447db8a-065d-4670-a16f-e10cc70055f7/5003753/FOTO_8517_620008517_5003753.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1370", "punto_venta": "EXITO - EXITO DEL ESTE - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "VIVIANA PATRICIA POLANIA PEREZ", "ciudad": "MEDELLIN", "colaborador": "MARIANA FLORES RUEDA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-06", "fecha_disp": "06/08/2026", "dia_semana": "JUE", "id_tarea": 257988, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/f0WX9fCnPn6NA9gJzBNOUeNIxrgvk8UR280FUBdKUw=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/3452d54d-735d-42db-a829-200503424de4/1027663270/FOTO_8409_620008409_1027663270.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1488", "punto_venta": "EXITO - CARULLA OVIEDO - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "VIVIANA PATRICIA POLANIA PEREZ", "ciudad": "MEDELLIN", "colaborador": "ANA GABRIEL VANEGAS LOPEZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-06", "fecha_disp": "06/08/2026", "dia_semana": "JUE", "id_tarea": 258255, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/83wIpHd06cHBO0PrEtNFoVnDuwk4IXBvvBgG0tWUNA=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/0a94730f-a60d-494d-8609-cc7b1cfb49df/1000440938/FOTO_8451_620008451_1000440938.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1489", "punto_venta": "EXITO - CARULLA PALMAS - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "CARLOS ANDRES SUAREZ", "ciudad": "MEDELLIN", "colaborador": "LINA PATRICIA JARAMILLO LOPERA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-06", "fecha_disp": "06/08/2026", "dia_semana": "JUE", "id_tarea": 258890, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/kE38IHyjuGic2rFqg3mUlbpzFgaNjedg9t6CMDSSAhA=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/98dc9dae-8777-4e69-8ed2-014dbeb4c13f/1152689210/FOTO_8452_620008452_1152689210.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1495", "punto_venta": "EXITO - EXITO COUNTRY - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-05", "fecha_disp": "05/08/2026", "dia_semana": "MIÉ", "id_tarea": 256530, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/XLRFI03IAZ3Y8suo1enlBenlupCK4u31fGsC2ICTc=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/a3885ca7-efc4-48c4-ad19-cfe15994098f/1033700554/FOTO_8455_620008455_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1597", "punto_venta": "EXITO - CARULLA CALLE 140 - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-05", "fecha_disp": "05/08/2026", "dia_semana": "MIÉ", "id_tarea": 256941, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/4WPki9oycPdqItqAukLaXXhxxdYMr9ZwLCc38aPk=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/9394b941-d7e9-4d6b-b65a-5a3c84f28f13/1033700554/FOTO_8517_620008517_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1597", "punto_venta": "EXITO - CARULLA CALLE 140 - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-04", "fecha_disp": "04/08/2026", "dia_semana": "MAR", "id_tarea": 255312, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/ZYhyWB4A1lYgJOeUOfUU4jrPq2nSMyXGxeOBRHKrg=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/21729e33-2bf7-443f-b151-a9631d4d34bd/1033700554/FOTO_8517_620008517_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1396", "punto_venta": "EXITO - EXITO BARRANQUILLA - BARRANQUILLA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "VIVIANA PATRICIA POLANIA PEREZ", "ciudad": "BARRANQUILLA", "colaborador": "ADRIANA CASTRO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-01", "fecha_disp": "01/08/2026", "dia_semana": "SÁB", "id_tarea": 251291, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/JULAFdZQ7xpouDyQLVqEoEatUeaPwIGu1TOdykfhV28=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/e5ac0e44-81fa-4ff3-aec9-7af90defe9e3/1143456956/FOTO_8423_620008423_1143456956.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1495", "punto_venta": "EXITO - EXITO COUNTRY - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-01", "fecha_disp": "01/08/2026", "dia_semana": "SÁB", "id_tarea": 251402, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/ak0qeQV1j6b6CTV4ES98wjQ52Q2MaCUx3eySJR28A=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/1d4cf863-50dd-41fc-a049-69a9ad383be1/1033700554/FOTO_8455_620008455_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1597", "punto_venta": "EXITO - CARULLA CALLE 140 - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-01", "fecha_disp": "01/08/2026", "dia_semana": "SÁB", "id_tarea": 251436, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/wGcwdOLdTmKCqjhBTA4MuFKwyU4b8YoN6xjcmezFr0=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/d31cc277-a37c-4697-ac88-b85bc1bcced5/1033700554/FOTO_8517_620008517_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1608", "punto_venta": "EXITO - CARULLA NIZA - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "JENNY DAIYANA MOLANO ROMERO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-01", "fecha_disp": "01/08/2026", "dia_semana": "SÁB", "id_tarea": 251299, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/hqNfSAUXFHW1B1X3Xqss2eu5EI6X7SnyjHszRQNCtlE=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/7813dd7e-ca6f-447f-87be-99e4c78c8228/1033700554/FOTO_8528_620008528_1033700554.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1694", "punto_venta": "EXITO - CARULLA PANCE CALI - CALI", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "ANDERSON ROMERO ", "ciudad": "CALI", "colaborador": "MONICA MARIA SOLORZANO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-08-01", "fecha_disp": "01/08/2026", "dia_semana": "SÁB", "id_tarea": 251032, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/n4dff3EeKNMpobjyb5lqnOKrNMB9liW0dF8DjSLiY=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/a756c122-9f62-423e-b4ee-93f09cae1c3a/38460284/FOTO_8570_620008570_38460284.jpeg"}]}</script>
+<script id="data-json" type="application/json">{"marca": "CARMEN SACHA", "mes": "SEPTIEMBRE", "generado": "17/09/2026 07:35", "fecha_ultimo_corte": "2026-09-16", "rango_fechas": ["2026-09-16", "2026-09-16"], "kpis": {"total_registros": 5, "pdv_cubiertos": 5, "var_total_dia": null, "var_pdv_dia": null, "valor_ayer_total": null, "valor_ayer_pdv": null, "por_indicador": {"EXHIBICIONES LINEALES": {"total": 5, "color": "#2E7D32", "var_dia": null, "valor_ayer": null}, "EXHIBICIONES NEGOCIADAS": {"total": 0, "color": "#1F4E78", "var_dia": null, "valor_ayer": null}, "EXHIBICIONES GRATIS": {"total": 0, "color": "#ED7D31", "var_dia": null, "valor_ayer": null}, "PROMOCIONES POS": {"total": 0, "color": "#C0392B", "var_dia": null, "valor_ayer": null}, "FOTO CATEGORIA": {"total": 0, "color": "#8E44AD", "var_dia": null, "valor_ayer": null}}}, "serie_temporal": [{"fecha": "2026-09-16", "valor": 5}], "top_cadenas": [["EXITO", 5]], "distribucion_tipo": [["EXHIBICIONES LINEALES", 5]], "ranking_ciudades": [["BOGOTA", 3], ["MEDELLIN", 1], ["CALI", 1]], "indicadores_orden": ["EXHIBICIONES LINEALES", "EXHIBICIONES NEGOCIADAS", "EXHIBICIONES GRATIS", "PROMOCIONES POS", "FOTO CATEGORIA"], "colores": {"EXHIBICIONES LINEALES": "#2E7D32", "EXHIBICIONES NEGOCIADAS": "#1F4E78", "EXHIBICIONES GRATIS": "#ED7D31", "PROMOCIONES POS": "#C0392B", "FOTO CATEGORIA": "#8E44AD"}, "registros": [{"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1489", "punto_venta": "EXITO - CARULLA PALMAS - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "CARLOS ANDRES SUAREZ", "ciudad": "MEDELLIN", "colaborador": "LINA PATRICIA JARAMILLO LOPERA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-16", "fecha_disp": "16/09/2026", "dia_semana": "MIÉ", "id_tarea": 321372, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/avejebbf1B4gNXWRheEkerJsp9AYx5TwERmQLb8s9Wo=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/8c44f721-1d88-4c0c-ad74-09ca7c3fc27f/1152689210/FOTO_8452_620008452_1152689210.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1495", "punto_venta": "EXITO - EXITO COUNTRY - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-16", "fecha_disp": "16/09/2026", "dia_semana": "MIÉ", "id_tarea": 322768, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/Libya3119bB8vo5j5PM04X3UmeRagI19AriwiJ1Yow=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/a4951697-ba50-4250-9cad-c630509948a6/5003753/FOTO_8455_620008455_5003753.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1541", "punto_venta": "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "LAURA VIVIANA LATORRE PERDOMO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-16", "fecha_disp": "16/09/2026", "dia_semana": "MIÉ", "id_tarea": 322781, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/wp1Vh9ft3OEcCynd0W1va5jVuPg2uTbAqB2QuOE6Dc=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/97395f15-ff7b-46ac-b942-94e89e6d3ff1/53130675/FOTO_8488_620008488_53130675.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1597", "punto_venta": "EXITO - CARULLA CALLE 140 - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-16", "fecha_disp": "16/09/2026", "dia_semana": "MIÉ", "id_tarea": 322180, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/7OR28a5Oq3ZPEem66XkiShoDNHax4supD4eixIBo=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/8ce5c18d-d72b-46cd-8e45-fa394e26f777/5003753/FOTO_8517_620008517_5003753.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1694", "punto_venta": "EXITO - CARULLA PANCE CALI - CALI", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "ANDERSON ROMERO ", "ciudad": "CALI", "colaborador": "MONICA MARIA SOLORZANO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-16", "fecha_disp": "16/09/2026", "dia_semana": "MIÉ", "id_tarea": 322727, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/cexPCq89zEkXi46fWot3iBLgzy1n9U8iXa3Z4fPW1rA=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/480ed040-20b1-4311-96ce-5b260a2d6e82/38460284/FOTO_8570_620008570_38460284.jpeg"}], "detalle": [{"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1489", "punto_venta": "EXITO - CARULLA PALMAS - MEDELLIN", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "CARLOS ANDRES SUAREZ", "ciudad": "MEDELLIN", "colaborador": "LINA PATRICIA JARAMILLO LOPERA", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-16", "fecha_disp": "16/09/2026", "dia_semana": "MIÉ", "id_tarea": 321372, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/avejebbf1B4gNXWRheEkerJsp9AYx5TwERmQLb8s9Wo=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/8c44f721-1d88-4c0c-ad74-09ca7c3fc27f/1152689210/FOTO_8452_620008452_1152689210.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1495", "punto_venta": "EXITO - EXITO COUNTRY - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-16", "fecha_disp": "16/09/2026", "dia_semana": "MIÉ", "id_tarea": 322768, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/Libya3119bB8vo5j5PM04X3UmeRagI19AriwiJ1Yow=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/a4951697-ba50-4250-9cad-c630509948a6/5003753/FOTO_8455_620008455_5003753.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1541", "punto_venta": "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "LAURA VIVIANA LATORRE PERDOMO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-16", "fecha_disp": "16/09/2026", "dia_semana": "MIÉ", "id_tarea": 322781, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/wp1Vh9ft3OEcCynd0W1va5jVuPg2uTbAqB2QuOE6Dc=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/97395f15-ff7b-46ac-b942-94e89e6d3ff1/53130675/FOTO_8488_620008488_53130675.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1597", "punto_venta": "EXITO - CARULLA CALLE 140 - BOGOTA", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "TATIANA CAROLINA ARIAS BARRERA", "ciudad": "BOGOTA", "colaborador": "ZULLY SAAVEDRA SUAREZ", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-16", "fecha_disp": "16/09/2026", "dia_semana": "MIÉ", "id_tarea": 322180, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/7OR28a5Oq3ZPEem66XkiShoDNHax4supD4eixIBo=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/8ce5c18d-d72b-46cd-8e45-fa394e26f777/5003753/FOTO_8517_620008517_5003753.jpeg"}, {"indicador": "EXHIBICIONES LINEALES", "color": "#2E7D32", "pdv": "NMER1694", "punto_venta": "EXITO - CARULLA PANCE CALI - CALI", "canal": "AUTOSERVICIOS", "cadena": "EXITO", "coordinador": "ANDERSON ROMERO ", "ciudad": "CALI", "colaborador": "MONICA MARIA SOLORZANO", "actividad": "EXHIBICION LINEAL", "detalle_actividad": "", "fecha": "2026-09-16", "fecha_disp": "16/09/2026", "dia_semana": "MIÉ", "id_tarea": 322727, "categoria": "", "tipo_exhibicion": "EXHIBICION LINEAL", "foto": "https://plf.co.teamcore.net/imagenes/task/cexPCq89zEkXi46fWot3iBLgzy1n9U8iXa3Z4fPW1rA=/", "foto_directa": "https://teamcore-multi-test2.s3.amazonaws.com/plf.co/480ed040-20b1-4311-96ce-5b260a2d6e82/38460284/FOTO_8570_620008570_38460284.jpeg"}]}</script>
+<script id="noimpl-json" type="application/json">{}</script>
+<script id="encuestas-json" type="application/json">{"marca": "CARMEN SACHA", "total": 35, "encuestas": 3, "pdv": 7, "preguntas": 4, "respuestas": 17, "g_encuestas": [{"k": "CARMEN SACHA", "v": 21}, {"k": "CARMEN SACHA FIN TAREA DE IMPULSO", "v": 9}, {"k": "CARMEN SACHA INICIO TAREA DE IMPULSO", "v": 5}], "g_cadenas": [{"k": "CARULLA", "v": 19}, {"k": "EXITO", "v": 16}], "g_usuarios": [{"k": "5003753", "v": 21}, {"k": "38460284", "v": 5}, {"k": "53130675", "v": 3}, {"k": "1152689210", "v": 2}, {"k": "1081790325", "v": 2}, {"k": "1070018922", "v": 2}], "g_tipos": [{"k": "MUEBLE", "v": 22}, {"k": "CARTELERIA", "v": 7}, {"k": "PRODUCTO", "v": 6}], "g_fechas": [{"k": "16/09/2026", "v": 35}], "cols": ["Fecha", "Semana", "Encuesta", "Cadena", "Código", "Punto de Venta", "Tipo", "Mercaderista", "Pregunta", "Respuesta", "Observación", "Fuente", "REGISTRO FOTOGRAFICO"], "idx": {"fecha": 0, "semana": 1, "encuesta": 2, "cadena": 3, "codigo": 4, "pdv": 5, "tipo": 6, "usuario": 7, "pregunta": 8, "respuesta": 9, "observacion": 10, "fuente": 11, "foto": 12}, "rows": [["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "MUEBLE", "38460284", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "0", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "MUEBLE", "38460284", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/cexPCq89zEkXi46fWot3iBLgzy1n9U8iXa3Z4fPW1rA="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "PRODUCTO", "38460284", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/FXLcttOyCyf3uNuQEOJUqQwqFdhre80gNE830cXums="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "CARTELERIA", "38460284", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/t0xlkANxJXNm6TPqQfBVDIZkTYNZGLqoOyRnal5Rafk="], ["16/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "MUEBLE", "38460284", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/62KcfSViwf63F87xMMtSBHFUE2OQmMHRS22SxSZNvg="], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/wp1Vh9ft3OEcCynd0W1va5jVuPg2uTbAqB2QuOE6Dc="], ["16/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/xKLqASASIPIKy1t5qym4JAAxYNFCXiyT73iWbiPPA="], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "5", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/7OR28a5Oq3ZPEem66XkiShoDNHax4supD4eixIBo="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "PRODUCTO", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/ziNG2saKrOCSJOZCWzsGXQn2DD3F9Kw1hcXP3lCZ2Q="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/KcSw35SvVDD4GuBL822KhHgOKlOMUESr36fiqv9TI="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/PWFff5lS264h6W3k5Q3LJopkvE0f6MkOM2bbbHnLI="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/BLzMD6DF2bORQ5uL8TkluZG5p6dpfH0NYXHAOE="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "PRODUCTO", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/QTgx48ZlblFpgMGYq7cQC9ABUS7DKP2sTwx4Gez3cE="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/fW8velBxEBXH61NoJZLW7h50V8GKqS6ECMDmFkmcg="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "PRODUCTO", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/xQks00IYrGmAmEE8txhTQtx21SjrUToFOjCzBrg="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/DISQVUkfmyrtFODfxU8zzuVICbfojQXg8fv9PU60="], ["16/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/9t96CEyyeBwMnyJRivNCQ84Ou7DkoJTYo7dKcNfISs="], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "SELECCIONE EL PRODUCTO CARMEN SACHA", "7709102454898 - ACEITE DE SACHA INCHI ORGANICO CARMENSACHA", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "3", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/Libya3119bB8vo5j5PM04X3UmeRagI19AriwiJ1Yow="], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "PRODUCTO", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/8hjvudr48HnpH6RLJAmupHS6ExbVRMIdfrwf7u2zs8="], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/NeChHMspsZEOxWaCxfn1nwku5FxaRQUeoJDsUdX6oKo="], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/9jDAemX7WoLCmFutSgJ4MwTn4aj1HtAsNqCmuM262A="], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "PRODUCTO", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/qd3OnDDYidxHtPzpvAPPUmuc0y9zpKQqId9iTQIqDgI="], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/QAs5TdlH8WxSVhQREPEv1phFradStgDSFSwNwhcIc="], ["16/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/B9ZVDPzCVFVBbhIcFGiub4yW3MWE78xU8TiZeY8VWw="], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "SELECCIONE EL PRODUCTO CARMEN SACHA", "7709102454898 - ACEITE DE SACHA INCHI ORGANICO CARMENSACHA", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "2", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1489", "EXITO - CARULLA PALMAS - MEDELLIN - NMER1489", "MUEBLE", "1152689210", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/avejebbf1B4gNXWRheEkerJsp9AYx5TwERmQLb8s9Wo="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1489", "EXITO - CARULLA PALMAS - MEDELLIN - NMER1489", "CARTELERIA", "1152689210", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/Mv5BkYuXOTFCtIbn67axYIOyKtNlJHu31Ej0uok6Co="], ["16/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "EXITO", "NMER1940", "EXITO - EXITO BUENA VISTA SANTA MARTA - SANTA MARTA - NMER1940", "MUEBLE", "1081790325", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/gR5ruEUwFZZ7DSr5GzIXBg5U5msAwj41sdnkHQm5h8I="], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1940", "EXITO - EXITO BUENA VISTA SANTA MARTA - SANTA MARTA - NMER1940", "MUEBLE", "1081790325", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "2", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1768", "EXITO - EXITO FONTANAR CHÃƒÂA - CHIA-CUNDINAMARCA - NMER1768", "MUEBLE", "1070018922", "SELECCIONE EL PRODUCTO CARMEN SACHA", "7709102454898 - ACEITE DE SACHA INCHI ORGANICO CARMENSACHA", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1768", "EXITO - EXITO FONTANAR CHÃƒÂA - CHIA-CUNDINAMARCA - NMER1768", "MUEBLE", "1070018922", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "1", "", "Objeto Sala", ""]], "corta_fecha": {}}</script>
+<script id="precios-json" type="application/json">{}</script>
+<script id="agotados-json" type="application/json">{}</script>
+<script id="facing-json" type="application/json">{}</script>
 <script>
 const RAW = JSON.parse(document.getElementById('data-json').textContent);
 let filtro = { indicador:"", canal:"", cadena:"", coordinador:"", ciudad:"", fecha:"", colaborador:"", pdv:"", detalle:"" };
@@ -1624,7 +2042,7 @@ let charts = {};
 let vistaActual = 'resumen';
 let datosFiltradosActuales = [];
 let paginaGaleria = 1;
-const FOTOS_POR_PAGINA = 8;
+const FOTOS_POR_PAGINA = 12;   // 3 filas de 4: aprovecha el alto de la pantalla
 let busquedaBD = "";
 
 function cambiarVista(vista) {
@@ -1636,8 +2054,38 @@ function cambiarVista(vista) {
   document.getElementById('vista-fotos').style.display = vista === 'fotos' ? '' : 'none';
   document.getElementById('vista-basedatos').style.display = vista === 'basedatos' ? '' : 'none';
 
+  const mapNoImpl = { noexh:'exh', nopos:'pos' };
+  Object.keys(mapNoImpl).forEach(v => {
+    const el = document.getElementById('vista-' + v);
+    if (el) el.style.display = (vista === v) ? '' : 'none';
+  });
+
   if (vista === 'fotos') { paginaGaleria = 1; renderGaleria(); }
   if (vista === 'basedatos') { renderBaseDatos(); }
+  if (mapNoImpl[vista]) renderNoImpl(mapNoImpl[vista]);
+
+  ['encuestas','bdencuestas'].forEach(v => {
+    const el = document.getElementById('vista-' + v);
+    if (el) el.style.display = (vista === v) ? '' : 'none';
+  });
+  if (vista === 'encuestas') renderEncuestas();
+  if (vista === 'bdencuestas') renderEncuestasTabla();
+
+  ['precios','bdprecios'].forEach(v => {
+    const el = document.getElementById('vista-' + v);
+    if (el) el.style.display = (vista === v) ? '' : 'none';
+  });
+  if (vista === 'precios') renderPrecios();
+  if (vista === 'bdprecios') renderPreciosTabla();
+
+  ['agotados','bdagotados','facing','bdfacing'].forEach(v => {
+    const el = document.getElementById('vista-' + v);
+    if (el) el.style.display = (vista === v) ? '' : 'none';
+  });
+  if (vista === 'agotados')   indRender('agotados');
+  if (vista === 'bdagotados') indTablaBD('agotados');
+  if (vista === 'facing')     indRender('facing');
+  if (vista === 'bdfacing')   indTablaBD('facing');
 }
 
 function renderGaleria() {
@@ -1760,8 +2208,79 @@ function badgeVar(valor, valorAyer) {
   return `<span class="var ${cls}">${signo} ${Math.abs(valor)}% vs dia anterior${refAyer}</span>`;
 }
 
+/* ============ FILTRADO CRUZADO (clic en los graficos, estilo Power BI) ============ */
+const ETIQUETA_CAMPO = {
+  indicador:'Indicador', fecha:'Fecha', canal:'Canal', cadena:'Cadena', pdv:'PDV',
+  ciudad:'Ciudad', coordinador:'Coordinador', colaborador:'Colaborador', detalle:'Detalle',
+};
+/* mapas nombre-mostrado -> valor-de-filtro, se rellenan en cada render */
+let MAPA_PDV = {};        // nombre del punto de venta -> codigo PDV
+let MAPA_COLAB = {};      // nombre corto -> nombre completo
+
+function aplicarFiltroCruzado(campo, valor) {
+  if (valor === null || valor === undefined || valor === '') return;
+  filtro[campo] = (filtro[campo] === valor) ? '' : valor;
+  refrescarTodosLosSelects(campo);
+  const sel = document.getElementById('f-' + campo);
+  if (sel) sel.value = filtro[campo];
+  render();
+}
+
+function quitarFiltro(campo) {
+  filtro[campo] = '';
+  refrescarTodosLosSelects(campo);
+  const sel = document.getElementById('f-' + campo);
+  if (sel) sel.value = '';
+  render();
+}
+
+/* atenua las barras no seleccionadas */
+function coloresBarras(valores, campo, base) {
+  const act = filtro[campo];
+  const c = base || '#3BBFCF';
+  if (!act) return c;
+  return valores.map(v => (v === act) ? '#1F4E78' : 'rgba(59,191,207,0.30)');
+}
+
+/* devuelve el bloque onClick/onHover para las opciones de un chart */
+function accionesClic(valores, campo) {
+  return {
+    onClick: (evt, elementos) => {
+      if (!elementos || !elementos.length) return;
+      aplicarFiltroCruzado(campo, valores[elementos[0].index]);
+    },
+    onHover: (evt, elementos) => {
+      evt.native.target.style.cursor = (elementos && elementos.length) ? 'pointer' : 'default';
+    },
+  };
+}
+
+function renderChipsFiltros() {
+  const cont = document.getElementById('chips-filtros');
+  if (!cont) return;
+  const activos = ORDEN_CAMPOS_FILTRO.filter(c => filtro[c]);
+  if (!activos.length) {
+    cont.innerHTML = '<span class="titulo">Sin filtros — haz clic en cualquier barra o punto para filtrar todo el tablero</span>';
+    return;
+  }
+  const texto = (campo) => {
+    const v = filtro[campo];
+    if (campo === 'fecha') return v.split('-').reverse().join('/');
+    if (campo === 'pdv') {
+      const r = RAW.registros.find(x => x.pdv === v);
+      return r ? (r.punto_venta || v) : v;
+    }
+    return v;
+  };
+  cont.innerHTML = '<span class="titulo">Filtros activos</span>'
+    + activos.map(c => `<span class="chip">${ETIQUETA_CAMPO[c]}: <b>${texto(c)}</b>`
+        + `<span class="x" title="Quitar" onclick="quitarFiltro('${c}')">&times;</span></span>`).join('')
+    + '<button class="chip-limpiar" onclick="resetFiltros()">Limpiar todo</button>';
+}
+
 function render() {
   const datos = aplicarFiltros();
+  renderChipsFiltros();
   const pdvUnicos = new Set(datos.map(r=>r.pdv).filter(Boolean)).size;
 
   // ---- fecha de corte ----
@@ -1794,7 +2313,7 @@ function render() {
   // ---- Tendencia diaria (registros + PDV visitados) ----
   const porFecha = {};
   const pdvPorFecha = {};
-  datos.forEach(r => {
+  registrosSinFiltro('fecha').forEach(r => {
     if (r.fecha) {
       porFecha[r.fecha] = (porFecha[r.fecha]||0)+1;
       if (r.pdv) {
@@ -1820,17 +2339,19 @@ function render() {
       },
     ]},
     options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true, position:'top', labels:{boxWidth:12,font:{size:11}}}},
-      scales:{y:{beginAtZero:true, grace:'10%'}} }
+      scales:{y:{beginAtZero:true, grace:'10%'}},
+      ...accionesClic(fechasOrden, 'fecha') }
   });
 
   // ---- Top cadenas ----
-  const porCadena = contarPor('cadena', datos);
+  const porCadena = contarPor('cadena', registrosSinFiltro('cadena'));
   const topCadenas = Object.entries(porCadena).sort((a,b)=>b[1]-a[1]).slice(0,10);
   destruirChart('cadenas');
   charts['cadenas'] = new Chart(document.getElementById('chart-cadenas'), {
     type: 'bar',
     data: { labels: topCadenas.map(c=>c[0]), datasets: [{
-      data: topCadenas.map(c=>c[1]), backgroundColor:'#3BBFCF', borderRadius:5,
+      data: topCadenas.map(c=>c[1]),
+      backgroundColor: coloresBarras(topCadenas.map(c=>c[0]), 'cadena'), borderRadius:5,
     }]},
     options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
       plugins:{legend:{display:false}, tooltip:{enabled:true},
@@ -1839,24 +2360,35 @@ function render() {
           font:{weight:'bold', size:10.5},
         }},
       layout:{padding:{right:26}},
-      scales:{x:{beginAtZero:true}} }
+      scales:{x:{beginAtZero:true}},
+      ...accionesClic(topCadenas.map(c=>c[0]), 'cadena') }
   });
 
   // ---- Top 5 PDV con mas exhibiciones ----
   const porPdvNombre = {};
-  datos.forEach(r => {
+  const basePdv = registrosSinFiltro('pdv');
+  basePdv.forEach(r => {
     const key = r.punto_venta || r.pdv || 'N/D';
     porPdvNombre[key] = (porPdvNombre[key]||0)+1;
   });
-  const top5Pdv = Object.entries(porPdvNombre).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  MAPA_PDV = {};
+  basePdv.forEach(r => { const k = r.punto_venta || r.pdv || 'N/D'; if (r.pdv) MAPA_PDV[k] = r.pdv; });
+  let top5Pdv = Object.entries(porPdvNombre).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  if (filtro.pdv && !top5Pdv.some(p => MAPA_PDV[p[0]] === filtro.pdv)) {
+    const extra = Object.entries(porPdvNombre).find(p => MAPA_PDV[p[0]] === filtro.pdv);
+    if (extra) top5Pdv = [extra].concat(top5Pdv.slice(0, 4));
+  }
+  const codigosTop5 = top5Pdv.map(p => MAPA_PDV[p[0]] || '');
   document.getElementById('chart-top-pdv').parentElement.style.height = '320px';
   destruirChart('topPdv');
   charts['topPdv'] = new Chart(document.getElementById('chart-top-pdv'), {
     type: 'bar',
     data: { labels: top5Pdv.map(p => p[0]), datasets: [{
-      data: top5Pdv.map(p=>p[1]), backgroundColor:'#3BBFCF', borderRadius:5,
+      data: top5Pdv.map(p=>p[1]),
+      backgroundColor: coloresBarras(codigosTop5, 'pdv'), borderRadius:5,
     }]},
     options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      ...accionesClic(codigosTop5, 'pdv'),
       plugins:{legend:{display:false},
         datalabels:{
           anchor:'end', align:'end', offset:2, color:'#33414F',
@@ -1871,7 +2403,7 @@ function render() {
 
   // ---- Ranking de coordinadores ----
   const porCoordinador = {};
-  datos.forEach(r => {
+  registrosSinFiltro('coordinador').forEach(r => {
     const key = r.coordinador || 'SIN COORDINADOR';
     porCoordinador[key] = (porCoordinador[key]||0)+1;
   });
@@ -1881,9 +2413,11 @@ function render() {
   charts['coordinadores'] = new Chart(document.getElementById('chart-coordinadores'), {
     type: 'bar',
     data: { labels: rankingCoordinadores.map(c=>c[0]), datasets: [{
-      data: rankingCoordinadores.map(c=>c[1]), backgroundColor:'#3BBFCF', borderRadius:5,
+      data: rankingCoordinadores.map(c=>c[1]),
+      backgroundColor: coloresBarras(rankingCoordinadores.map(c=>c[0]), 'coordinador'), borderRadius:5,
     }]},
     options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      ...accionesClic(rankingCoordinadores.map(c=>c[0]), 'coordinador'),
       plugins:{legend:{display:false},
         datalabels:{
           anchor:'end', align:'end', offset:2, color:'#33414F',
@@ -1909,20 +2443,24 @@ function render() {
   }
 
   const porColaborador = {};
-  datos.forEach(r => {
+  MAPA_COLAB = {};
+  registrosSinFiltro('colaborador').forEach(r => {
     const nombreOriginal = r.colaborador || 'SIN COLABORADOR';
     const key = nombreCorto(nombreOriginal);
     porColaborador[key] = (porColaborador[key]||0)+1;
+    if (r.colaborador && !MAPA_COLAB[key]) MAPA_COLAB[key] = r.colaborador;
   });
   const rankingMercaderistas = Object.entries(porColaborador).sort((a,b)=>b[1]-a[1]).slice(0,20);
   destruirChart('mercaderistas');
   charts['mercaderistas'] = new Chart(document.getElementById('chart-mercaderistas'), {
     type: 'bar',
     data: { labels: rankingMercaderistas.map(c=>c[0]), datasets: [{
-      label:'Exhibiciones implementadas', data: rankingMercaderistas.map(c=>c[1]), backgroundColor:'#3BBFCF', borderRadius:6,
+      label:'Exhibiciones implementadas', data: rankingMercaderistas.map(c=>c[1]),
+      backgroundColor: coloresBarras(rankingMercaderistas.map(c=>MAPA_COLAB[c[0]] || c[0]), 'colaborador'), borderRadius:6,
       barPercentage:0.85, categoryPercentage:0.85,
     }]},
     options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      ...accionesClic(rankingMercaderistas.map(c=>MAPA_COLAB[c[0]] || c[0]), 'colaborador'),
       plugins:{legend:{display:false},
         datalabels:{
           anchor:'end', align:'end', offset:4, color:'#22303F',
@@ -2214,6 +2752,1554 @@ function exportarExcelCompleto() {
   const fechaArchivo = new Date().toISOString().slice(0,10);
   XLSX.writeFile(libro, `BaseDatos_Completa_${marca}_${fechaArchivo}.xlsx`);
 }
+
+
+/* ================= NO IMPLEMENTACION (Exhibiciones Negociadas / Descuentos POS) ================= */
+const NOIMPL = (() => {
+  try { return JSON.parse(document.getElementById('noimpl-json').textContent); }
+  catch (e) { return {}; }
+})();
+const NOIMPL_VISTA = { exh: 'noexh', pos: 'nopos' };
+let busquedaNoImpl = { exh: '', pos: '' };
+let noImplPintado = { exh: false, pos: false };
+
+function noImplMostrarNav() {
+  Object.keys(NOIMPL_VISTA).forEach(k => {
+    const a = document.getElementById('nav-' + NOIMPL_VISTA[k]);
+    if (a && NOIMPL[k] && NOIMPL[k].total > 0) a.style.display = '';
+  });
+}
+
+function noImplKpis(k) {
+  const d = NOIMPL[k], v = NOIMPL_VISTA[k];
+  const cont = document.getElementById(v + '-kpis');
+  if (!cont) return;
+  const filas = noImplBase(k);
+  const ix = d.idx;
+  const unicos = (i) => i < 0 ? 0 : new Set(filas.map(r => r[i]).filter(Boolean)).size;
+  const cuenta = {};
+  if (ix.motivo >= 0) filas.forEach(r => { const m = r[ix.motivo] || '(sin dato)'; cuenta[m] = (cuenta[m]||0)+1; });
+  const top = Object.entries(cuenta).sort((a,b)=>b[1]-a[1])[0] || ['-', 0];
+  const iPdv = d.cols.indexOf(k === 'exh' ? 'PUNTO DE VENTA' : 'PDV');
+  const tarjetas = [
+    { valor: filas.length.toLocaleString('es-CO'), etiqueta: 'Registros no implementados', color: '#1F4E78' },
+    { valor: unicos(iPdv).toLocaleString('es-CO'), etiqueta: 'PDV afectados',              color: '#3BBFCF' },
+    { valor: Object.keys(cuenta).length,           etiqueta: 'Motivos distintos',          color: '#2E7D32' },
+    { valor: unicos(ix.equipo),                    etiqueta: 'Mercaderistas involucrados', color: '#ED7D31' },
+    { valor: top[1].toLocaleString('es-CO'),       etiqueta: 'Motivo #1: ' + top[0],       color: '#C0392B' },
+  ];
+  cont.innerHTML = tarjetas.map(t => `
+    <div class="kpi-card" style="--color:${t.color}">
+      <div class="top"><div>
+        <div class="valor">${t.valor}</div>
+        <div class="etiqueta">${t.etiqueta}</div>
+      </div></div>
+    </div>`).join('');
+}
+
+/* Paleta corporativa (identica a la vista Indicador Exhibiciones) */
+const CORP_BARRA = '#3BBFCF';
+const CORP_BARRA_ATENUADA = 'rgba(59,191,207,0.30)';
+const CORP_SELECCION = '#1F4E78';
+const CORP_LINEA = '#2E7D32';
+const CORP_LINEA_FONDO = 'rgba(46,125,50,0.12)';
+
+/* seleccion por vista: {motivo, cadena, equipo, fecha} */
+let noImplSel = { exh: {}, pos: {} };
+
+function noImplBase(k, excepto) {
+  const d = NOIMPL[k], sel = noImplSel[k], ix = d.idx;
+  const campos = ['motivo', 'cadena', 'equipo', 'fecha'];
+  return d.rows.filter(r => campos.every(c => {
+    if (c === excepto) return true;
+    if (!sel[c]) return true;
+    return ix[c] >= 0 && r[ix[c]] === sel[c];
+  }));
+}
+
+function noImplAgrupar(filas, i, orden) {
+  if (i < 0) return [];
+  const m = {};
+  filas.forEach(r => { const kk = r[i] || '(sin dato)'; m[kk] = (m[kk]||0)+1; });
+  let e = Object.entries(m);
+  if (orden === 'fecha') {
+    const nf = x => { const p = String(x[0]).split('/'); return (p[2]||'')+(p[1]||'')+(p[0]||''); };
+    e.sort((a,b) => nf(a).localeCompare(nf(b)));
+  } else {
+    e.sort((a,b) => b[1]-a[1]);
+  }
+  return e;
+}
+
+function noImplFiltroCruzado(k, campo, valor) {
+  if (!valor) return;
+  noImplSel[k][campo] = (noImplSel[k][campo] === valor) ? '' : valor;
+  renderNoImplTodo(k);
+}
+
+function noImplQuitar(k, campo) {
+  noImplSel[k][campo] = '';
+  renderNoImplTodo(k);
+}
+
+function noImplLimpiar(k) {
+  noImplSel[k] = {};
+  renderNoImplTodo(k);
+}
+
+function noImplChips(k) {
+  const d = NOIMPL[k], v = NOIMPL_VISTA[k];
+  const cont = document.getElementById(v + '-chips');
+  if (!cont) return;
+  const et = d.etiquetas_idx || {};
+  const activos = ['motivo','cadena','equipo','fecha'].filter(c => noImplSel[k][c]);
+  if (!activos.length) {
+    cont.innerHTML = '<span class="titulo">Sin filtros — haz clic en cualquier barra o punto para filtrar esta vista</span>';
+    return;
+  }
+  cont.innerHTML = '<span class="titulo">Filtros activos</span>'
+    + activos.map(c => `<span class="chip">${et[c] || c}: <b>${noImplSel[k][c]}</b>`
+        + `<span class="x" title="Quitar" onclick="noImplQuitar('${k}','${c}')">&times;</span></span>`).join('')
+    + `<button class="chip-limpiar" onclick="noImplLimpiar('${k}')">Limpiar todo</button>`;
+}
+
+function noImplChart(id, tipo, pares, campo, k, horizontal, orden) {
+  const cv = document.getElementById(id);
+  if (!cv) return;
+  if (charts[id]) charts[id].destroy();
+  const esLinea = tipo === 'line';
+  const valores = pares.map(p => p[0]);
+  const sel = noImplSel[k][campo];
+  const corta = t => String(t).length > 40 ? String(t).slice(0, 38) + '…' : String(t);
+  charts[id] = new Chart(cv, {
+    type: tipo,
+    data: { labels: valores.map(corta), datasets: [{
+      label: 'Registros', data: pares.map(p => p[1]),
+      backgroundColor: esLinea ? CORP_LINEA_FONDO
+        : (sel ? valores.map(x => x === sel ? CORP_SELECCION : CORP_BARRA_ATENUADA) : CORP_BARRA),
+      borderColor: esLinea ? CORP_LINEA : undefined,
+      borderWidth: esLinea ? 2 : 0,
+      borderRadius: esLinea ? 0 : 5,
+      fill: esLinea, tension: 0.3, pointRadius: 3,
+      pointBackgroundColor: CORP_LINEA,
+    }]},
+    options: {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true, maintainAspectRatio: false,
+      onClick: (evt, els) => { if (els && els.length) noImplFiltroCruzado(k, campo, valores[els[0].index]); },
+      onHover: (evt, els) => { evt.native.target.style.cursor = (els && els.length) ? 'pointer' : 'default'; },
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          anchor: 'end', align: horizontal ? 'end' : 'top', offset: horizontal ? 2 : 4,
+          color: esLinea ? '#1F4E78' : '#33414F',
+          font: { size: 10, weight: 'bold' },
+          formatter: x => x.toLocaleString('es-CO'),
+        },
+      },
+      scales: {
+        x: { ticks: { font: { size: 10 }, autoSkip: false, maxRotation: horizontal ? 0 : 45, minRotation: 0 }, grid: { display: !horizontal } },
+        y: { ticks: { font: { size: 10 } }, grid: { display: horizontal }, beginAtZero: true },
+      },
+      layout: { padding: { right: horizontal ? 34 : 8, top: 16 } },
+    },
+  });
+}
+
+function noImplGraficos(k) {
+  const d = NOIMPL[k], v = NOIMPL_VISTA[k], ix = d.idx;
+  noImplChart('chart-' + v + '-motivos', 'bar',
+    noImplAgrupar(noImplBase(k, 'motivo'), ix.motivo).slice(0, 10), 'motivo', k, true);
+  noImplChart('chart-' + v + '-cadenas', 'bar',
+    noImplAgrupar(noImplBase(k, 'cadena'), ix.cadena).slice(0, 10), 'cadena', k, true);
+  noImplChart('chart-' + v + '-fechas', 'line',
+    noImplAgrupar(noImplBase(k, 'fecha'), ix.fecha, 'fecha'), 'fecha', k, false);
+  noImplChart('chart-' + v + '-equipos', 'bar',
+    noImplAgrupar(noImplBase(k, 'equipo'), ix.equipo).slice(0, 10), 'equipo', k, true);
+}
+
+function noImplFilas(k) {
+  const q = (busquedaNoImpl[k] || '').toLowerCase();
+  const base = noImplBase(k);
+  if (!q) return base;
+  return base.filter(r => r.some(c => c && String(c).toLowerCase().includes(q)));
+}
+
+function noImplTabla(k) {
+  const d = NOIMPL[k], v = NOIMPL_VISTA[k];
+  const head = document.getElementById(v + '-head');
+  const body = document.getElementById(v + '-body');
+  if (!head || !body) return;
+  const iFoto = d.cols.length - 1;
+  head.innerHTML = '<tr>' + d.cols.map((c, i) => `<th>${i === iFoto ? 'Evidencia' : c}</th>`).join('') + '</tr>';
+  const filas = noImplFilas(k);
+  const tope = filas.slice(0, 1500);
+  if (tope.length === 0) {
+    body.innerHTML = `<tr><td colspan="${d.cols.length}" class="vacio">No hay registros con los filtros actuales.</td></tr>`;
+  } else {
+    body.innerHTML = tope.map(r => '<tr>' + r.map((c, i) => {
+      if (i === iFoto) {
+        return c ? `<td><a href="${c}" target="_blank" rel="noopener" style="color:#1a7a86;font-weight:600;">Ver foto</a></td>` : '<td>-</td>';
+      }
+      return `<td>${c || ''}</td>`;
+    }).join('') + '</tr>').join('');
+  }
+  const info = document.getElementById(v + '-info');
+  if (info) {
+    info.textContent = `Mostrando ${tope.length.toLocaleString('es-CO')} de ${filas.length.toLocaleString('es-CO')} registros`
+      + (filas.length > tope.length ? ' (usa el buscador o descarga a Excel para ver el resto)' : '')
+      + ` — total en el mes: ${d.total.toLocaleString('es-CO')}`;
+  }
+}
+
+function renderNoImplTodo(k) {
+  noImplChips(k);
+  noImplKpis(k);
+  noImplGraficos(k);
+  noImplTabla(k);
+}
+
+function renderNoImpl(k) {
+  if (!NOIMPL[k] || !NOIMPL[k].total) return;
+  if (!noImplPintado[k]) {
+    const inp = document.getElementById('buscador-' + NOIMPL_VISTA[k]);
+    if (inp) inp.addEventListener('input', (e) => { busquedaNoImpl[k] = e.target.value; noImplTabla(k); });
+    noImplPintado[k] = true;
+  }
+  renderNoImplTodo(k);
+}
+
+function exportarNoImpl(k) {
+  const d = NOIMPL[k];
+  if (!d) return;
+  const filas = noImplFilas(k);
+  if (!filas.length) { alert('No hay registros para exportar.'); return; }
+  const enc = d.cols.slice(0, -1).concat(['Link Evidencia']);
+  const hoja = XLSX.utils.aoa_to_sheet([enc, ...filas]);
+  hoja['!cols'] = enc.map((c, i) => ({ wch: i === enc.length - 1 ? 48 : Math.min(Math.max(c.length + 4, 12), 44) }));
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, k === 'exh' ? 'No Implem EXH' : 'No Implem POS');
+  const marca = RAW.marca || 'Dashboard';
+  XLSX.writeFile(libro, `NoImplementacion_${k.toUpperCase()}_${marca}_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+noImplMostrarNav();
+
+
+/* ================================= ENCUESTAS ================================= */
+const ENC = (() => {
+  try { return JSON.parse(document.getElementById('encuestas-json').textContent); }
+  catch (e) { return {}; }
+})();
+let encSel = {};              // {encuesta, cadena, usuario, fecha, tipo, pregunta, respuesta}
+let busquedaEnc = '';
+let encIniciado = false;
+
+const ENC_ETIQUETA = { encuesta:'Encuesta', cadena:'Cadena', usuario:'Mercaderista',
+                       fecha:'Fecha', tipo:'Tipo', pregunta:'Pregunta', respuesta:'Respuesta' };
+
+function encHayDatos() { return ENC && ENC.total > 0; }
+
+function encMostrarNav() {
+  if (!encHayDatos()) return;
+  ['nav-encuestas','nav-bdencuestas'].forEach(id => {
+    const a = document.getElementById(id);
+    if (a) a.style.display = '';
+  });
+}
+
+function encBase(excepto) {
+  const ix = ENC.idx;
+  const campos = Object.keys(ENC_ETIQUETA);
+  return ENC.rows.filter(r => campos.every(c => {
+    if (c === excepto) return true;
+    if (!encSel[c]) return true;
+    return String(r[ix[c]]) === encSel[c];
+  }));
+}
+
+function encAgrupar(filas, i, orden) {
+  const m = {};
+  filas.forEach(r => { const k = r[i] || '(sin dato)'; m[k] = (m[k]||0)+1; });
+  let e = Object.entries(m);
+  if (orden === 'fecha') {
+    const nf = x => { const p = String(x[0]).split('/'); return (p[2]||'')+(p[1]||'')+(p[0]||''); };
+    e.sort((a,b) => nf(a).localeCompare(nf(b)));
+  } else e.sort((a,b) => b[1]-a[1]);
+  return e;
+}
+
+function encFiltrar(campo, valor) {
+  if (!valor) return;
+  encSel[campo] = (encSel[campo] === valor) ? '' : valor;
+  if (campo === 'encuesta') {
+    const sel = document.getElementById('sel-encuesta');
+    if (sel) sel.value = encSel.encuesta || '';
+  }
+  renderEncuestas();
+}
+
+function encQuitar(campo) {
+  encSel[campo] = '';
+  if (campo === 'encuesta') { const sel = document.getElementById('sel-encuesta'); if (sel) sel.value = ''; }
+  renderEncuestas();
+}
+
+function encLimpiar() {
+  encSel = {};
+  const sel = document.getElementById('sel-encuesta');
+  if (sel) sel.value = '';
+  renderEncuestas();
+}
+
+function encChips() {
+  const activos = Object.keys(ENC_ETIQUETA).filter(c => encSel[c]);
+  const corto = t => String(t).length > 46 ? String(t).slice(0,44) + '…' : t;
+  const html = !activos.length
+    ? '<span class="titulo">Sin filtros — haz clic en cualquier barra, punto o respuesta para filtrar el capitulo</span>'
+    : '<span class="titulo">Filtros activos</span>'
+      + activos.map(c => `<span class="chip">${ENC_ETIQUETA[c]}: <b>${corto(encSel[c])}</b>`
+          + `<span class="x" title="Quitar" onclick="encQuitar('${c}')">&times;</span></span>`).join('')
+      + '<button class="chip-limpiar" onclick="encLimpiar()">Limpiar todo</button>';
+  ['encuestas-chips','encuestas-chips-bd'].forEach(id => {
+    const cont = document.getElementById(id);
+    if (cont) cont.innerHTML = html;
+  });
+}
+
+function encKpis() {
+  const cont = document.getElementById('encuestas-kpis');
+  if (!cont) return;
+  const ix = ENC.idx, filas = encBase();
+  const u = i => new Set(filas.map(r => r[i]).filter(Boolean)).size;
+  const tarjetas = [
+    { valor: filas.length.toLocaleString('es-CO'), etiqueta: 'Mediciones registradas', color: '#1F4E78' },
+    { valor: u(ix.encuesta),                       etiqueta: 'Encuestas distintas',     color: '#3BBFCF' },
+    { valor: u(ix.codigo).toLocaleString('es-CO'), etiqueta: 'PDV encuestados',         color: '#2E7D32' },
+    { valor: u(ix.pregunta),                       etiqueta: 'Preguntas distintas',     color: '#ED7D31' },
+    { valor: u(ix.usuario),                        etiqueta: 'Mercaderistas',           color: '#8E44AD' },
+  ];
+  cont.innerHTML = tarjetas.map(t => `
+    <div class="kpi-card" style="--color:${t.color}">
+      <div class="top"><div>
+        <div class="valor">${t.valor}</div>
+        <div class="etiqueta">${t.etiqueta}</div>
+      </div></div>
+    </div>`).join('');
+}
+
+/* parte un texto largo en varias lineas para el eje de categorias */
+function encLineas(t, ancho) {
+  const pal = String(t).split(' ');
+  const out = []; let ln = '';
+  pal.forEach(w => {
+    if ((ln + ' ' + w).trim().length > ancho) { if (ln) out.push(ln); ln = w; }
+    else ln = (ln + ' ' + w).trim();
+  });
+  if (ln) out.push(ln);
+  return out.slice(0, 3);
+}
+
+function encChart(id, tipo, pares, campo, horizontal, opciones) {
+  opciones = opciones || {};
+  const cv = document.getElementById(id);
+  if (!cv) return;
+  if (charts[id]) charts[id].destroy();
+  const esLinea = tipo === 'line';
+  const valores = pares.map(p => String(p[0]));
+  const sel = encSel[campo];
+  const corta = t => opciones.completo ? String(t) : (String(t).length > 38 ? String(t).slice(0,36) + '…' : String(t));
+  if (opciones.altoPorItem) {
+    cv.parentElement.style.height = Math.max(260, pares.length * opciones.altoPorItem + 60) + 'px';
+  }
+  charts[id] = new Chart(cv, {
+    type: tipo,
+    data: { labels: valores.map(v => opciones.completo ? encLineas(v, opciones.anchoTexto || 40) : corta(v)), datasets: [{
+      label: 'Mediciones', data: pares.map(p => p[1]),
+      backgroundColor: esLinea ? CORP_LINEA_FONDO
+        : (sel ? valores.map(x => x === sel ? CORP_SELECCION : CORP_BARRA_ATENUADA) : CORP_BARRA),
+      borderColor: esLinea ? CORP_LINEA : undefined,
+      borderWidth: esLinea ? 2 : 0, borderRadius: esLinea ? 0 : 5,
+      fill: esLinea, tension: 0.3, pointRadius: 3, pointBackgroundColor: CORP_LINEA,
+    }]},
+    options: {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true, maintainAspectRatio: false,
+      onClick: (evt, els) => { if (els && els.length) encFiltrar(campo, valores[els[0].index]); },
+      onHover: (evt, els) => { evt.native.target.style.cursor = (els && els.length) ? 'pointer' : 'default'; },
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { title: it => valores[it[0].dataIndex] } },
+        datalabels: { anchor:'end', align: horizontal ? 'end' : 'top', offset: horizontal ? 2 : 4,
+          color: esLinea ? '#1F4E78' : '#33414F', font: { size:10, weight:'bold' },
+          formatter: x => x.toLocaleString('es-CO') } },
+      scales: {
+        x: { ticks: { font:{size:10}, autoSkip:false, maxRotation: horizontal ? 0 : 45 }, grid:{display:!horizontal} },
+        y: { ticks: { font:{size: opciones.completo ? 10.5 : 10}, autoSkip:false },
+             grid:{display:horizontal}, beginAtZero:true,
+             afterFit: opciones.anchoEje ? (sc) => { sc.width = opciones.anchoEje; } : undefined },
+      },
+      layout: { padding: { right: horizontal ? 40 : 8, top: 16 } },
+    },
+  });
+}
+
+function encGraficos() {
+  const ix = ENC.idx;
+  // 100% de las encuestas, con el nombre completo y barra mas corta
+  encChart('chart-enc-encuestas', 'bar', encAgrupar(encBase('encuesta'), ix.encuesta), 'encuesta', true,
+           { completo: true, anchoEje: 400, anchoTexto: 46, altoPorItem: 34 });
+  encChart('chart-enc-cadenas',  'bar', encAgrupar(encBase('cadena'),  ix.cadena ).slice(0,10), 'cadena',  true);
+  encChart('chart-enc-fechas',  'line', encAgrupar(encBase('fecha'),   ix.fecha, 'fecha'),      'fecha',   false);
+  encChart('chart-enc-usuarios', 'bar', encAgrupar(encBase('usuario'), ix.usuario).slice(0,10), 'usuario', true);
+}
+
+/* ---- Resultados por pregunta: TODAS las preguntas y TODAS sus respuestas ---- */
+function encPreguntas() {
+  const cont = document.getElementById('enc-preguntas');
+  if (!cont) return;
+  const ix = ENC.idx;
+  const filas = encBase('pregunta');
+  const porPregunta = {};
+  filas.forEach(r => {
+    const p = r[ix.pregunta] || '(sin pregunta)';
+    const resp = r[ix.respuesta] || '(sin respuesta)';
+    if (!porPregunta[p]) porPregunta[p] = { total: 0, resp: {} };
+    porPregunta[p].total++;
+    porPregunta[p].resp[resp] = (porPregunta[p].resp[resp] || 0) + 1;
+  });
+  const lista = Object.entries(porPregunta).sort((a, b) => b[1].total - a[1].total);
+  const info = document.getElementById('enc-preguntas-info');
+  if (info) {
+    info.textContent = lista.length
+      ? `${lista.length} pregunta(s) con respuestas. Cada tarjeta muestra el 100% de sus opciones; haz clic en una respuesta para filtrar todo el capitulo.`
+      : '';
+  }
+  if (!lista.length) {
+    cont.innerHTML = '<div class="preg-vacio">No hay preguntas con los filtros actuales.</div>';
+    return;
+  }
+  const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  cont.innerHTML = lista.map(([preg, d]) => {
+    const respuestas = Object.entries(d.resp).sort((a, b) => b[1] - a[1]);
+    const max = respuestas[0][1];
+    const items = respuestas.map(([rp, n]) => {
+      const pct = (100 * n / d.total).toFixed(1);
+      const sel = (encSel.respuesta === rp && encSel.pregunta === preg);
+      return `<div class="preg-item ${sel ? 'sel' : ''}"
+                   onclick="encFiltrarRespuesta(this.dataset.p, this.dataset.r)"
+                   data-p="${esc(preg)}" data-r="${esc(rp)}"
+                   title="${esc(rp)} — ${n} respuestas (${pct}%)">
+                <div class="preg-top">
+                  <span class="preg-etq">${esc(rp)}</span>
+                  <span class="preg-val">${n.toLocaleString('es-CO')} <small>· ${pct}%</small></span>
+                </div>
+                <div class="preg-track"><div class="preg-barra" style="width:${Math.max(1.5, 100 * n / max)}%"></div></div>
+              </div>`;
+    }).join('');
+    return `<div class="preg-card">
+              <h3>${esc(preg)}</h3>
+              <div class="meta">${d.total.toLocaleString('es-CO')} respuestas · ${respuestas.length} opcion(es)</div>
+              <div class="preg-lista">${items}</div>
+            </div>`;
+  }).join('');
+}
+
+/* ===== Control de fechas de vencimiento: una linea por producto/lote ===== */
+const CF = (ENC && ENC.corta_fecha && ENC.corta_fecha.total) ? ENC.corta_fecha : null;
+const CF_CLASE = {
+  'Vencido': 'cf-e0',
+  'Vence en 7 dias o menos': 'cf-e1',
+  'Vence en 8 a 15 dias': 'cf-e2',
+  'Vence en 16 a 30 dias': 'cf-e3',
+  'Vence en mas de 30 dias': 'cf-e4',
+};
+let cfSel = { estado: '', producto: '' };
+let busquedaCf = '';
+let cfIniciado = false;
+
+function cfBase(excepto) {
+  const ix = CF.idx;
+  return CF.rows.filter(r =>
+    (excepto === 'estado'   || !cfSel.estado   || r[ix.estado]   === cfSel.estado) &&
+    (excepto === 'producto' || !cfSel.producto || r[ix.producto] === cfSel.producto)
+  );
+}
+
+function cfFilas() {
+  const q = (busquedaCf || '').toLowerCase();
+  const base = cfBase();
+  if (!q) return base;
+  return base.filter(r => r.some(c => c !== null && c !== undefined && String(c).toLowerCase().includes(q)));
+}
+
+function cfFiltrar(campo, valor) {
+  if (!valor) return;
+  cfSel[campo] = (cfSel[campo] === valor) ? '' : valor;
+  renderCortaFecha();
+}
+
+function cfKpis() {
+  const ix = CF.idx, filas = cfBase();
+  const und = fs => fs.reduce((a, r) => a + (r[ix.unidades] || 0), 0);
+  const vencidas = filas.filter(r => r[ix.estado] === 'Vencido');
+  const riesgo = filas.filter(r => r[ix.dias] !== null && r[ix.dias] <= 30);
+  const t = [
+    { v: filas.length.toLocaleString('es-CO'),        e: 'Lineas producto / lote',      c: '#1F4E78' },
+    { v: und(filas).toLocaleString('es-CO'),          e: 'Unidades reportadas',         c: '#3BBFCF' },
+    { v: new Set(filas.map(r => r[ix.producto]).filter(Boolean)).size, e: 'Productos distintos', c: '#2E7D32' },
+    { v: und(riesgo).toLocaleString('es-CO'),         e: 'Unidades por vencer (≤30 dias)', c: '#ED7D31' },
+    { v: und(vencidas).toLocaleString('es-CO'),       e: 'Unidades ya vencidas',        c: '#C0392B' },
+  ];
+  document.getElementById('cf-kpis').innerHTML = t.map(x => `
+    <div class="kpi-card" style="--color:${x.c}">
+      <div class="top"><div><div class="valor">${x.v}</div><div class="etiqueta">${x.e}</div></div></div>
+    </div>`).join('');
+}
+
+function cfChart(id, pares, campo, horizontal, opciones) {
+  opciones = opciones || {};
+  const cv = document.getElementById(id);
+  if (!cv) return;
+  if (charts[id]) charts[id].destroy();
+  const valores = pares.map(p => String(p[0]));
+  const sel = cfSel[campo];
+  if (opciones.altoPorItem) {
+    cv.parentElement.style.height = Math.max(240, pares.length * opciones.altoPorItem + 60) + 'px';
+  }
+  charts[id] = new Chart(cv, {
+    type: 'bar',
+    data: { labels: valores.map(v => opciones.completo ? encLineas(v, opciones.anchoTexto || 40) : v), datasets: [{
+      data: pares.map(p => p[1]),
+      backgroundColor: opciones.colores
+        ? valores.map(v => (!sel || v === sel) ? opciones.colores[v] || CORP_BARRA : CORP_BARRA_ATENUADA)
+        : (sel ? valores.map(v => v === sel ? CORP_SELECCION : CORP_BARRA_ATENUADA) : CORP_BARRA),
+      borderRadius: 5, borderWidth: 0,
+    }]},
+    options: {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true, maintainAspectRatio: false,
+      onClick: (evt, els) => { if (els && els.length) cfFiltrar(campo, valores[els[0].index]); },
+      onHover: (evt, els) => { evt.native.target.style.cursor = (els && els.length) ? 'pointer' : 'default'; },
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { title: it => valores[it[0].dataIndex] } },
+        datalabels: { anchor:'end', align: horizontal ? 'end' : 'top', offset: horizontal ? 2 : 4,
+          color:'#33414F', font:{ size:10, weight:'bold' }, formatter: x => x.toLocaleString('es-CO') } },
+      scales: {
+        x: { ticks:{ font:{size:10}, autoSkip:false, maxRotation: horizontal ? 0 : 30 }, grid:{display:!horizontal} },
+        y: { ticks:{ font:{size:10}, autoSkip:false }, grid:{display:horizontal}, beginAtZero:true,
+             afterFit: opciones.anchoEje ? (sc) => { sc.width = opciones.anchoEje; } : undefined },
+      },
+      layout: { padding: { right: horizontal ? 40 : 8, top: 16 } },
+    },
+  });
+}
+
+function cfGraficos() {
+  const ix = CF.idx;
+  const und = (fs, i) => {
+    const m = {};
+    fs.forEach(r => { const k = r[i] || '(sin dato)'; m[k] = (m[k] || 0) + (r[ix.unidades] || 0); });
+    return m;
+  };
+  const ORDEN = ['Vencido','Vence en 7 dias o menos','Vence en 8 a 15 dias','Vence en 16 a 30 dias','Vence en mas de 30 dias'];
+  const COLOR = { 'Vencido':'#C0392B', 'Vence en 7 dias o menos':'#ED7D31',
+                  'Vence en 8 a 15 dias':'#E8B33A', 'Vence en 16 a 30 dias':'#3BBFCF',
+                  'Vence en mas de 30 dias':'#2E7D32' };
+  const mEst = und(cfBase('estado'), ix.estado);
+  cfChart('chart-cf-estados', ORDEN.filter(e => mEst[e]).map(e => [e, mEst[e]]), 'estado', false, { colores: COLOR });
+  const mProd = und(cfBase('producto'), ix.producto);
+  const prods = Object.entries(mProd).sort((a,b) => b[1]-a[1]).slice(0, 15);
+  cfChart('chart-cf-productos', prods, 'producto', true, { completo: true, anchoEje: 300, anchoTexto: 34, altoPorItem: 30 });
+}
+
+function cfTabla() {
+  const ix = CF.idx;
+  const cols = CF.cols, iFoto = cols.indexOf('REGISTRO FOTOGRAFICO');
+  const visibles = cols.map((c, i) => i).filter(i => cols[i] !== 'ID Medición');
+  document.getElementById('cf-head').innerHTML = '<tr>' +
+    visibles.map(i => `<th>${cols[i] === 'REGISTRO FOTOGRAFICO' ? 'Evidencia' : cols[i]}</th>`).join('') + '</tr>';
+  const filas = cfFilas();
+  const tope = filas.slice(0, 1000);
+  const body = document.getElementById('cf-body');
+  if (!tope.length) {
+    body.innerHTML = `<tr><td colspan="${visibles.length}" class="vacio">No hay registros con los filtros actuales.</td></tr>`;
+  } else {
+    body.innerHTML = tope.map(r => '<tr>' + visibles.map(i => {
+      const v = r[i];
+      if (i === iFoto) return v ? `<td><a href="${v}" target="_blank" rel="noopener" style="color:#1a7a86;font-weight:600;">Ver foto</a></td>` : '<td>-</td>';
+      if (i === ix.estado) return `<td><span class="cf-estado ${CF_CLASE[v] || ''}">${v || '-'}</span></td>`;
+      if (i === ix.dias) return `<td class="cf-dias">${v === null || v === undefined ? '-' : v}</td>`;
+      if (i === ix.unidades) return `<td class="cf-und">${v === null || v === undefined ? '-' : Number(v).toLocaleString('es-CO')}</td>`;
+      if (i === ix.producto) return `<td class="cf-prod">${v || ''}</td>`;
+      return `<td>${v === null || v === undefined ? '' : v}</td>`;
+    }).join('') + '</tr>').join('');
+  }
+  const pie = document.getElementById('cf-pie');
+  if (pie) {
+    const und = filas.reduce((a, r) => a + (r[ix.unidades] || 0), 0);
+    pie.textContent = `Mostrando ${tope.length.toLocaleString('es-CO')} de ${filas.length.toLocaleString('es-CO')} lineas`
+      + ` — ${und.toLocaleString('es-CO')} unidades. Ordenado de lo mas urgente a lo menos urgente.`;
+  }
+}
+
+function renderCortaFecha() {
+  if (!CF) return;
+  const panel = document.getElementById('panel-cf');
+  if (panel) panel.style.display = '';
+  if (!cfIniciado) {
+    const inp = document.getElementById('buscador-cf');
+    if (inp) inp.addEventListener('input', (e) => { busquedaCf = e.target.value; cfTabla(); });
+    cfIniciado = true;
+  }
+  const info = document.getElementById('cf-info');
+  if (info) {
+    const activos = [];
+    if (cfSel.estado) activos.push('Estado: ' + cfSel.estado);
+    if (cfSel.producto) activos.push('Producto: ' + cfSel.producto);
+    info.innerHTML = 'Una linea por producto y lote: se unieron las respuestas de <b>producto</b>, <b>lote</b>, '
+      + '<b>unidades disponibles</b> y <b>fecha de vencimiento</b> de cada medicion. '
+      + (activos.length ? '<b>' + activos.join(' · ') + '</b> — clic de nuevo en la barra para quitar el filtro.'
+                        : 'Haz clic en una barra para filtrar.');
+  }
+  cfKpis();
+  cfGraficos();
+  cfTabla();
+}
+
+function exportarCortaFecha() {
+  if (!CF) return;
+  const filas = cfFilas();
+  if (!filas.length) { alert('No hay registros para exportar.'); return; }
+  const hoja = XLSX.utils.aoa_to_sheet([CF.cols, ...filas]);
+  hoja['!cols'] = CF.cols.map(c => ({ wch: Math.min(Math.max(String(c).length + 6, 12), 46) }));
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, 'Corta Fecha');
+  const marca = RAW.marca || ENC.marca || 'Dashboard';
+  XLSX.writeFile(libro, `ControlVencimientos_${marca}_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+function encFiltrarRespuesta(preg, resp) {
+  const yaEsta = (encSel.pregunta === preg && encSel.respuesta === resp);
+  encSel.pregunta = yaEsta ? '' : preg;
+  encSel.respuesta = yaEsta ? '' : resp;
+  renderEncuestas();
+}
+
+function encSelectorEncuestas() {
+  const ix = ENC.idx;
+  const opts = encAgrupar(encBase('encuesta'), ix.encuesta);
+  const actual = encSel.encuesta || '';
+  const html = '<option value="">Todas las encuestas (' + ENC.total.toLocaleString('es-CO') + ' mediciones)</option>'
+    + opts.map(([k,v]) => `<option value="${String(k).replace(/"/g,'&quot;')}">${k} (${v.toLocaleString('es-CO')})</option>`).join('');
+  ['sel-encuesta','sel-encuesta-bd'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = html;
+    sel.value = actual;
+  });
+}
+
+function encFilas() {
+  const q = (busquedaEnc || '').toLowerCase();
+  const base = encBase();
+  if (!q) return base;
+  return base.filter(r => r.some(c => c && String(c).toLowerCase().includes(q)));
+}
+
+function renderEncuestasTabla() {
+  if (!encHayDatos()) return;
+  encSelectorEncuestas();
+  encChips();
+  const head = document.getElementById('encuestas-head');
+  const body = document.getElementById('encuestas-body');
+  if (!head || !body) return;
+  const cols = ENC.cols, iFoto = cols.length - 1;
+  head.innerHTML = '<tr>' + cols.map((c,i) => `<th>${i === iFoto ? 'Evidencia' : c}</th>`).join('') + '</tr>';
+  const filas = encFilas();
+  const tope = filas.slice(0, 1500);
+  if (!tope.length) {
+    body.innerHTML = `<tr><td colspan="${cols.length}" class="vacio">No hay registros con los filtros actuales.</td></tr>`;
+  } else {
+    body.innerHTML = tope.map(r => '<tr>' + cols.map((c,i) => {
+      const v = r[i];
+      if (i === iFoto) return v ? `<td><a href="${v}" target="_blank" rel="noopener" style="color:#1a7a86;font-weight:600;">Ver foto</a></td>` : '<td>-</td>';
+      return `<td>${v || ''}</td>`;
+    }).join('') + '</tr>').join('');
+  }
+  const info = document.getElementById('encuestas-info');
+  if (info) {
+    info.textContent = `Mostrando ${tope.length.toLocaleString('es-CO')} de ${filas.length.toLocaleString('es-CO')} registros`
+      + (filas.length > tope.length ? ' (usa el buscador o descarga a Excel para ver el resto)' : '')
+      + ` — total de la marca: ${ENC.total.toLocaleString('es-CO')}`;
+  }
+}
+
+function renderEncuestas() {
+  if (!encHayDatos()) return;
+  if (!encIniciado) {
+    const inp = document.getElementById('buscador-encuestas');
+    if (inp) inp.addEventListener('input', (e) => { busquedaEnc = e.target.value; renderEncuestasTabla(); });
+    ['sel-encuesta','sel-encuesta-bd'].forEach(id => {
+      const sel = document.getElementById(id);
+      if (sel) sel.addEventListener('change', (e) => { encSel.encuesta = e.target.value; renderEncuestas(); });
+    });
+    encIniciado = true;
+  }
+  encSelectorEncuestas();
+  encChips();
+  encKpis();
+  encGraficos();
+  renderCortaFecha();
+  encPreguntas();
+  renderEncuestasTabla();
+}
+
+function exportarEncuestas() {
+  if (!encHayDatos()) return;
+  const filas = encFilas();
+  if (!filas.length) { alert('No hay registros para exportar.'); return; }
+  const enc = ENC.cols.slice(0, -1).concat(['Link Evidencia']);
+  const hoja = XLSX.utils.aoa_to_sheet([enc, ...filas]);
+  hoja['!cols'] = enc.map((c,i) => ({ wch: i === enc.length-1 ? 48 : Math.min(Math.max(String(c).length + 4, 12), 46) }));
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, 'Encuestas');
+  const marca = RAW.marca || ENC.marca || 'Dashboard';
+  XLSX.writeFile(libro, `Encuestas_${marca}_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+encMostrarNav();
+
+
+/* ============================ INDICADOR PRECIOS ============================ */
+const PR = (() => {
+  try { return JSON.parse(document.getElementById('precios-json').textContent); }
+  catch (e) { return {}; }
+})();
+const PR_ETIQUETA = { categoria:'Categoria', producto:'Producto', cadena:'Cadena',
+                      ciudad:'Ciudad', pdv:'Punto de Venta', subtipo:'Tipo de precio', fecha:'Fecha' };
+let prSel = {};
+let busquedaPr = '', busquedaPrPdv = '';
+let prIniciado = false;
+
+function prHay() { return PR && PR.total > 0; }
+
+function prMostrarNav() {
+  if (!prHay()) return;
+  ['nav-precios','nav-bdprecios'].forEach(id => {
+    const a = document.getElementById(id);
+    if (a) a.style.display = '';
+  });
+}
+
+function prBase(excepto) {
+  const ix = PR.idx, campos = Object.keys(PR_ETIQUETA);
+  return PR.rows.filter(r => campos.every(c => {
+    if (c === excepto) return true;
+    if (!prSel[c]) return true;
+    return String(r[ix[c]]) === prSel[c];
+  }));
+}
+
+function prMoneda(v) {
+  if (v === null || v === undefined || isNaN(v)) return '-';
+  return '$' + Math.round(v).toLocaleString('es-CO');
+}
+
+function prModa(vals) {
+  if (!vals.length) return null;
+  const c = new Map();
+  vals.forEach(v => c.set(v, (c.get(v) || 0) + 1));
+  let top = 0;
+  c.forEach(n => { if (n > top) top = n; });
+  let moda = null;
+  c.forEach((n, v) => { if (n === top && (moda === null || v > moda)) moda = v; });
+  return moda;
+}
+
+/* agrupa por una columna y calcula moda / promedio / maximo / minimo */
+function prResumen(filas, i, extras) {
+  const ix = PR.idx, m = new Map();
+  filas.forEach(r => {
+    const k = r[i] || '(sin dato)';
+    if (!m.has(k)) m.set(k, { vals: [], extra: {} });
+    const o = m.get(k);
+    o.vals.push(r[ix.precio]);
+    (extras || []).forEach(e => { if (!o.extra[e] && r[ix[e]]) o.extra[e] = r[ix[e]]; });
+  });
+  const out = [];
+  m.forEach((o, k) => {
+    const s = o.vals.reduce((a, b) => a + b, 0);
+    out.push({ k, n: o.vals.length, moda: prModa(o.vals), prom: s / o.vals.length,
+               max: Math.max(...o.vals), min: Math.min(...o.vals), extra: o.extra });
+  });
+  out.sort((a, b) => b.prom - a.prom);
+  return out;
+}
+
+function prFiltrar(campo, valor) {
+  if (!valor) return;
+  prSel[campo] = (prSel[campo] === valor) ? '' : valor;
+  if (campo === 'categoria') {
+    ['sel-categoria-pr','sel-categoria-pr-bd'].forEach(id => {
+      const sel = document.getElementById(id);
+      if (sel) sel.value = prSel.categoria || '';
+    });
+  }
+  renderPrecios();
+}
+
+function prQuitar(campo) {
+  prSel[campo] = '';
+  if (campo === 'categoria') {
+    ['sel-categoria-pr','sel-categoria-pr-bd'].forEach(id => {
+      const sel = document.getElementById(id); if (sel) sel.value = '';
+    });
+  }
+  renderPrecios();
+}
+
+function prLimpiar() {
+  prSel = {};
+  ['sel-categoria-pr','sel-categoria-pr-bd'].forEach(id => {
+    const sel = document.getElementById(id); if (sel) sel.value = '';
+  });
+  renderPrecios();
+}
+
+function prChips() {
+  const activos = Object.keys(PR_ETIQUETA).filter(c => prSel[c]);
+  const corto = t => String(t).length > 46 ? String(t).slice(0,44) + '…' : t;
+  const html = !activos.length
+    ? `<span class="titulo">Chequeo de precios de ${PR.mes || ''} — haz clic en cualquier barra o categoria para filtrar</span>`
+    : '<span class="titulo">Filtros activos</span>'
+      + activos.map(c => `<span class="chip">${PR_ETIQUETA[c]}: <b>${corto(prSel[c])}</b>`
+          + `<span class="x" title="Quitar" onclick="prQuitar('${c}')">&times;</span></span>`).join('')
+      + '<button class="chip-limpiar" onclick="prLimpiar()">Limpiar todo</button>';
+  ['precios-chips','precios-chips-bd'].forEach(id => {
+    const c = document.getElementById(id); if (c) c.innerHTML = html;
+  });
+}
+
+function prKpis() {
+  const ix = PR.idx, filas = prBase();
+  const vals = filas.map(r => r[ix.precio]);
+  const prom = vals.length ? vals.reduce((a,b) => a+b, 0) / vals.length : 0;
+  const t = [
+    { v: prMoneda(prModa(vals)),        e: 'Precio moda',      c: '#1F4E78' },
+    { v: prMoneda(prom),                e: 'Precio promedio',  c: '#3BBFCF' },
+    { v: prMoneda(vals.length ? Math.max(...vals) : null), e: 'Precio maximo', c: '#C0392B' },
+    { v: prMoneda(vals.length ? Math.min(...vals) : null), e: 'Precio minimo', c: '#2E7D32' },
+    { v: filas.length.toLocaleString('es-CO'), e: 'Tomas de precio', c: '#ED7D31' },
+    { v: new Set(filas.map(r => r[ix.codigo]).filter(Boolean)).size, e: 'PDV con toma', c: '#8E44AD' },
+  ];
+  document.getElementById('precios-kpis').innerHTML = t.map(x => `
+    <div class="kpi-card" style="--color:${x.c}">
+      <div class="top"><div><div class="valor">${x.v}</div><div class="etiqueta">${x.e}</div></div></div>
+    </div>`).join('');
+}
+
+function prChart(id, tipo, pares, campo, horizontal, opciones) {
+  opciones = opciones || {};
+  const cv = document.getElementById(id);
+  if (!cv) return;
+  if (charts[id]) charts[id].destroy();
+  const esLinea = tipo === 'line';
+  const valores = pares.map(p => String(p[0]));
+  const sel = prSel[campo];
+  if (opciones.altoPorItem) {
+    cv.parentElement.style.height = Math.max(260, pares.length * opciones.altoPorItem + 60) + 'px';
+  }
+  charts[id] = new Chart(cv, {
+    type: tipo,
+    data: { labels: valores.map(v => opciones.completo ? encLineas(v, opciones.anchoTexto || 40) : v), datasets: [{
+      label: 'Precio promedio', data: pares.map(p => p[1]),
+      backgroundColor: esLinea ? CORP_LINEA_FONDO
+        : (sel ? valores.map(v => v === sel ? CORP_SELECCION : CORP_BARRA_ATENUADA) : CORP_BARRA),
+      borderColor: esLinea ? CORP_LINEA : undefined,
+      borderWidth: esLinea ? 2 : 0, borderRadius: esLinea ? 0 : 5,
+      fill: esLinea, tension: 0.3, pointRadius: 3, pointBackgroundColor: CORP_LINEA,
+    }]},
+    options: {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true, maintainAspectRatio: false,
+      onClick: (evt, els) => { if (els && els.length) prFiltrar(campo, valores[els[0].index]); },
+      onHover: (evt, els) => { evt.native.target.style.cursor = (els && els.length) ? 'pointer' : 'default'; },
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { title: it => valores[it[0].dataIndex],
+                                label: it => 'Precio promedio: ' + prMoneda(it.raw) } },
+        datalabels: { anchor:'end', align: horizontal ? 'end' : 'top', offset: horizontal ? 2 : 4,
+          color: esLinea ? '#1F4E78' : '#33414F', font:{ size:10, weight:'bold' },
+          formatter: v => prMoneda(v) } },
+      scales: {
+        x: { ticks:{ font:{size:10}, autoSkip:false, maxRotation: horizontal ? 0 : 40,
+                     callback: function(v) { return horizontal ? prMoneda(v) : this.getLabelForValue(v); } },
+             grid:{display:!horizontal} },
+        y: { ticks:{ font:{size:10}, autoSkip:false,
+                     callback: function(v) { return horizontal ? this.getLabelForValue(v) : prMoneda(v); } },
+             grid:{display:horizontal}, beginAtZero:true,
+             afterFit: opciones.anchoEje ? (sc) => { sc.width = opciones.anchoEje; } : undefined },
+      },
+      layout: { padding: { right: horizontal ? 70 : 8, top: 16 } },
+    },
+  });
+}
+
+function prGraficos() {
+  const ix = PR.idx;
+  const par = (res) => res.map(x => [x.k, Math.round(x.prom)]);
+  prChart('chart-pr-productos', 'bar', par(prResumen(prBase('producto'), ix.producto)).slice(0, 15),
+          'producto', true, { completo:true, anchoEje:330, anchoTexto:36, altoPorItem:30 });
+  prChart('chart-pr-categorias', 'bar', par(prResumen(prBase('categoria'), ix.categoria)),
+          'categoria', true, { completo:true, anchoEje:250, anchoTexto:28, altoPorItem:32 });
+  prChart('chart-pr-cadenas', 'bar', par(prResumen(prBase('cadena'), ix.cadena)), 'cadena', false);
+  const fech = prResumen(prBase('fecha'), ix.fecha);
+  const nf = x => { const p = String(x.k).split('/'); return (p[2]||'')+(p[1]||'')+(p[0]||''); };
+  fech.sort((a,b) => nf(a).localeCompare(nf(b)));
+  prChart('chart-pr-fechas', 'line', par(fech), 'fecha', false);
+}
+
+/* ---- Resultados por categoria y producto, con subtotal por categoria ---- */
+function prTablaCategorias() {
+  const ix = PR.idx;
+  const head = document.getElementById('pr-cat-head');
+  const body = document.getElementById('pr-cat-body');
+  if (!head || !body) return;
+  head.innerHTML = '<tr><th>Categoria</th><th>EAN</th><th>Producto</th><th>Moda</th>'
+                 + '<th>Promedio</th><th>Maximo</th><th>Minimo</th><th>Tomas</th></tr>';
+  const filas = prBase();
+  const porCat = new Map();
+  filas.forEach(r => {
+    const c = r[ix.categoria] || '(sin categoria)';
+    if (!porCat.has(c)) porCat.set(c, []);
+    porCat.get(c).push(r);
+  });
+  const cats = [...porCat.entries()].map(([c, fs]) => {
+    const vals = fs.map(r => r[ix.precio]);
+    return { c, fs, prom: vals.reduce((a,b)=>a+b,0)/vals.length };
+  }).sort((a,b) => b.prom - a.prom);
+  if (!cats.length) {
+    body.innerHTML = '<tr><td colspan="8" class="vacio">No hay tomas de precio con los filtros actuales.</td></tr>';
+    return;
+  }
+  const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/'/g,'&#39;');
+  let html = '';
+  cats.forEach(({ c, fs }) => {
+    const prods = prResumen(fs, ix.producto, ['ean']);
+    prods.forEach((p, i) => {
+      html += '<tr>'
+        + `<td class="pr-cat" onclick="prFiltrar('categoria','${esc(c)}')">${i === 0 ? esc(c) : ''}</td>`
+        + `<td>${p.extra.ean || ''}</td>`
+        + `<td class="txt pr-cat" onclick="prFiltrar('producto','${esc(p.k)}')">${esc(p.k)}</td>`
+        + `<td class="num">${prMoneda(p.moda)}</td><td class="num">${prMoneda(p.prom)}</td>`
+        + `<td class="num">${prMoneda(p.max)}</td><td class="num">${prMoneda(p.min)}</td>`
+        + `<td class="num">${p.n.toLocaleString('es-CO')}</td></tr>`;
+    });
+    const vals = fs.map(r => r[ix.precio]);
+    const s = vals.reduce((a,b) => a+b, 0);
+    html += '<tr class="subtotal">'
+      + `<td colspan="3">Total ${esc(c)}</td>`
+      + `<td class="num">${prMoneda(prModa(vals))}</td><td class="num">${prMoneda(s/vals.length)}</td>`
+      + `<td class="num">${prMoneda(Math.max(...vals))}</td><td class="num">${prMoneda(Math.min(...vals))}</td>`
+      + `<td class="num">${vals.length.toLocaleString('es-CO')}</td></tr>`;
+  });
+  body.innerHTML = html;
+  const info = document.getElementById('pr-cat-info');
+  if (info) {
+    info.textContent = `${cats.length} categoria(s) — clic en la categoria o en el producto para filtrar todo el capitulo.`;
+  }
+}
+
+/* ---- Resultados por punto de venta ---- */
+function prTablaPdv() {
+  const ix = PR.idx;
+  const head = document.getElementById('pr-pdv-head');
+  const body = document.getElementById('pr-pdv-body');
+  if (!head || !body) return;
+  head.innerHTML = '<tr><th>COD PLF</th><th>Punto de Venta</th><th>Ciudad</th><th>Cadena</th>'
+                 + '<th>Moda</th><th>Promedio</th><th>Maximo</th><th>Minimo</th><th>Tomas</th></tr>';
+  let res = prResumen(prBase(), ix.pdv, ['codigo','ciudad','cadena']);
+  const q = (busquedaPrPdv || '').toLowerCase();
+  if (q) {
+    res = res.filter(p => (p.k + ' ' + (p.extra.codigo||'') + ' ' + (p.extra.ciudad||'') + ' ' + (p.extra.cadena||''))
+                          .toLowerCase().includes(q));
+  }
+  const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/'/g,'&#39;');
+  body.innerHTML = res.length ? res.map(p => '<tr>'
+      + `<td>${p.extra.codigo || ''}</td>`
+      + `<td class="txt pr-cat" onclick="prFiltrar('pdv','${esc(p.k)}')">${esc(p.k)}</td>`
+      + `<td>${p.extra.ciudad || ''}</td><td>${p.extra.cadena || ''}</td>`
+      + `<td class="num">${prMoneda(p.moda)}</td><td class="num">${prMoneda(p.prom)}</td>`
+      + `<td class="num">${prMoneda(p.max)}</td><td class="num">${prMoneda(p.min)}</td>`
+      + `<td class="num">${p.n.toLocaleString('es-CO')}</td></tr>`).join('')
+    : '<tr><td colspan="9" class="vacio">No hay puntos de venta con los filtros actuales.</td></tr>';
+  const info = document.getElementById('pr-pdv-info');
+  if (info) info.textContent = `${res.length} punto(s) de venta — ordenados por precio promedio de mayor a menor.`;
+}
+
+function prSelectores() {
+  const ix = PR.idx;
+  const cats = prResumen(prBase('categoria'), ix.categoria);
+  const html = '<option value="">Todas las categorias (' + PR.total.toLocaleString('es-CO') + ' tomas)</option>'
+    + cats.map(c => `<option value="${String(c.k).replace(/"/g,'&quot;')}">${c.k} (${c.n.toLocaleString('es-CO')})</option>`).join('');
+  ['sel-categoria-pr','sel-categoria-pr-bd'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = html;
+    sel.value = prSel.categoria || '';
+  });
+}
+
+function prFilas() {
+  const q = (busquedaPr || '').toLowerCase();
+  const base = prBase();
+  if (!q) return base;
+  return base.filter(r => r.some(c => c !== null && c !== undefined && String(c).toLowerCase().includes(q)));
+}
+
+function renderPreciosTabla() {
+  if (!prHay()) return;
+  prSelectores();
+  prChips();
+  const ix = PR.idx, cols = PR.cols, iFoto = cols.length - 1;
+  const head = document.getElementById('precios-head');
+  const body = document.getElementById('precios-body');
+  if (!head || !body) return;
+  head.innerHTML = '<tr>' + cols.map((c,i) => `<th>${i === iFoto ? 'Evidencia' : c}</th>`).join('') + '</tr>';
+  const filas = prFilas();
+  const tope = filas.slice(0, 1500);
+  body.innerHTML = tope.length ? tope.map(r => '<tr>' + cols.map((c,i) => {
+      const v = r[i];
+      if (i === iFoto) return v ? `<td><a href="${v}" target="_blank" rel="noopener" style="color:#1a7a86;font-weight:600;">Ver foto</a></td>` : '<td>-</td>';
+      if (i === ix.precio) return `<td class="num">${prMoneda(v)}</td>`;
+      if (i === ix.producto || i === ix.pdv) return `<td class="txt">${v || ''}</td>`;
+      return `<td>${v === null || v === undefined ? '' : v}</td>`;
+    }).join('') + '</tr>').join('')
+    : `<tr><td colspan="${cols.length}" class="vacio">No hay registros con los filtros actuales.</td></tr>`;
+  const info = document.getElementById('precios-info');
+  if (info) {
+    info.textContent = `Mostrando ${tope.length.toLocaleString('es-CO')} de ${filas.length.toLocaleString('es-CO')} tomas`
+      + (filas.length > tope.length ? ' (usa el buscador o descarga a Excel para ver el resto)' : '')
+      + ` — total del mes: ${PR.total.toLocaleString('es-CO')} · fuente: ${PR.archivo || ''}`;
+  }
+}
+
+function renderPrecios() {
+  if (!prHay()) return;
+  if (!prIniciado) {
+    ['sel-categoria-pr','sel-categoria-pr-bd'].forEach(id => {
+      const sel = document.getElementById(id);
+      if (sel) sel.addEventListener('change', (e) => { prSel.categoria = e.target.value; renderPrecios(); });
+    });
+    const b1 = document.getElementById('buscador-precios');
+    if (b1) b1.addEventListener('input', (e) => { busquedaPr = e.target.value; renderPreciosTabla(); });
+    const b2 = document.getElementById('buscador-pr-pdv');
+    if (b2) b2.addEventListener('input', (e) => { busquedaPrPdv = e.target.value; prTablaPdv(); });
+    prIniciado = true;
+  }
+  prSelectores();
+  prChips();
+  prKpis();
+  prGraficos();
+  prTablaCategorias();
+  prTablaPdv();
+  renderPreciosTabla();
+}
+
+function exportarPrecios() {
+  if (!prHay()) return;
+  const filas = prFilas();
+  if (!filas.length) { alert('No hay registros para exportar.'); return; }
+  const enc = PR.cols.slice(0, -1).concat(['Link Evidencia']);
+  const hoja = XLSX.utils.aoa_to_sheet([enc, ...filas]);
+  hoja['!cols'] = enc.map(c => ({ wch: Math.min(Math.max(String(c).length + 4, 12), 46) }));
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, 'Precios');
+  XLSX.writeFile(libro, `Precios_${RAW.marca || PR.marca}_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+function exportarPreciosResumen() {
+  if (!prHay()) return;
+  const ix = PR.idx, filas = prBase();
+  const libro = XLSX.utils.book_new();
+  const enc1 = ['Categoria','EAN','Producto','Moda','Promedio','Maximo','Minimo','Tomas'];
+  const f1 = [];
+  const porCat = new Map();
+  filas.forEach(r => {
+    const c = r[ix.categoria] || '(sin categoria)';
+    if (!porCat.has(c)) porCat.set(c, []);
+    porCat.get(c).push(r);
+  });
+  porCat.forEach((fs, c) => {
+    prResumen(fs, ix.producto, ['ean']).forEach(p => {
+      f1.push([c, p.extra.ean || '', p.k, p.moda, Math.round(p.prom), p.max, p.min, p.n]);
+    });
+    const vals = fs.map(r => r[ix.precio]);
+    f1.push(['Total ' + c, '', '', prModa(vals), Math.round(vals.reduce((a,b)=>a+b,0)/vals.length),
+             Math.max(...vals), Math.min(...vals), vals.length]);
+  });
+  const h1 = XLSX.utils.aoa_to_sheet([enc1, ...f1]);
+  h1['!cols'] = [{wch:32},{wch:16},{wch:44},{wch:12},{wch:12},{wch:12},{wch:12},{wch:9}];
+  XLSX.utils.book_append_sheet(libro, h1, 'Categoria-Producto');
+
+  const enc2 = ['COD PLF','Punto de Venta','Ciudad','Cadena','Moda','Promedio','Maximo','Minimo','Tomas'];
+  const f2 = prResumen(filas, ix.pdv, ['codigo','ciudad','cadena']).map(p =>
+    [p.extra.codigo || '', p.k, p.extra.ciudad || '', p.extra.cadena || '',
+     p.moda, Math.round(p.prom), p.max, p.min, p.n]);
+  const h2 = XLSX.utils.aoa_to_sheet([enc2, ...f2]);
+  h2['!cols'] = [{wch:14},{wch:48},{wch:18},{wch:18},{wch:12},{wch:12},{wch:12},{wch:12},{wch:9}];
+  XLSX.utils.book_append_sheet(libro, h2, 'Por PDV');
+
+  XLSX.writeFile(libro, `ResultadosPrecios_${RAW.marca || PR.marca}_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+prMostrarNav();
+
+
+/* ============ INDICADORES AGOTADOS y FACING (motor compartido) ============ */
+const IND = {
+  agotados: {
+    datos: (() => { try { return JSON.parse(document.getElementById('agotados-json').textContent); } catch(e) { return {}; } })(),
+    titulo: '% Agotado', unidad: 'pct',
+    campos: { categoria:'Categoria', producto:'Producto', cadena:'Cadena', canal:'Canal',
+              ciudad:'Ciudad', pdv:'Punto de Venta', equipo:'Mercaderista', problema:'Causal', fecha:'Fecha' },
+    ejeEquipo: '% Agotado por mercaderista',
+    sel: {}, busq: '', busqPdv: '', listo: false,
+  },
+  facing: {
+    datos: (() => { try { return JSON.parse(document.getElementById('facing-json').textContent); } catch(e) { return {}; } })(),
+    titulo: '% Facing', unidad: 'pct',
+    campos: { categoria:'Categoria', tipo:'Tipo', cadena:'Cadena', canal:'Canal',
+              ciudad:'Ciudad', pdv:'Punto de Venta', equipo:'Mercaderista', fecha:'Fecha' },
+    ejeEquipo: '% Facing por mercaderista',
+    sel: {}, busq: '', busqPdv: '', listo: false,
+  },
+};
+
+function indHay(k) { const d = IND[k].datos; return d && d.total > 0; }
+
+function indMostrarNav() {
+  Object.keys(IND).forEach(k => {
+    if (!indHay(k)) return;
+    ['nav-' + k, 'nav-bd' + k].forEach(id => {
+      const a = document.getElementById(id); if (a) a.style.display = '';
+    });
+  });
+}
+
+function indPct(v) { return (v === null || v === undefined || isNaN(v)) ? '-' : v.toFixed(2).replace('.', ',') + '%'; }
+function indNum(v) { return (v === null || v === undefined) ? '-' : Math.round(v).toLocaleString('es-CO'); }
+
+function indBase(k, excepto) {
+  const c = IND[k], d = c.datos, ix = d.idx, campos = Object.keys(c.campos);
+  return d.rows.filter(r => campos.every(f => {
+    if (f === excepto) return true;
+    if (!c.sel[f]) return true;
+    return String(r[ix[f]]) === c.sel[f];
+  }));
+}
+
+/* metrica del capitulo sobre un conjunto de filas */
+function indMetrica(k, filas) {
+  const ix = IND[k].datos.idx;
+  if (k === 'agotados') {
+    const n = filas.length;
+    const a = filas.filter(r => String(r[ix.disponible]).trim().toUpperCase() === 'NO').length;
+    return { n, num: a, pct: n ? 100 * a / n : 0 };
+  }
+  const caras = filas.reduce((s, r) => s + r[ix.caras], 0);
+  const prop = filas.reduce((s, r) => s + r[ix.propios], 0);
+  return { n: filas.length, caras, propias: prop, competencia: caras - prop,
+           pct: caras ? 100 * prop / caras : 0 };
+}
+
+function indAgrupar(k, filas, i, extras) {
+  const ix = IND[k].datos.idx, m = new Map();
+  filas.forEach(r => {
+    const key = r[i] || '(sin dato)';
+    if (!m.has(key)) m.set(key, { fs: [], extra: {} });
+    const o = m.get(key);
+    o.fs.push(r);
+    (extras || []).forEach(e => { if (!o.extra[e] && r[ix[e]]) o.extra[e] = r[ix[e]]; });
+  });
+  const out = [];
+  m.forEach((o, key) => {
+    const met = indMetrica(k, o.fs);
+    out.push(Object.assign({ k: key, extra: o.extra }, met));
+  });
+  out.sort((a, b) => b.pct - a.pct);
+  return out;
+}
+
+function indFiltrar(k, campo, valor) {
+  if (!valor) return;
+  const c = IND[k];
+  c.sel[campo] = (c.sel[campo] === valor) ? '' : valor;
+  if (campo === 'categoria') {
+    ['sel-cat-' + k, 'sel-cat-' + k + '-bd'].forEach(id => {
+      const sel = document.getElementById(id); if (sel) sel.value = c.sel.categoria || '';
+    });
+  }
+  indRender(k);
+}
+
+function indQuitar(k, campo) {
+  IND[k].sel[campo] = '';
+  if (campo === 'categoria') {
+    ['sel-cat-' + k, 'sel-cat-' + k + '-bd'].forEach(id => {
+      const sel = document.getElementById(id); if (sel) sel.value = '';
+    });
+  }
+  indRender(k);
+}
+
+function indLimpiar(k) {
+  IND[k].sel = {};
+  ['sel-cat-' + k, 'sel-cat-' + k + '-bd'].forEach(id => {
+    const sel = document.getElementById(id); if (sel) sel.value = '';
+  });
+  indRender(k);
+}
+
+function indChips(k) {
+  const c = IND[k], d = c.datos;
+  const activos = Object.keys(c.campos).filter(f => c.sel[f]);
+  const corto = t => String(t).length > 44 ? String(t).slice(0,42) + '…' : t;
+  const html = !activos.length
+    ? `<span class="titulo">${d.mes || ''} · ${d.archivo || ''} — haz clic en cualquier barra para filtrar</span>`
+    : '<span class="titulo">Filtros activos</span>'
+      + activos.map(f => `<span class="chip">${c.campos[f]}: <b>${corto(c.sel[f])}</b>`
+          + `<span class="x" title="Quitar" onclick="indQuitar('${k}','${f}')">&times;</span></span>`).join('')
+      + `<button class="chip-limpiar" onclick="indLimpiar('${k}')">Limpiar todo</button>`;
+  [k + '-chips', k + '-chips-bd'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.innerHTML = html;
+  });
+}
+
+function indKpis(k) {
+  const c = IND[k], d = c.datos, ix = d.idx, filas = indBase(k);
+  const m = indMetrica(k, filas);
+  const uni = i => new Set(filas.map(r => r[ix[i]]).filter(Boolean)).size;
+  let t;
+  if (k === 'agotados') {
+    const cau = (texto) => {
+      const n = filas.filter(r => String(r[ix.problema]).trim().toUpperCase() === texto).length;
+      return filas.length ? 100 * n / filas.length : 0;
+    };
+    t = [
+      { v: indPct(m.pct),               e: '% Agotado (no disponible)', c: '#C0392B' },
+      { v: indNum(m.n),                 e: 'Chequeos de presencia',     c: '#1F4E78' },
+      { v: indNum(m.num),               e: 'SKU agotados',              c: '#ED7D31' },
+      { v: indPct(cau('PRODUCTO AGOTADO')),        e: '% Producto agotado',   c: '#E8B33A' },
+      { v: indPct(cau('PRODUCTO NO CODIFICADO')),  e: '% No codificado',      c: '#8E44AD' },
+      { v: uni('codigo'),               e: 'PDV chequeados',            c: '#2E7D32' },
+    ];
+  } else {
+    t = [
+      { v: indPct(m.pct),                    e: '% Facing propio',                    c: '#1F4E78' },
+      { v: indPct(m.pct / (d.meta/100)),     e: `% Cumplimiento (meta ${indPct(d.meta)})`, c: '#3BBFCF' },
+      { v: indNum(m.propias),                e: 'Caras propias',                      c: '#2E7D32' },
+      { v: indNum(m.competencia),            e: 'Caras competencia',                  c: '#C0392B' },
+      { v: indNum(m.caras),                  e: 'Total caras medidas',                c: '#ED7D31' },
+      { v: uni('codigo'),                    e: 'PDV medidos',                        c: '#8E44AD' },
+    ];
+  }
+  const cont = document.getElementById(k + '-kpis');
+  if (cont) cont.innerHTML = t.map(x => `
+    <div class="kpi-card" style="--color:${x.c}">
+      <div class="top"><div><div class="valor">${x.v}</div><div class="etiqueta">${x.e}</div></div></div>
+    </div>`).join('');
+}
+
+function indChart(k, id, tipo, pares, campo, horizontal, opciones) {
+  opciones = opciones || {};
+  const cv = document.getElementById(id);
+  if (!cv) return;
+  if (charts[id]) charts[id].destroy();
+  const esLinea = tipo === 'line';
+  const valores = pares.map(p => String(p[0]));
+  const sel = IND[k].sel[campo];
+  if (opciones.altoPorItem) {
+    cv.parentElement.style.height = Math.max(250, pares.length * opciones.altoPorItem + 60) + 'px';
+  }
+  charts[id] = new Chart(cv, {
+    type: tipo,
+    data: { labels: valores.map(v => opciones.completo ? encLineas(v, opciones.anchoTexto || 34) : v), datasets: [{
+      label: IND[k].titulo, data: pares.map(p => p[1]),
+      backgroundColor: esLinea ? CORP_LINEA_FONDO
+        : (sel ? valores.map(v => v === sel ? CORP_SELECCION : CORP_BARRA_ATENUADA) : CORP_BARRA),
+      borderColor: esLinea ? CORP_LINEA : undefined,
+      borderWidth: esLinea ? 2 : 0, borderRadius: esLinea ? 0 : 5,
+      fill: esLinea, tension: 0.3, pointRadius: 3, pointBackgroundColor: CORP_LINEA,
+    }]},
+    options: {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true, maintainAspectRatio: false,
+      onClick: (evt, els) => { if (els && els.length) indFiltrar(k, campo, valores[els[0].index]); },
+      onHover: (evt, els) => { evt.native.target.style.cursor = (els && els.length) ? 'pointer' : 'default'; },
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { title: it => valores[it[0].dataIndex],
+                                label: it => IND[k].titulo + ': ' + indPct(it.raw) } },
+        datalabels: { anchor:'end', align: horizontal ? 'end' : 'top', offset: horizontal ? 2 : 4,
+          color: esLinea ? '#1F4E78' : '#33414F', font:{ size:10, weight:'bold' },
+          formatter: v => indPct(v) } },
+      scales: {
+        x: { ticks:{ font:{size:10}, autoSkip:false, maxRotation: horizontal ? 0 : 35,
+                     callback: function(v) { return horizontal ? v + '%' : this.getLabelForValue(v); } },
+             grid:{display:!horizontal} },
+        y: { ticks:{ font:{size:10}, autoSkip:false,
+                     callback: function(v) { return horizontal ? this.getLabelForValue(v) : v + '%'; } },
+             grid:{display:horizontal}, beginAtZero:true,
+             afterFit: opciones.anchoEje ? (sc) => { sc.width = opciones.anchoEje; } : undefined },
+      },
+      layout: { padding: { right: horizontal ? 56 : 8, top: 16 } },
+    },
+  });
+}
+
+function indGraficos(k) {
+  const ix = IND[k].datos.idx;
+  const par = res => res.map(x => [x.k, +x.pct.toFixed(2)]);
+  indChart(k, 'chart-' + k + '-cat', 'bar', par(indAgrupar(k, indBase(k, 'categoria'), ix.categoria)),
+           'categoria', true, { completo:true, anchoEje:270, anchoTexto:30, altoPorItem:30 });
+  indChart(k, 'chart-' + k + '-cad', 'bar', par(indAgrupar(k, indBase(k, 'cadena'), ix.cadena)),
+           'cadena', true, { completo:true, anchoEje:190, anchoTexto:22, altoPorItem:30 });
+  indChart(k, 'chart-' + k + '-eq', 'bar', par(indAgrupar(k, indBase(k, 'equipo'), ix.equipo)).slice(0, 15),
+           'equipo', true, { completo:true, anchoEje:280, anchoTexto:30, altoPorItem:30 });
+  const fech = indAgrupar(k, indBase(k, 'fecha'), ix.fecha);
+  const nf = x => { const p = String(x.k).split('/'); return (p[2]||'')+(p[1]||'')+(p[0]||''); };
+  fech.sort((a,b) => nf(a).localeCompare(nf(b)));
+  indChart(k, 'chart-' + k + '-fec', 'line', par(fech), 'fecha', false);
+  const t3 = document.getElementById(k + '-t3');
+  if (t3) t3.textContent = IND[k].ejeEquipo;
+}
+
+const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/'/g,'&#39;');
+
+/* tabla 1: agotados -> categoria+producto con subtotal ; facing -> categoria */
+function indTabla1(k) {
+  const c = IND[k], ix = c.datos.idx;
+  const head = document.getElementById(k + '-t1-head');
+  const body = document.getElementById(k + '-t1-body');
+  if (!head || !body) return;
+  const filas = indBase(k);
+  let html = '';
+  if (k === 'agotados') {
+    head.innerHTML = '<tr><th>Categoria</th><th>EAN</th><th>Producto</th><th>Chequeos</th>'
+                   + '<th>Agotados</th><th>% Agotado</th></tr>';
+    const porCat = new Map();
+    filas.forEach(r => {
+      const cc = r[ix.categoria] || '(sin categoria)';
+      if (!porCat.has(cc)) porCat.set(cc, []);
+      porCat.get(cc).push(r);
+    });
+    const cats = [...porCat.entries()].map(([cc, fs]) => ({ cc, fs, m: indMetrica(k, fs) }))
+                    .sort((a,b) => b.m.pct - a.m.pct);
+    cats.forEach(({ cc, fs, m }) => {
+      indAgrupar(k, fs, ix.producto, ['ean']).forEach((p, i) => {
+        html += '<tr>'
+          + `<td class="pr-cat" onclick="indFiltrar('${k}','categoria','${esc(cc)}')">${i === 0 ? esc(cc) : ''}</td>`
+          + `<td>${p.extra.ean || ''}</td>`
+          + `<td class="txt pr-cat" onclick="indFiltrar('${k}','producto','${esc(p.k)}')">${esc(p.k)}</td>`
+          + `<td class="num">${indNum(p.n)}</td><td class="num">${indNum(p.num)}</td>`
+          + `<td class="num">${indPct(p.pct)}</td></tr>`;
+      });
+      html += `<tr class="subtotal"><td colspan="3">Total ${esc(cc)}</td>`
+            + `<td class="num">${indNum(m.n)}</td><td class="num">${indNum(m.num)}</td>`
+            + `<td class="num">${indPct(m.pct)}</td></tr>`;
+    });
+    const info = document.getElementById(k + '-t1-info');
+    if (info) info.textContent = `${cats.length} categoria(s) — clic en la categoria o el producto para filtrar.`;
+  } else {
+    head.innerHTML = '<tr><th>Categoria</th><th>Tipo</th><th>Caras propias</th><th>Caras competencia</th>'
+                   + '<th>Total caras</th><th>% Facing</th><th>% Cumplimiento</th></tr>';
+    const res = indAgrupar(k, filas, ix.categoria, ['tipo']);
+    const meta = c.datos.meta / 100;
+    res.forEach(x => {
+      html += '<tr>'
+        + `<td class="txt pr-cat" onclick="indFiltrar('${k}','categoria','${esc(x.k)}')">${esc(x.k)}</td>`
+        + `<td>${x.extra.tipo || ''}</td>`
+        + `<td class="num">${indNum(x.propias)}</td><td class="num">${indNum(x.competencia)}</td>`
+        + `<td class="num">${indNum(x.caras)}</td><td class="num">${indPct(x.pct)}</td>`
+        + `<td class="num">${indPct(x.pct / meta)}</td></tr>`;
+    });
+    const m = indMetrica(k, filas);
+    html += `<tr class="subtotal"><td colspan="2">TOTAL</td>`
+          + `<td class="num">${indNum(m.propias)}</td><td class="num">${indNum(m.competencia)}</td>`
+          + `<td class="num">${indNum(m.caras)}</td><td class="num">${indPct(m.pct)}</td>`
+          + `<td class="num">${indPct(m.pct / meta)}</td></tr>`;
+    const info = document.getElementById(k + '-t1-info');
+    if (info) info.textContent = `${res.length} categoria(s) — el % de cumplimiento se calcula sobre la meta de ${indPct(c.datos.meta)}.`;
+  }
+  body.innerHTML = html || `<tr><td colspan="7" class="vacio">No hay registros con los filtros actuales.</td></tr>`;
+}
+
+/* tabla 2: por punto de venta */
+function indTabla2(k) {
+  const c = IND[k], ix = c.datos.idx;
+  const head = document.getElementById(k + '-t2-head');
+  const body = document.getElementById(k + '-t2-body');
+  if (!head || !body) return;
+  let res = indAgrupar(k, indBase(k), ix.pdv, ['codigo','ciudad','cadena']);
+  const q = (c.busqPdv || '').toLowerCase();
+  if (q) res = res.filter(p => (p.k + ' ' + (p.extra.codigo||'') + ' ' + (p.extra.ciudad||'') + ' ' + (p.extra.cadena||'')).toLowerCase().includes(q));
+  if (k === 'agotados') {
+    head.innerHTML = '<tr><th>COD PLF</th><th>Punto de Venta</th><th>Ciudad</th><th>Cadena</th>'
+                   + '<th>Chequeos</th><th>Agotados</th><th>% Agotado</th></tr>';
+    body.innerHTML = res.length ? res.map(p => '<tr>'
+        + `<td>${p.extra.codigo || ''}</td>`
+        + `<td class="txt pr-cat" onclick="indFiltrar('${k}','pdv','${esc(p.k)}')">${esc(p.k)}</td>`
+        + `<td>${p.extra.ciudad || ''}</td><td>${p.extra.cadena || ''}</td>`
+        + `<td class="num">${indNum(p.n)}</td><td class="num">${indNum(p.num)}</td>`
+        + `<td class="num">${indPct(p.pct)}</td></tr>`).join('')
+      : '<tr><td colspan="7" class="vacio">No hay puntos de venta con los filtros actuales.</td></tr>';
+  } else {
+    const meta = c.datos.meta / 100;
+    head.innerHTML = '<tr><th>COD PLF</th><th>Punto de Venta</th><th>Ciudad</th><th>Cadena</th>'
+                   + '<th>Propias</th><th>Competencia</th><th>Total</th><th>% Facing</th><th>% Cumpl.</th></tr>';
+    body.innerHTML = res.length ? res.map(p => '<tr>'
+        + `<td>${p.extra.codigo || ''}</td>`
+        + `<td class="txt pr-cat" onclick="indFiltrar('${k}','pdv','${esc(p.k)}')">${esc(p.k)}</td>`
+        + `<td>${p.extra.ciudad || ''}</td><td>${p.extra.cadena || ''}</td>`
+        + `<td class="num">${indNum(p.propias)}</td><td class="num">${indNum(p.competencia)}</td>`
+        + `<td class="num">${indNum(p.caras)}</td><td class="num">${indPct(p.pct)}</td>`
+        + `<td class="num">${indPct(p.pct / meta)}</td></tr>`).join('')
+      : '<tr><td colspan="9" class="vacio">No hay puntos de venta con los filtros actuales.</td></tr>';
+  }
+  const info = document.getElementById(k + '-t2-info');
+  if (info) info.textContent = `${res.length} punto(s) de venta — ordenados de mayor a menor ${IND[k].titulo}.`;
+}
+
+function indSelectores(k) {
+  const c = IND[k], ix = c.datos.idx;
+  const cats = indAgrupar(k, indBase(k, 'categoria'), ix.categoria);
+  const html = '<option value="">Todas las categorias (' + indNum(c.datos.total) + ' registros)</option>'
+    + cats.map(x => `<option value="${String(x.k).replace(/"/g,'&quot;')}">${x.k} (${indPct(x.pct)})</option>`).join('');
+  ['sel-cat-' + k, 'sel-cat-' + k + '-bd'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = html;
+    sel.value = c.sel.categoria || '';
+  });
+}
+
+function indFilasBD(k) {
+  const c = IND[k], q = (c.busq || '').toLowerCase();
+  const base = indBase(k);
+  if (!q) return base;
+  return base.filter(r => r.some(x => x !== null && x !== undefined && String(x).toLowerCase().includes(q)));
+}
+
+function indTablaBD(k) {
+  if (!indHay(k)) return;
+  indSelectores(k); indChips(k);
+  const c = IND[k], d = c.datos, ix = d.idx, cols = d.cols;
+  const iFoto = cols.indexOf('REGISTRO FOTOGRAFICO');
+  const head = document.getElementById(k + '-head');
+  const body = document.getElementById(k + '-body');
+  if (!head || !body) return;
+  head.innerHTML = '<tr>' + cols.map((x,i) => `<th>${i === iFoto ? 'Evidencia' : x}</th>`).join('') + '</tr>';
+  const filas = indFilasBD(k);
+  const tope = filas.slice(0, 1500);
+  body.innerHTML = tope.length ? tope.map(r => '<tr>' + cols.map((x,i) => {
+      const v = r[i];
+      if (i === iFoto) return v ? `<td><a href="${v}" target="_blank" rel="noopener" style="color:#1a7a86;font-weight:600;">Ver foto</a></td>` : '<td>-</td>';
+      if (i === ix.producto || i === ix.pdv) return `<td class="txt">${v || ''}</td>`;
+      if (typeof v === 'number') return `<td class="num">${indNum(v)}</td>`;
+      return `<td>${v === null || v === undefined ? '' : v}</td>`;
+    }).join('') + '</tr>').join('')
+    : `<tr><td colspan="${cols.length}" class="vacio">No hay registros con los filtros actuales.</td></tr>`;
+  const info = document.getElementById(k + '-info');
+  if (info) {
+    info.textContent = `Mostrando ${indNum(tope.length)} de ${indNum(filas.length)} registros`
+      + (filas.length > tope.length ? ' (usa el buscador o descarga a Excel para ver el resto)' : '')
+      + ` — total del mes: ${indNum(d.total)} · fuente: ${d.archivo || ''}`;
+  }
+}
+
+function indRender(k) {
+  if (!indHay(k)) return;
+  const c = IND[k];
+  if (!c.listo) {
+    ['sel-cat-' + k, 'sel-cat-' + k + '-bd'].forEach(id => {
+      const sel = document.getElementById(id);
+      if (sel) sel.addEventListener('change', (e) => { c.sel.categoria = e.target.value; indRender(k); });
+    });
+    const b1 = document.getElementById('buscador-' + k);
+    if (b1) b1.addEventListener('input', (e) => { c.busq = e.target.value; indTablaBD(k); });
+    const b2 = document.getElementById('buscador-' + k + '-pdv');
+    if (b2) b2.addEventListener('input', (e) => { c.busqPdv = e.target.value; indTabla2(k); });
+    c.listo = true;
+  }
+  indSelectores(k);
+  indChips(k);
+  indKpis(k);
+  indGraficos(k);
+  indTabla1(k);
+  indTabla2(k);
+  indTablaBD(k);
+}
+
+function indExportarBD(k) {
+  if (!indHay(k)) return;
+  const d = IND[k].datos, filas = indFilasBD(k);
+  if (!filas.length) { alert('No hay registros para exportar.'); return; }
+  const iFoto = d.cols.indexOf('REGISTRO FOTOGRAFICO');
+  const enc = d.cols.map((c,i) => i === iFoto ? 'Link Evidencia' : c);
+  const hoja = XLSX.utils.aoa_to_sheet([enc, ...filas]);
+  hoja['!cols'] = enc.map(c => ({ wch: Math.min(Math.max(String(c).length + 4, 12), 46) }));
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, k === 'agotados' ? 'Agotados' : 'Facing');
+  XLSX.writeFile(libro, `${k === 'agotados' ? 'Agotados' : 'Facing'}_${RAW.marca || d.marca}_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+function indExportarResumen(k) {
+  if (!indHay(k)) return;
+  const c = IND[k], d = c.datos, ix = d.idx, filas = indBase(k);
+  const libro = XLSX.utils.book_new();
+  if (k === 'agotados') {
+    const f1 = [];
+    const porCat = new Map();
+    filas.forEach(r => {
+      const cc = r[ix.categoria] || '(sin categoria)';
+      if (!porCat.has(cc)) porCat.set(cc, []);
+      porCat.get(cc).push(r);
+    });
+    porCat.forEach((fs, cc) => {
+      indAgrupar(k, fs, ix.producto, ['ean']).forEach(p =>
+        f1.push([cc, p.extra.ean || '', p.k, p.n, p.num, +p.pct.toFixed(2)]));
+      const m = indMetrica(k, fs);
+      f1.push(['Total ' + cc, '', '', m.n, m.num, +m.pct.toFixed(2)]);
+    });
+    const h1 = XLSX.utils.aoa_to_sheet([['Categoria','EAN','Producto','Chequeos','Agotados','% Agotado'], ...f1]);
+    h1['!cols'] = [{wch:32},{wch:16},{wch:44},{wch:11},{wch:11},{wch:12}];
+    XLSX.utils.book_append_sheet(libro, h1, 'Categoria-Producto');
+    const f2 = indAgrupar(k, filas, ix.pdv, ['codigo','ciudad','cadena']).map(p =>
+      [p.extra.codigo||'', p.k, p.extra.ciudad||'', p.extra.cadena||'', p.n, p.num, +p.pct.toFixed(2)]);
+    const h2 = XLSX.utils.aoa_to_sheet([['COD PLF','Punto de Venta','Ciudad','Cadena','Chequeos','Agotados','% Agotado'], ...f2]);
+    h2['!cols'] = [{wch:14},{wch:48},{wch:18},{wch:18},{wch:11},{wch:11},{wch:12}];
+    XLSX.utils.book_append_sheet(libro, h2, 'Por PDV');
+    XLSX.writeFile(libro, `ResultadosAgotados_${RAW.marca || d.marca}_${new Date().toISOString().slice(0,10)}.xlsx`);
+  } else {
+    const meta = d.meta / 100;
+    const f1 = indAgrupar(k, filas, ix.categoria, ['tipo']).map(x =>
+      [x.k, x.extra.tipo||'', x.propias, x.competencia, x.caras, +x.pct.toFixed(2), +(x.pct/meta).toFixed(2)]);
+    const m = indMetrica(k, filas);
+    f1.push(['TOTAL','', m.propias, m.competencia, m.caras, +m.pct.toFixed(2), +(m.pct/meta).toFixed(2)]);
+    const h1 = XLSX.utils.aoa_to_sheet([['Categoria','Tipo','Caras propias','Caras competencia','Total caras','% Facing','% Cumplimiento'], ...f1]);
+    h1['!cols'] = [{wch:34},{wch:14},{wch:15},{wch:18},{wch:14},{wch:12},{wch:16}];
+    XLSX.utils.book_append_sheet(libro, h1, 'Por Categoria');
+    const f2 = indAgrupar(k, filas, ix.pdv, ['codigo','ciudad','cadena']).map(p =>
+      [p.extra.codigo||'', p.k, p.extra.ciudad||'', p.extra.cadena||'', p.propias, p.competencia, p.caras,
+       +p.pct.toFixed(2), +(p.pct/meta).toFixed(2)]);
+    const h2 = XLSX.utils.aoa_to_sheet([['COD PLF','Punto de Venta','Ciudad','Cadena','Propias','Competencia','Total','% Facing','% Cumpl.'], ...f2]);
+    h2['!cols'] = [{wch:14},{wch:48},{wch:18},{wch:18},{wch:11},{wch:13},{wch:11},{wch:12},{wch:12}];
+    XLSX.utils.book_append_sheet(libro, h2, 'Por PDV');
+    XLSX.writeFile(libro, `ResultadosFacing_${RAW.marca || d.marca}_${new Date().toISOString().slice(0,10)}.xlsx`);
+  }
+}
+
+indMostrarNav();
 
 inicializarFiltros();
 render();
