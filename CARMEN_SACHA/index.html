@@ -171,6 +171,7 @@
   <div class="sidebar">
     <div class="brand"><div class="logo">CA</div> Dashboard CARMEN SACHA</div>
     <nav>
+      <a data-vista="visitas" id="nav-visitas" onclick="cambiarVista('visitas')" style="display:none;">✅ % Cumplimiento Visitas Mandatorias</a>
       <a class="active" data-vista="resumen" onclick="cambiarVista('resumen')">📊 Indicador Exhibiciones</a>
       <a data-vista="fotos" onclick="cambiarVista('fotos')">🖼️ Registro Fotografico</a>
       <a data-vista="basedatos" onclick="cambiarVista('basedatos')">🗄️ Base de Datos Exhibiciones</a>
@@ -207,6 +208,70 @@
         <div class="sub">Seguimiento de actividades en punto de venta — SEPTIEMBRE</div>
       </div>
       <div class="corte">Ultimo corte: <b id="fecha-corte">-</b><br>Generado: 23/09/2026 07:39</div>
+    </div>
+
+    <!-- VS-VISITAS-V3 -->
+    <div id="vista-visitas" class="vista" style="display:none;">
+      <div class="vs-filtros">
+        <div><label>Canal</label><select id="vs-f-canal" onchange="vsFiltrar('canal', this.value, true)"></select></div>
+        <div><label>Cadena</label><select id="vs-f-cadena" onchange="vsFiltrar('cadena', this.value, true)"></select></div>
+        <div><label>Coordinador</label><select id="vs-f-coordinador" onchange="vsFiltrar('coordinador', this.value, true)"></select></div>
+        <div><label>Ciudad</label><select id="vs-f-ciudad" onchange="vsFiltrar('ciudad', this.value, true)"></select></div>
+        <div><label>Mercaderista</label><select id="vs-f-mercaderista" onchange="vsFiltrar('mercaderista', this.value, true)"></select></div>
+      </div>
+      <div class="chips" id="vs-chips"></div>
+      <div class="kpis" id="vs-kpis"></div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2>Cumplimiento de visitas por canal</h2>
+          <div class="nota-tabla vs-ley"></div>
+          <div class="chart-box tall"><canvas id="chart-vs-canal" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Cumplimiento de visitas por coordinador</h2>
+          <div class="nota-tabla vs-ley"></div>
+          <div class="chart-box tall"><canvas id="chart-vs-coordinador" class="clicable"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel">
+          <h2>Cumplimiento de visitas por cadena</h2>
+          <div class="nota-tabla vs-ley"></div>
+          <div class="chart-box tall"><canvas id="chart-vs-cadena" class="clicable"></canvas></div>
+        </div>
+        <div class="panel">
+          <h2>Evolucion mensual del cumplimiento</h2>
+          <div class="nota-tabla vs-ley"></div>
+          <div class="chart-box tall"><canvas id="chart-vs-mes"></canvas></div>
+        </div>
+      </div>
+      <div class="grid-mid" style="grid-template-columns: 1fr;">
+        <div class="panel" style="min-width:0;">
+          <h2>Cumplimiento de visitas por mercaderista</h2>
+          <div class="bd-info" style="margin:-6px 0 10px;">Clic en un mercaderista para filtrar todo el tablero.</div>
+          <div class="tabla-scroll tabla-res" style="max-height:560px;">
+            <table><thead id="vs-eq-head"></thead><tbody id="vs-eq-body"></tbody></table>
+          </div>
+        </div>
+        <div class="panel" style="min-width:0;">
+          <h2>Cumplimiento de visitas por punto de venta</h2>
+          <div class="bd-info" style="margin:-6px 0 10px;">Clic en una cadena (&#9656;) para ver sus puntos de venta.</div>
+          <div class="tabla-scroll tabla-res" style="max-height:560px;">
+            <table><thead id="vs-pdv-head"></thead><tbody id="vs-pdv-body"></tbody></table>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Puntos de venta con visitas pendientes</h2>
+        <div class="buscador">
+          <input type="text" id="buscador-vs" placeholder="Buscar PDV, codigo, cadena, ciudad, mercaderista..." oninput="vsBusq=this.value; vsTablaPendientes();">
+          <button class="btn-exportar" onclick="vsExportar()">⬇ Descargar base de visitas a Excel</button>
+        </div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="vs-pen-head"></thead><tbody id="vs-pen-body"></tbody></table>
+        </div>
+        <div class="bd-info" id="vs-pen-info"></div>
+      </div>
     </div>
 
     <div id="vista-resumen" class="vista">
@@ -2087,6 +2152,7 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
 <script id="noimpl-json" type="application/json">{}</script>
 <script id="encuestas-json" type="application/json">{"marca": "CARMEN SACHA", "total": 66, "encuestas": 3, "pdv": 7, "preguntas": 4, "respuestas": 30, "g_encuestas": [{"k": "CARMEN SACHA", "v": 39}, {"k": "CARMEN SACHA FIN TAREA DE IMPULSO", "v": 15}, {"k": "CARMEN SACHA INICIO TAREA DE IMPULSO", "v": 12}], "g_cadenas": [{"k": "EXITO", "v": 37}, {"k": "CARULLA", "v": 29}], "g_usuarios": [{"k": "5003753", "v": 31}, {"k": "53130675", "v": 15}, {"k": "38460284", "v": 10}, {"k": "1081790325", "v": 5}, {"k": "1152689210", "v": 3}, {"k": "1070018922", "v": 2}], "g_tipos": [{"k": "MUEBLE", "v": 42}, {"k": "CARTELERIA", "v": 13}, {"k": "PRODUCTO", "v": 11}], "g_fechas": [{"k": "16/09/2026", "v": 35}, {"k": "19/09/2026", "v": 31}], "cols": ["Fecha", "Semana", "Encuesta", "Cadena", "Código", "Punto de Venta", "Tipo", "Mercaderista", "Pregunta", "Respuesta", "Observación", "Fuente", "REGISTRO FOTOGRAFICO"], "idx": {"fecha": 0, "semana": 1, "encuesta": 2, "cadena": 3, "codigo": 4, "pdv": 5, "tipo": 6, "usuario": 7, "pregunta": 8, "respuesta": 9, "observacion": 10, "fuente": 11, "foto": 12}, "rows": [["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1489", "EXITO - CARULLA PALMAS - MEDELLIN - NMER1489", "MUEBLE", "1152689210", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/avejebbf1B4gNXWRheEkerJsp9AYx5TwERmQLb8s9Wo="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1489", "EXITO - CARULLA PALMAS - MEDELLIN - NMER1489", "CARTELERIA", "1152689210", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/Mv5BkYuXOTFCtIbn67axYIOyKtNlJHu31Ej0uok6Co="], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1768", "EXITO - EXITO FONTANAR CHÃƒÂA - CHIA-CUNDINAMARCA - NMER1768", "MUEBLE", "1070018922", "SELECCIONE EL PRODUCTO CARMEN SACHA", "7709102454898 - ACEITE DE SACHA INCHI ORGANICO CARMENSACHA", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1768", "EXITO - EXITO FONTANAR CHÃƒÂA - CHIA-CUNDINAMARCA - NMER1768", "MUEBLE", "1070018922", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "1", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "MUEBLE", "38460284", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "0", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "MUEBLE", "38460284", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/cexPCq89zEkXi46fWot3iBLgzy1n9U8iXa3Z4fPW1rA="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "PRODUCTO", "38460284", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/FXLcttOyCyf3uNuQEOJUqQwqFdhre80gNE830cXums="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "CARTELERIA", "38460284", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/t0xlkANxJXNm6TPqQfBVDIZkTYNZGLqoOyRnal5Rafk="], ["16/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "MUEBLE", "38460284", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/62KcfSViwf63F87xMMtSBHFUE2OQmMHRS22SxSZNvg="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/7OR28a5Oq3ZPEem66XkiShoDNHax4supD4eixIBo="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "PRODUCTO", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/ziNG2saKrOCSJOZCWzsGXQn2DD3F9Kw1hcXP3lCZ2Q="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/KcSw35SvVDD4GuBL822KhHgOKlOMUESr36fiqv9TI="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/PWFff5lS264h6W3k5Q3LJopkvE0f6MkOM2bbbHnLI="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/BLzMD6DF2bORQ5uL8TkluZG5p6dpfH0NYXHAOE="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "PRODUCTO", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/QTgx48ZlblFpgMGYq7cQC9ABUS7DKP2sTwx4Gez3cE="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/fW8velBxEBXH61NoJZLW7h50V8GKqS6ECMDmFkmcg="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "PRODUCTO", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/xQks00IYrGmAmEE8txhTQtx21SjrUToFOjCzBrg="], ["16/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/DISQVUkfmyrtFODfxU8zzuVICbfojQXg8fv9PU60="], ["16/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/9t96CEyyeBwMnyJRivNCQ84Ou7DkoJTYo7dKcNfISs="], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "SELECCIONE EL PRODUCTO CARMEN SACHA", "7709102454898 - ACEITE DE SACHA INCHI ORGANICO CARMENSACHA", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "3", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/Libya3119bB8vo5j5PM04X3UmeRagI19AriwiJ1Yow="], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "PRODUCTO", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/8hjvudr48HnpH6RLJAmupHS6ExbVRMIdfrwf7u2zs8="], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/NeChHMspsZEOxWaCxfn1nwku5FxaRQUeoJDsUdX6oKo="], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/9jDAemX7WoLCmFutSgJ4MwTn4aj1HtAsNqCmuM262A="], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "PRODUCTO", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/qd3OnDDYidxHtPzpvAPPUmuc0y9zpKQqId9iTQIqDgI="], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/QAs5TdlH8WxSVhQREPEv1phFradStgDSFSwNwhcIc="], ["16/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/B9ZVDPzCVFVBbhIcFGiub4yW3MWE78xU8TiZeY8VWw="], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "SELECCIONE EL PRODUCTO CARMEN SACHA", "7709102454898 - ACEITE DE SACHA INCHI ORGANICO CARMENSACHA", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "2", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/wp1Vh9ft3OEcCynd0W1va5jVuPg2uTbAqB2QuOE6Dc="], ["16/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/xKLqASASIPIKy1t5qym4JAAxYNFCXiyT73iWbiPPA="], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "5", "", "Objeto Sala", ""], ["16/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "EXITO", "NMER1940", "EXITO - EXITO BUENA VISTA SANTA MARTA - SANTA MARTA - NMER1940", "MUEBLE", "1081790325", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/gR5ruEUwFZZ7DSr5GzIXBg5U5msAwj41sdnkHQm5h8I="], ["16/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1940", "EXITO - EXITO BUENA VISTA SANTA MARTA - SANTA MARTA - NMER1940", "MUEBLE", "1081790325", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "2", "", "Objeto Sala", ""], ["19/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1489", "EXITO - CARULLA PALMAS - MEDELLIN - NMER1489", "MUEBLE", "1152689210", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/fSomvXArHpFSJu4EnvAsqRYeO3E4w1Xfb5J8XKJpk="], ["19/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/PPrSGWR6me2p41LJNyMXUGPqhid2ID3RCK8Cw6TVdic="], ["19/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/W8sxqu4wISpL1f6SeJA50IQeYlwKjQttglVpr8jd4="], ["19/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/K9JMEY5fof3wymaZLF5oaG1f5MC3HkAmDOlH58Hfo="], ["19/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "CARULLA", "NMER1597", "EXITO - CARULLA CALLE 140 - BOGOTA - NMER1597", "MUEBLE", "5003753", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "0", "", "Objeto Sala", ""], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "PRODUCTO", "53130675", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/Lr9PTF6K2KGehFM4LYvyv6M13kap195ew802c2f98FQ="], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/nTLUIfkhdASP18NUNEvPEDsCQyTRZslFE8bpM1AX0VM="], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "CARTELERIA", "53130675", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/LykqZq2eAJH8Zdtta58ZkXCKnQPapmhsrVdjqrmG000="], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/aU0yg0uM0z6PgZiswnEEGOKeAmSl7aOHmzrt0V2KPIo="], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "PRODUCTO", "53130675", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/xGLu3e1yXqfbbTTcuiGUs94UFF6EKbMV0gbdtptj4Q="], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "CARTELERIA", "53130675", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/CNHMXM9rYgEVRnsTsEfopp5vPaMJxZuWV64zI6gZgc="], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/fGn9XDwj1vH38IkXI8ygEa7EV0MPWTssSh7tuOvuA="], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "PRODUCTO", "53130675", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/DXz7BeXeTVnnj7zhiigo7TLeWz4fRW6Nb4SMR8ps="], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "CARTELERIA", "53130675", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/h5InJfh3OVX1UG6QcAZj9FBt58Lsf49ApaKo1jsdI="], ["19/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/gqviSziojcRsZb3MXBsD8bU18uFJ0g0O6ODpkODuQ="], ["19/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "SELECCIONE EL PRODUCTO CARMEN SACHA", "7709102454898 - ACEITE DE SACHA INCHI ORGANICO CARMENSACHA", "", "Objeto Sala", ""], ["19/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1541", "EXITO - EXITO GRAN ESTACION (CV)BOGOTA - BOGOTA - NMER1541", "MUEBLE", "53130675", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "3", "", "Objeto Sala", ""], ["19/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "EXITO", "NMER1940", "EXITO - EXITO BUENA VISTA SANTA MARTA - SANTA MARTA - NMER1940", "MUEBLE", "1081790325", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/F4Jsxh3rz2kgAucgigpdArm0yOBxBoAKT8WqRv0Gt4="], ["19/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "EXITO", "NMER1940", "EXITO - EXITO BUENA VISTA SANTA MARTA - SANTA MARTA - NMER1940", "MUEBLE", "1081790325", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/tEqylpVDGxcivmGVieuWXKSWkXWcwkehqrsa684Q="], ["19/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1940", "EXITO - EXITO BUENA VISTA SANTA MARTA - SANTA MARTA - NMER1940", "MUEBLE", "1081790325", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "2", "", "Objeto Sala", ""], ["19/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "MUEBLE", "38460284", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/4a63h6kVij1iuk8JH4Nyq3HmSI3tMO7VDHhnHBsxI="], ["19/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "PRODUCTO", "38460284", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/ocuWE6i5sBbtqsh09oSosTM3Pqw0bigzjwAR99ALt0="], ["19/09/2026", "38", "CARMEN SACHA", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "CARTELERIA", "38460284", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/Oi22WGoWoFIMeoCwL19D9RvCVCdEr8PFjvOt19brKw="], ["19/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "MUEBLE", "38460284", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/oG2JgmqNDfWPzrO52XMVMCZ5KvjUifq6WnHXFE0C8="], ["19/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "CARULLA", "NMER1694", "EXITO - CARULLA PANCE CALI - CALI - NMER1694", "MUEBLE", "38460284", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "0", "", "Objeto Sala", ""], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "¿Se encuentra implementada la exhibición?", "Si", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/KCP4zuHL2jvsd1jWyptmO2Wc4VZNDaDHKhq8cBTRzB0="], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "PRODUCTO", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/e2IqTDfPHpZvf96UBDIZDMwh7OE4CvVFbm8V687dHPE="], ["19/09/2026", "38", "CARMEN SACHA", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "CARTELERIA", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/LirMeKNZRHJGil2yEx8eUGLXpOagHg4r8gDuLFPLk="], ["19/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/s0SqWgOZbZhXBlpJuKn3k5cipefdTobYdEZBP9yc9w="], ["19/09/2026", "38", "CARMEN SACHA INICIO TAREA DE IMPULSO", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "(registro sin pregunta — solo evidencia)", "", "", "Objeto Sala", "http://plf.co.teamcore.net/imagenes/task/fWxx5PPH5baHaziow4kWQQ8G6GmkKLFl4SjrKyMU="], ["19/09/2026", "38", "CARMEN SACHA FIN TAREA DE IMPULSO", "EXITO", "NMER1495", "EXITO - EXITO COUNTRY - BOGOTA - NMER1495", "MUEBLE", "5003753", "¿CUANTAS UNIDADES DEL PRODUCTO VENDIO?", "3", "", "Objeto Sala", ""]], "corta_fecha": {}}</script>
 <script id="precios-json" type="application/json">{}</script>
+<script id="visitas-json" type="application/json">{}</script>
 <script id="agotados-json" type="application/json">{}</script>
 <script id="facing-json" type="application/json">{}</script>
 <script>
@@ -3770,7 +3836,7 @@ function prChips() {
   const corto = t => String(t).length > 46 ? String(t).slice(0,44) + '…' : t;
   const html = !activos.length
     ? `<span class="titulo">Chequeo de precios de ${PR.mes || ''} — haz clic en cualquier barra o categoria para filtrar</span>`
-      + (PR.excluidos ? `<span class="chip" style="background:#E5F5EA;color:#1B7A3D;border-color:#BFE3CB;" title="${PR.motivos_excl || ''}">&#10004; Precios validados: se descartaron <b>&nbsp;${PR.excluidos.toLocaleString('es-CO')}&nbsp;</b> de ${(PR.leidos||0).toLocaleString('es-CO')} registros no creibles (ceros, 1, 1234, cero de mas/menos, fuera de rango)</span>` : '')
+      + (PR.excluidos ? `<span class="chip" title="${PR.motivos_excl || ''}">&#10004; Precios validados: se descartaron <b>&nbsp;${PR.excluidos.toLocaleString('es-CO')}&nbsp;</b> de ${(PR.leidos||0).toLocaleString('es-CO')} registros no creibles (ceros, 1, 1234, cero de mas/menos, fuera de rango)</span>` : '')
     : '<span class="titulo">Filtros activos</span>'
       + activos.map(c => `<span class="chip">${PR_ETIQUETA[c]}: <b>${corto(prSel[c])}</b>`
           + `<span class="x" title="Quitar" onclick="prQuitar('${c}')">&times;</span></span>`).join('')
@@ -4504,6 +4570,260 @@ indMostrarNav();
 
 inicializarFiltros();
 render();
+</script>
+
+
+
+<style>
+  .vs-filtros { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-bottom:14px; }
+  .vs-filtros label { display:block; font-size:11px; font-weight:700; color:#7A8699; text-transform:uppercase; letter-spacing:.4px; margin-bottom:4px; }
+  .vs-filtros select { width:100%; padding:7px 10px; border-radius:7px; border:1px solid #CBD8E4; background:#fff; font-size:12.5px; color:var(--texto); }
+  .vs-bar { position:relative; min-width:92px; }
+  #vista-visitas .tabla-scroll { overflow-x:auto; }
+  #vista-visitas .tabla-res table td.txt { min-width:180px; }
+  .vs-bar span.b { position:absolute; left:0; top:3px; bottom:3px; background:rgba(59,191,207,0.28); border-radius:3px; }
+  .vs-bar span.t { position:relative; font-weight:700; color:#1F4E78; padding-left:4px; }
+  .vs-cad { cursor:pointer; font-weight:700; background:#F5F9FC; }
+  .vs-cad td:first-child::before { content:'\25B8  '; color:#3BBFCF; }
+  .vs-cad.abierta td:first-child::before { content:'\25BE  '; }
+  .vs-hijo td:first-child { padding-left:26px; font-size:11px; }
+  .vs-gauge { height:8px; background:#EDF1F6; border-radius:6px; overflow:hidden; margin-top:8px; }
+  .vs-gauge i { display:block; height:100%; background:#3BBFCF; border-radius:6px; }
+</style>
+<script>
+/* ===================== VS-VISITAS-V3 : % CUMPLIMIENTO VISITAS MANDATORIAS ===================== */
+const VS = (() => { try { return JSON.parse(document.getElementById('visitas-json').textContent) || {}; } catch (e) { return {}; } })();
+const VS_ETQ = { canal:'Canal', cadena:'Cadena', coordinador:'Coordinador', ciudad:'Ciudad', mercaderista:'Mercaderista', pdv:'PDV' };
+const VS_OBJ = '#1F4E78', VS_REAL = '#3BBFCF', VS_LIN = '#2E7D32';
+let vsSel = {}, vsBusq = '', vsAbiertas = new Set();
+const vsCharts = {};
+
+function vsHay() { return VS && VS.rows && VS.rows.length > 0; }
+function vsN(v) { return Math.round(v || 0).toLocaleString('es-CO'); }
+function vsPct(o, r) { return o ? r / o * 100 : null; }
+function vsPctTxt(p) { return (p === null || p === undefined || isNaN(p)) ? '-' : p.toFixed(1).replace('.', ',') + ' %'; }
+function vsEsc(t) { return String(t == null ? '' : t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/'/g,'&#39;').replace(/"/g,'&quot;'); }
+function vsJs(t) { return String(t == null ? '' : t).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function vsLineas(t, n) {
+  const pal = String(t).split(' '), out = []; let cur = '';
+  pal.forEach(p => { if ((cur + ' ' + p).trim().length > n && cur) { out.push(cur); cur = p; } else cur = (cur + ' ' + p).trim(); });
+  if (cur) out.push(cur);
+  return out.length > 1 ? out : String(t);
+}
+
+function vsBase(excepto) {
+  const ix = VS.idx;
+  return VS.rows.filter(r => Object.keys(VS_ETQ).every(c => {
+    if (c === excepto || !vsSel[c]) return true;
+    return String(r[ix[c]]) === vsSel[c];
+  }));
+}
+
+function vsAgrupar(filas, campo) {
+  const ix = VS.idx, g = new Map();
+  filas.forEach(r => {
+    const k = r[ix[campo]] || '(sin dato)';
+    if (!g.has(k)) g.set(k, { k, obj: 0, real: 0, pen: 0, pdv: new Set(), extra: r });
+    const o = g.get(k);
+    o.obj += r[ix.obj]; o.real += r[ix.real]; o.pen += Math.max(r[ix.obj] - r[ix.real], 0);
+    if (r[ix.codigo]) o.pdv.add(r[ix.codigo]);
+  });
+  return [...g.values()].map(o => ({ ...o, pct: vsPct(o.obj, o.real), npdv: o.pdv.size }));
+}
+
+function vsFiltrar(campo, valor, desdeSelector) {
+  if (!valor || (vsSel[campo] === valor && !desdeSelector)) delete vsSel[campo];
+  else vsSel[campo] = valor;
+  vsRender();
+}
+function vsQuitar(c) { delete vsSel[c]; vsRender(); }
+function vsLimpiar() { vsSel = {}; vsRender(); }
+
+function vsChips() {
+  const act = Object.keys(VS_ETQ).filter(c => vsSel[c]);
+  const corto = t => String(t).length > 46 ? String(t).slice(0, 44) + '…' : t;
+  document.getElementById('vs-chips').innerHTML = !act.length
+    ? `<span class="titulo">Visitas mandatorias de ${vsEsc(VS.mes)} — corte ${vsEsc(VS.corte)} · haz clic en cualquier barra o fila para filtrar</span>`
+    : '<span class="titulo">Filtros activos</span>'
+      + act.map(c => `<span class="chip">${VS_ETQ[c]}: <b>${vsEsc(corto(vsSel[c]))}</b><span class="x" title="Quitar" onclick="vsQuitar('${c}')">&times;</span></span>`).join('')
+      + '<button class="chip-limpiar" onclick="vsLimpiar()">Limpiar todo</button>';
+}
+
+function vsSelectores() {
+  ['canal', 'cadena', 'coordinador', 'ciudad', 'mercaderista'].forEach(c => {
+    const sel = document.getElementById('vs-f-' + c); if (!sel) return;
+    const vals = [...new Set(vsBase(c).map(r => r[VS.idx[c]]).filter(Boolean))].sort();
+    sel.innerHTML = '<option value="">Todos</option>' + vals.map(v => `<option value="${vsEsc(v)}">${vsEsc(v)}</option>`).join('');
+    sel.value = vsSel[c] || '';
+  });
+}
+
+function vsKpis() {
+  const ix = VS.idx, f = vsBase();
+  const obj = f.reduce((a, r) => a + r[ix.obj], 0), real = f.reduce((a, r) => a + r[ix.real], 0);
+  const pen = f.reduce((a, r) => a + Math.max(r[ix.obj] - r[ix.real], 0), 0), p = vsPct(obj, real);
+  const pdv = vsAgrupar(f, 'codigo'), ok = pdv.filter(x => x.real >= x.obj).length;
+  const t = VS.total_plf || {}, pt = vsPct(t.obj, t.real);
+  const k = [
+    { v: vsN(obj), e: 'Visitas mandatorias (objetivo)', c: VS_OBJ },
+    { v: vsN(real), e: 'Visitas realizadas', c: VS_REAL },
+    { v: vsPctTxt(p), e: '% Cumplimiento visitas mandatorias', c: VS_LIN, g: p },
+    { v: vsN(pen), e: 'Visitas pendientes por realizar', c: '#ED7D31' },
+    { v: `${vsN(ok)} / ${vsN(pdv.length)}`, e: 'PDV con el 100% de sus visitas', c: '#8E44AD' },
+    { v: vsPctTxt(pt), e: 'Referencia: cumplimiento total PLF', c: '#7A8699' },
+  ];
+  document.getElementById('vs-kpis').innerHTML = k.map(x => `<div class="kpi-card" style="--color:${x.c}">
+      <div class="top"><div style="width:100%"><div class="valor">${x.v}</div><div class="etiqueta">${x.e}</div>
+      ${x.g !== undefined && x.g !== null ? `<div class="vs-gauge"><i style="width:${Math.min(100, x.g).toFixed(1)}%"></i></div>` : ''}</div></div></div>`).join('');
+}
+
+function vsLeyendas() {
+  document.querySelectorAll('.vs-ley').forEach(e => e.innerHTML =
+    `<span style="color:${VS_OBJ}">&#9632;</span> Mandatorias &nbsp; <span style="color:${VS_REAL}">&#9632;</span> Visitas &nbsp; <span style="color:${VS_LIN}">&#9679;&#8212;</span> % Cumplimiento`);
+}
+
+/* combo: barras mandatorias / visitas + linea de % cumplimiento (eje derecho) */
+function vsCombo(id, res, campo, opc) {
+  opc = opc || {};
+  const cv = document.getElementById(id); if (!cv) return;
+  if (vsCharts[id]) vsCharts[id].destroy();
+  const etq = res.map(x => x.k), sel = campo ? vsSel[campo] : null;
+  const rota = res.length > 6 && !opc.sinRotar;
+  const at = (c, a) => etq.map(k => (sel && k !== sel) ? a : c);
+  const pcts = res.map(x => x.pct);
+  const vals = pcts.filter(v => v !== null);
+  const mn = vals.length ? Math.min(...vals) : 0, mx = vals.length ? Math.max(...vals) : 100;
+  cv.parentElement.style.height = (opc.alto || 330) + 'px';
+  vsCharts[id] = new Chart(cv, {
+    data: { labels: etq.map(v => rota ? (String(v).length > 22 ? String(v).slice(0, 21) + '…' : v) : vsLineas(v, opc.ancho || 14)), datasets: [
+      { type: 'line', label: '% Cumplimiento', data: pcts, yAxisID: 'y1', order: 0, borderColor: VS_LIN, backgroundColor: VS_LIN,
+        borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: VS_LIN, pointBorderColor: '#fff', pointBorderWidth: 1.5, tension: 0.3, cubicInterpolationMode: 'monotone',
+        datalabels: { align: 'top', anchor: 'end', offset: 6, color: '#1F4E78', backgroundColor: 'rgba(255,255,255,0.92)', borderRadius: 4,
+          padding: { top: 2, bottom: 1, left: 4, right: 4 }, font: { size: 10.5, weight: 'bold' }, formatter: v => vsPctTxt(v) } },
+      { type: 'bar', label: 'Mandatorias', data: res.map(x => x.obj), yAxisID: 'y', order: 1, backgroundColor: at(VS_OBJ, 'rgba(31,78,120,0.25)'),
+        borderRadius: 4, maxBarThickness: 34,
+        datalabels: { anchor: 'end', align: 'end', offset: 1, color: '#33414F', font: { size: 9.5, weight: 'bold' }, formatter: v => vsN(v) } },
+      { type: 'bar', label: 'Visitas', data: res.map(x => x.real), yAxisID: 'y', order: 2, backgroundColor: at(VS_REAL, 'rgba(59,191,207,0.25)'),
+        borderRadius: 4, maxBarThickness: 34,
+        datalabels: { anchor: 'end', align: 'end', offset: 1, color: '#33414F', font: { size: 9.5, weight: 'bold' }, formatter: v => vsN(v) } },
+    ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      onClick: (e, els) => { if (campo && els && els.length) vsFiltrar(campo, etq[els[0].index]); },
+      onHover: (e, els) => { e.native.target.style.cursor = (campo && els && els.length) ? 'pointer' : 'default'; },
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { title: it => etq[it[0].dataIndex],
+          label: it => it.dataset.yAxisID === 'y1' ? '% Cumplimiento: ' + vsPctTxt(it.raw) : it.dataset.label + ': ' + vsN(it.raw),
+          footer: it => { const x = res[it[0].dataIndex]; return 'Pendientes: ' + vsN(x.pen); } } } },
+      scales: {
+        x: { ticks: { font: { size: 10 }, autoSkip: false, maxRotation: rota ? 40 : 0, minRotation: rota ? 40 : 0 }, grid: { display: false } },
+        y: { beginAtZero: true, grace: '75%', ticks: { font: { size: 10 }, callback: v => vsN(v) }, grid: { color: '#EEF1F6' } },
+        y1: { position: 'right', min: Math.max(0, Math.floor((mn - 45) / 10) * 10), max: Math.max(100, Math.ceil((mx + 6) / 10) * 10),
+              ticks: { font: { size: 10 }, callback: v => v + ' %' }, grid: { display: false } } },
+      layout: { padding: { top: 10, right: 4 } } }
+  });
+}
+
+function vsGraficos() {
+  const orden = (a, b) => b.obj - a.obj;
+  vsCombo('chart-vs-canal', vsAgrupar(vsBase('canal'), 'canal').sort(orden), 'canal', { ancho: 14, alto: 360 });
+  vsCombo('chart-vs-coordinador', vsAgrupar(vsBase('coordinador'), 'coordinador').sort(orden), 'coordinador', { ancho: 12, alto: 360 });
+  const cad = vsAgrupar(vsBase('cadena'), 'cadena').sort(orden);
+  vsCombo('chart-vs-cadena', cad.slice(0, 10), 'cadena', { ancho: 11, alto: 360 });
+  const hist = (VS.historia || []).map(h => ({ k: h.mes, obj: h.obj, real: h.real, pen: Math.max(h.obj - h.real, 0), pct: vsPct(h.obj, h.real) }));
+  vsCombo('chart-vs-mes', hist, null, { ancho: 9, alto: 360, sinRotar: true });
+}
+
+function vsCeldaPct(p) {
+  const w = p === null ? 0 : Math.min(100, p);
+  return `<td class="num"><div class="vs-bar"><span class="b" style="width:${w}%"></span><span class="t">${vsPctTxt(p)}</span></div></td>`;
+}
+
+function vsTablaEquipo() {
+  const ix = VS.idx, res = vsAgrupar(vsBase('mercaderista'), 'mercaderista').sort((a, b) => (b.pct || 0) - (a.pct || 0) || b.obj - a.obj);
+  document.getElementById('vs-eq-head').innerHTML = '<tr><th>Mercaderista</th><th>Coordinador</th><th>PDV</th><th>Mandatorias</th><th>Visitas</th><th>Pendientes</th><th>% Cumpl.</th></tr>';
+  const tot = res.reduce((a, x) => ({ obj: a.obj + x.obj, real: a.real + x.real, pen: a.pen + x.pen }), { obj: 0, real: 0, pen: 0 });
+  document.getElementById('vs-eq-body').innerHTML = res.map(x => `<tr style="${vsSel.mercaderista === x.k ? 'background:#EAF3FA;' : ''}">`
+    + `<td class="txt pr-cat" style="min-width:200px" onclick="vsFiltrar('mercaderista','${vsJs(x.k)}')">${vsEsc(x.k)}</td>`
+    + `<td>${vsEsc(x.extra[ix.coordinador])}</td><td class="num">${x.npdv}</td><td class="num">${vsN(x.obj)}</td><td class="num">${vsN(x.real)}</td>`
+    + `<td class="num">${vsN(x.pen)}</td>${vsCeldaPct(x.pct)}</tr>`).join('')
+    + `<tr class="subtotal"><td>Total</td><td></td><td></td><td class="num">${vsN(tot.obj)}</td><td class="num">${vsN(tot.real)}</td><td class="num">${vsN(tot.pen)}</td>${vsCeldaPct(vsPct(tot.obj, tot.real))}</tr>`;
+}
+
+function vsAbrir(cad) { if (vsAbiertas.has(cad)) vsAbiertas.delete(cad); else vsAbiertas.add(cad); vsTablaPdv(); }
+
+function vsTablaPdv() {
+  const ix = VS.idx, f = vsBase('pdv');
+  const cads = vsAgrupar(f, 'cadena').sort((a, b) => (b.pct || 0) - (a.pct || 0) || b.obj - a.obj);
+  document.getElementById('vs-pdv-head').innerHTML = '<tr><th>Cadena / Punto de venta</th><th>Mandatorias</th><th>Visitas</th><th>Pendientes</th><th>% Cumpl.</th></tr>';
+  let html = '';
+  cads.forEach(c => {
+    const ab = vsAbiertas.has(c.k);
+    html += `<tr class="vs-cad${ab ? ' abierta' : ''}" onclick="vsAbrir('${vsJs(c.k)}')"><td>${vsEsc(c.k)} <span style="font-weight:400;color:#7A8699">(${c.npdv} PDV)</span></td>`
+      + `<td class="num">${vsN(c.obj)}</td><td class="num">${vsN(c.real)}</td><td class="num">${vsN(c.pen)}</td>${vsCeldaPct(c.pct)}</tr>`;
+    if (ab) {
+      vsAgrupar(f.filter(r => r[ix.cadena] === c.k), 'pdv').sort((a, b) => (a.pct || 0) - (b.pct || 0)).forEach(p => {
+        html += `<tr class="vs-hijo"><td class="txt pr-cat" onclick="event.stopPropagation(); vsFiltrar('pdv','${vsJs(p.k)}')">${vsEsc(p.k)} <span style="color:#7A8699">· ${vsEsc(p.extra[ix.ciudad])}</span></td>`
+          + `<td class="num">${vsN(p.obj)}</td><td class="num">${vsN(p.real)}</td><td class="num">${vsN(p.pen)}</td>${vsCeldaPct(p.pct)}</tr>`;
+      });
+    }
+  });
+  const t = cads.reduce((a, x) => ({ obj: a.obj + x.obj, real: a.real + x.real, pen: a.pen + x.pen }), { obj: 0, real: 0, pen: 0 });
+  html += `<tr class="subtotal"><td>Total</td><td class="num">${vsN(t.obj)}</td><td class="num">${vsN(t.real)}</td><td class="num">${vsN(t.pen)}</td>${vsCeldaPct(vsPct(t.obj, t.real))}</tr>`;
+  document.getElementById('vs-pdv-body').innerHTML = html;
+}
+
+function vsTablaPendientes() {
+  const ix = VS.idx, q = vsBusq.toLowerCase();
+  let res = vsAgrupar(vsBase(), 'pdv').filter(x => x.pen > 0);
+  if (q) res = res.filter(x => [x.k, x.extra[ix.codigo], x.extra[ix.cadena], x.extra[ix.ciudad], x.extra[ix.mercaderista], x.extra[ix.coordinador]].join(' ').toLowerCase().includes(q));
+  res.sort((a, b) => b.pen - a.pen || (a.pct || 0) - (b.pct || 0));
+  document.getElementById('vs-pen-head').innerHTML = '<tr><th>COD PLF</th><th>Punto de Venta</th><th>Cadena</th><th>Ciudad</th><th>Mercaderista</th><th>Coordinador</th><th>Mandatorias</th><th>Visitas</th><th>Pendientes</th><th>% Cumpl.</th></tr>';
+  document.getElementById('vs-pen-body').innerHTML = res.length ? res.slice(0, 400).map(x => '<tr>'
+    + `<td>${vsEsc(x.extra[ix.codigo])}</td><td class="txt pr-cat" onclick="vsFiltrar('pdv','${vsJs(x.k)}')">${vsEsc(x.k)}</td><td>${vsEsc(x.extra[ix.cadena])}</td><td>${vsEsc(x.extra[ix.ciudad])}</td>`
+    + `<td>${vsEsc(x.extra[ix.mercaderista])}</td><td>${vsEsc(x.extra[ix.coordinador])}</td>`
+    + `<td class="num">${vsN(x.obj)}</td><td class="num">${vsN(x.real)}</td><td class="num" style="font-weight:700;color:#1F4E78">${vsN(x.pen)}</td>${vsCeldaPct(x.pct)}</tr>`).join('')
+    : '<tr><td colspan="10" class="vacio">Todos los puntos de venta tienen sus visitas completas con los filtros actuales.</td></tr>';
+  const tp = res.reduce((a, x) => a + x.pen, 0);
+  document.getElementById('vs-pen-info').textContent = `${res.length} punto(s) de venta con ${vsN(tp)} visitas pendientes — ordenados de mayor a menor pendiente. Fuente: ${VS.archivo}.`;
+}
+
+function vsExportar() {
+  const f = vsBase(); if (!f.length) { alert('No hay registros para exportar.'); return; }
+  const enc = VS.cols.concat(['Pendientes', '% Cumplimiento']);
+  const ix = VS.idx;
+  const filas = f.map(r => r.concat([Math.max(r[ix.obj] - r[ix.real], 0), r[ix.obj] ? Math.round(r[ix.real] / r[ix.obj] * 1000) / 10 : '']));
+  const hoja = XLSX.utils.aoa_to_sheet([enc, ...filas]);
+  hoja['!cols'] = enc.map(c => ({ wch: Math.min(Math.max(String(c).length + 4, 12), 40) }));
+  const lb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(lb, hoja, 'Visitas Mandatorias');
+  XLSX.writeFile(lb, `Visitas_Mandatorias_${VS.marca}_${new Date().toISOString().slice(0, 10)}.xlsx`);
+}
+
+function vsRender() {
+  if (!vsHay()) return;
+  vsChips(); vsSelectores(); vsKpis(); vsLeyendas(); vsGraficos();
+  vsTablaEquipo(); vsTablaPdv(); vsTablaPendientes();
+}
+
+function vsCambiar(v) {
+  const e = document.getElementById('vista-visitas');
+  if (e) e.style.display = (v === 'visitas') ? '' : 'none';
+  if (v === 'visitas') { vsRender(); window.scrollTo(0, 0); }
+}
+
+(function vsInit() {
+  if (typeof cambiarVista === 'function') {
+    const original = cambiarVista;
+    cambiarVista = function (v) {
+      if (v === 'visitas') { original('__ninguna__'); document.getElementById('vista-resumen').style.display = 'none'; }
+      else original(v);
+      vsCambiar(v);
+      document.querySelectorAll('.sidebar nav a[data-vista]').forEach(a => a.classList.toggle('active', a.dataset.vista === v));
+    };
+  }
+  if (!vsHay()) return;
+  const nav = document.getElementById('nav-visitas'); if (nav) nav.style.display = '';
+  setTimeout(() => cambiarVista('visitas'), 0);   // primer indicador del tablero
+})();
 </script>
 </body>
 </html>
