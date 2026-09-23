@@ -3771,6 +3771,7 @@ function prChips() {
   const html = !activos.length
     ? `<span class="titulo">Chequeo de precios de ${PR.mes || ''} — haz clic en cualquier barra o categoria para filtrar</span>`
       + (PR.excluidos ? `<span class="chip" style="background:#E5F5EA;color:#1B7A3D;border-color:#BFE3CB;" title="${PR.motivos_excl || ''}">&#10004; Precios validados: se descartaron <b>&nbsp;${PR.excluidos.toLocaleString('es-CO')}&nbsp;</b> de ${(PR.leidos||0).toLocaleString('es-CO')} registros no creibles (ceros, 1, 1234, cero de mas/menos, fuera de rango)</span>` : '')
+      + (PR.excluidos ? `<span class="chip" style="background:#E5F5EA;color:#1B7A3D;border-color:#BFE3CB;" title="${PR.motivos_excl || ''}">&#10004; Precios validados: se descartaron <b>&nbsp;${PR.excluidos.toLocaleString('es-CO')}&nbsp;</b> de ${(PR.leidos||0).toLocaleString('es-CO')} registros no creibles (ceros, 1, 1234, cero de mas/menos, fuera de rango)</span>` : '')
     : '<span class="titulo">Filtros activos</span>'
       + activos.map(c => `<span class="chip">${PR_ETIQUETA[c]}: <b>${corto(prSel[c])}</b>`
           + `<span class="x" title="Quitar" onclick="prQuitar('${c}')">&times;</span></span>`).join('')
