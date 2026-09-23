@@ -539,48 +539,54 @@
       </div>
     </div>
 
-    <!-- PC-COMPETENCIA-V1 -->
+    <!-- PC-COMPETENCIA-V2 -->
     <div id="vista-competencia" class="vista" style="display:none;">
       <div class="selector-enc">
         <label for="sel-pc-cat">Categoria</label>
         <select id="sel-pc-cat" onchange="pcFiltrar('categoria', this.value, true)"></select>
       </div>
       <div class="chips" id="pc-chips"></div>
-      <div class="kpis" id="pc-kpis"></div>
+      <div class="pc-sec">Marca propia</div>
+      <div class="kpis" id="pc-kpis-p" style="margin-bottom:12px;"></div>
+      <div class="pc-sec">Competencia</div>
+      <div class="kpis" id="pc-kpis-c" style="margin-bottom:12px;"></div>
+      <div class="pc-sec">Precio propio frente a la competencia</div>
+      <div class="kpis" id="pc-kpis-d"></div>
       <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
         <div class="panel">
-          <h2 id="pc-t-indice">Indice de precio vs competencia</h2>
-          <div class="nota-tabla">100 = mismo precio que la competencia · <b style="color:#C0392B">mayor a 105</b>: la marca esta mas cara · <b style="color:#2E7D32">menor a 95</b>: mas barata · <b style="color:#ED7D31">95 a 105</b>: paridad</div>
-          <div class="chart-box tall"><canvas id="chart-pc-indice" class="clicable"></canvas></div>
+          <h2 id="pc-t-unidad">Precio promedio por categoria</h2>
+          <div class="nota-tabla"><span style="color:#1F4E78">&#9632;</span> Propio &nbsp; <span style="color:#3BBFCF">&#9632;</span> Competencia</div>
+          <div class="chart-box tall"><canvas id="chart-pc-unidad" class="clicable"></canvas></div>
         </div>
         <div class="panel">
           <h2 id="pc-t-marcas">Precio promedio por marca</h2>
-          <div class="nota-tabla"><span style="color:#1F4E78">&#9632;</span> Marca propia &nbsp; <span style="color:#3BBFCF">&#9632;</span> Competencia</div>
+          <div class="nota-tabla"><span style="color:#1F4E78">&#9632;</span> Propio &nbsp; <span style="color:#3BBFCF">&#9632;</span> Competencia</div>
           <div class="chart-box tall"><canvas id="chart-pc-marcas" class="clicable"></canvas></div>
         </div>
       </div>
       <div class="grid-mid" style="grid-template-columns: 1fr 1fr;">
         <div class="panel">
-          <h2>Indice de precio por cadena</h2>
+          <h2>Precio promedio por cadena</h2>
+          <div class="nota-tabla"><span style="color:#1F4E78">&#9632;</span> Propio &nbsp; <span style="color:#3BBFCF">&#9632;</span> Competencia</div>
           <div class="chart-box tall"><canvas id="chart-pc-cadenas" class="clicable"></canvas></div>
         </div>
         <div class="panel">
-          <h2>Tendencia diaria del indice de precio</h2>
+          <h2>Tendencia diaria del precio promedio</h2>
           <div class="chart-box"><canvas id="chart-pc-fechas" class="clicable"></canvas></div>
         </div>
       </div>
       <div class="panel" style="margin-bottom:18px;">
-        <h2 id="pc-t-comp">Comparativo propio vs competencia</h2>
+        <h2 id="pc-t-comp">Precio propio vs competencia por categoria</h2>
         <div class="bd-info" id="pc-comp-info" style="margin:-6px 0 12px;"></div>
         <div class="tabla-scroll tabla-res" style="max-height:520px;">
           <table><thead id="pc-comp-head"></thead><tbody id="pc-comp-body"></tbody></table>
         </div>
       </div>
       <div class="panel" style="margin-bottom:18px;">
-        <h2>Matriz de precio promedio por marca</h2>
-        <div class="bd-info" style="margin:-6px 0 12px;">Cada celda: precio promedio y, debajo, la diferencia frente a la marca propia (<b style="color:#C0392B">rojo</b> = el competidor esta mas barato que nosotros, <b style="color:#2E7D32">verde</b> = mas caro). Clic en una marca o fila para filtrar.</div>
-        <div class="tabla-scroll tabla-res" style="max-height:520px; overflow-x:auto;">
-          <table><thead id="pc-mat-head"></thead><tbody id="pc-mat-body"></tbody></table>
+        <h2>Precio propio vs cada competidor</h2>
+        <div class="bd-info" style="margin:-6px 0 12px;">Se compara solo en lo que ambos tienen en comun (mismas categorias o productos). Clic en un competidor para filtrar.</div>
+        <div class="tabla-scroll tabla-res" style="max-height:520px;">
+          <table><thead id="pc-riv-head"></thead><tbody id="pc-riv-body"></tbody></table>
         </div>
       </div>
       <div class="panel" style="margin-bottom:18px;">
@@ -595,8 +601,8 @@
         <div class="bd-info" id="pc-prod-info"></div>
       </div>
       <div class="panel">
-        <h2>Posicionamiento por punto de venta</h2>
-        <div class="bd-info" style="margin:-6px 0 12px;">Indice calculado solo con lo que se midio en el mismo punto de venta (propio y competencia). Clic en un PDV para filtrar.</div>
+        <h2>Precio propio vs competencia por punto de venta</h2>
+        <div class="bd-info" style="margin:-6px 0 12px;">Solo PDV donde se tomo precio propio y de la competencia en las mismas categorias. Clic en un PDV para filtrar.</div>
         <div class="tabla-scroll tabla-res" style="max-height:520px;">
           <table><thead id="pc-pdv-head"></thead><tbody id="pc-pdv-body"></tbody></table>
         </div>
@@ -3853,7 +3859,7 @@ function prChips() {
   const corto = t => String(t).length > 46 ? String(t).slice(0,44) + '…' : t;
   const html = !activos.length
     ? `<span class="titulo">Chequeo de precios de ${PR.mes || ''} — haz clic en cualquier barra o categoria para filtrar</span>`
-      + (PR.excluidos ? `<span class="chip" style="background:#E5F5EA;color:#1B7A3D;border-color:#BFE3CB;" title="${PR.motivos_excl || ''}">&#10004; Precios validados: se descartaron <b>&nbsp;${PR.excluidos.toLocaleString('es-CO')}&nbsp;</b> de ${(PR.leidos||0).toLocaleString('es-CO')} registros no creibles (ceros, 1, 1234, cero de mas/menos, fuera de rango)</span>` : '')
+      + (PR.excluidos ? `<span class="chip" title="${PR.motivos_excl || ''}">&#10004; Precios validados: se descartaron <b>&nbsp;${PR.excluidos.toLocaleString('es-CO')}&nbsp;</b> de ${(PR.leidos||0).toLocaleString('es-CO')} registros no creibles (ceros, 1, 1234, cero de mas/menos, fuera de rango)</span>` : '')
     : '<span class="titulo">Filtros activos</span>'
       + activos.map(c => `<span class="chip">${PR_ETIQUETA[c]}: <b>${corto(prSel[c])}</b>`
           + `<span class="x" title="Quitar" onclick="prQuitar('${c}')">&times;</span></span>`).join('')
@@ -4589,33 +4595,52 @@ inicializarFiltros();
 render();
 </script>
 
+
+<style>
+  .pc-sec { font-size:11.5px; font-weight:700; color:#7A8699; text-transform:uppercase; letter-spacing:.4px; margin:0 0 6px; }
+  .pc-dif { font-weight:700; color:#1F4E78; }
+  .pc-dif.menos { color:#1a7a86; }
+</style>
 <script>
-/* ===================== PC-COMPETENCIA-V1 : PRECIOS PROPIOS vs COMPETENCIA ===================== */
+/* ===================== PC-COMPETENCIA-V2 : PRECIOS PROPIOS vs COMPETENCIA ===================== */
 const PC = (() => { try { return JSON.parse(document.getElementById('competencia-json').textContent) || {}; } catch (e) { return {}; } })();
-const PC_ETQ = { tipo:'Tipo', marca:'Marca', categoria:'Categoria', par:'Comparable', cadena:'Cadena',
+const PC_ETQ = { tipo:'Tipo', marca:'Marca', categoria:'Categoria', par:'Producto', cadena:'Cadena',
                  ciudad:'Ciudad', fecha:'Fecha', producto:'Producto', pdv:'PDV' };
-const PC_PROPIO = '#1F4E78', PC_COMP = '#3BBFCF', PC_ATEN = 'rgba(59,191,207,0.30)', PC_ATEN_P = 'rgba(31,78,120,0.30)';
+const PC_P = '#1F4E78', PC_C = '#3BBFCF', PC_P_AT = 'rgba(31,78,120,0.28)', PC_C_AT = 'rgba(59,191,207,0.28)';
 let pcSel = {}, pcBusq = '', pcBusqProd = '';
 const pcCharts = {};
 
 function pcHay() { return PC && PC.total > 0; }
 function pcUnidad() { return PC.modo === 'par' ? 'par' : 'categoria'; }
-function pcNomUnidad() { return PC.modo === 'par' ? 'Producto comparable' : 'Categoria'; }
-function pcNomUnidadPl() { return PC.modo === 'par' ? 'productos comparables' : 'categorias'; }
+function pcNomUnidad() { return PC.modo === 'par' ? 'Producto' : 'Categoria'; }
 function pcVal(r) { const ix = PC.idx; return PC.porKilo ? r[ix.pkg] : r[ix.precio]; }
+function pcSfx() { return PC.porKilo ? ' x kg' : ''; }
 function pcMon(v) { if (v === null || v === undefined || isNaN(v)) return '-'; return '$' + Math.round(v).toLocaleString('es-CO'); }
-function pcIdxTxt(v) { return (v === null || v === undefined || isNaN(v)) ? '-' : v.toFixed(1).replace('.', ','); }
-function pcColorIdx(v) { if (v === null || v === undefined || isNaN(v)) return '#9AA8B8'; return v > 105 ? '#C0392B' : (v < 95 ? '#2E7D32' : '#ED7D31'); }
 function pcEsc(t) { return String(t == null ? '' : t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/'/g,'&#39;').replace(/"/g,'&quot;'); }
 function pcJs(t) { return String(t == null ? '' : t).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-function pcProm(a) { const v = a.filter(x => x !== null && x !== undefined && !isNaN(x)); return v.length ? v.reduce((x, y) => x + y, 0) / v.length : null; }
-function pcModa(vals) {
-  if (!vals.length) return null;
-  const c = new Map(); vals.forEach(v => c.set(v, (c.get(v) || 0) + 1));
+function pcNum(a) { return a.filter(x => x !== null && x !== undefined && !isNaN(x)); }
+function pcProm(a) { const v = pcNum(a); return v.length ? v.reduce((x, y) => x + y, 0) / v.length : null; }
+function pcModa(a) {
+  const v = pcNum(a); if (!v.length) return null;
+  const c = new Map(); v.forEach(x => c.set(x, (c.get(x) || 0) + 1));
   let top = 0; c.forEach(n => { if (n > top) top = n; });
-  let m = null; c.forEach((n, v) => { if (n === top && (m === null || v > m)) m = v; });
+  let m = null; c.forEach((n, x) => { if (n === top && (m === null || x > m)) m = x; });
   return m;
 }
+function pcMax(a) { const v = pcNum(a); return v.length ? Math.max(...v) : null; }
+function pcMin(a) { const v = pcNum(a); return v.length ? Math.min(...v) : null; }
+/* diferencia % del precio propio contra la competencia */
+function pcDif(pp, pc) { return (pp !== null && pc) ? (pp / pc - 1) * 100 : null; }
+function pcDifTxt(d) {
+  if (d === null || d === undefined || isNaN(d)) return '-';
+  return (d > 0 ? '+' : '') + d.toFixed(1).replace('.', ',') + '%';
+}
+function pcSituacion(d) {
+  if (d === null || isNaN(d)) return 'Sin comparacion';
+  if (Math.abs(d) < 0.5) return 'Igual';
+  return d > 0 ? 'Propio mas caro' : 'Propio mas barato';
+}
+function pcDifCelda(d) { return `<span class="pc-dif${d !== null && d < 0 ? ' menos' : ''}">${pcDifTxt(d)}</span>`; }
 function pcLineas(t, n) {
   const pal = String(t).split(' '), out = []; let cur = '';
   pal.forEach(p => { if ((cur + ' ' + p).trim().length > n && cur) { out.push(cur); cur = p; } else cur = (cur + ' ' + p).trim(); });
@@ -4630,41 +4655,26 @@ function pcBase(excepto) {
     return String(r[ix[c]]) === pcSel[c];
   }));
 }
+function pcPropias(f) { return f.filter(r => r[PC.idx.tipo] === 'PROPIO'); }
+function pcComps(f) { return f.filter(r => r[PC.idx.tipo] !== 'PROPIO'); }
 
-/* indice = promedio propio / promedio competencia x 100 por unidad comparable;
-   el total pondera cada unidad por sus tomas propias */
-function pcIndice(filas, unidad) {
-  const ix = PC.idx, u = unidad || pcUnidad(), m = new Map();
+/* compara propio vs competencia dentro de cada grupo (campo) */
+function pcComparar(filas, campo) {
+  const ix = PC.idx, g = new Map();
   filas.forEach(r => {
-    const k = r[ix[u]]; if (!k) return;
-    const v = pcVal(r); if (v === null || v === undefined) return;
-    if (!m.has(k)) m.set(k, { p: [], c: [], mc: new Map() });
-    const o = m.get(k);
+    const k = r[ix[campo]] || '(sin dato)', v = pcVal(r);
+    if (v === null || v === undefined) return;
+    if (!g.has(k)) g.set(k, { p: [], c: [], mc: new Map() });
+    const o = g.get(k);
     if (r[ix.tipo] === 'PROPIO') o.p.push(v);
-    else {
-      o.c.push(v);
-      if (!o.mc.has(r[ix.marca])) o.mc.set(r[ix.marca], []);
-      o.mc.get(r[ix.marca]).push(v);
-    }
+    else { o.c.push(v); if (!o.mc.has(r[ix.marca])) o.mc.set(r[ix.marca], []); o.mc.get(r[ix.marca]).push(v); }
   });
-  const unidades = []; let num = 0, den = 0;
-  m.forEach((o, k) => {
+  return [...g.entries()].map(([k, o]) => {
     const pp = pcProm(o.p), pc = pcProm(o.c);
     let barato = null;
-    o.mc.forEach((vs, mc) => { const a = pcProm(vs); if (barato === null || a < barato.v) barato = { m: mc, v: a }; });
-    const idx = (pp !== null && pc) ? pp / pc * 100 : null;
-    unidades.push({ k, pp, pc, idx, np: o.p.length, nc: o.c.length, barato });
-    if (idx !== null) { num += idx * o.p.length; den += o.p.length; }
+    o.mc.forEach((vs, m) => { const a = pcProm(vs); if (barato === null || a < barato.v) barato = { m, v: a }; });
+    return { k, pp, pc, dif: pcDif(pp, pc), difp: (pp !== null && pc) ? pp - pc : null, np: o.p.length, nc: o.c.length, barato };
   });
-  return { idx: den ? num / den : null, unidades };
-}
-
-function pcIndicePor(campo, filas) {
-  const ix = PC.idx, g = new Map();
-  filas.forEach(r => { const k = r[ix[campo]] || '(sin dato)'; if (!g.has(k)) g.set(k, []); g.get(k).push(r); });
-  const out = [];
-  g.forEach((fs, k) => { const t = pcIndice(fs); if (t.idx !== null) out.push([k, t.idx, fs.length]); });
-  return out;
 }
 
 function pcFiltrar(campo, valor, desdeSelector) {
@@ -4680,7 +4690,7 @@ function pcChips() {
   const corto = t => String(t).length > 46 ? String(t).slice(0, 44) + '…' : t;
   const html = !act.length
     ? `<span class="titulo">Precios propios vs competencia — haz clic en cualquier barra o fila para filtrar</span>`
-      + (PC.excluidos ? `<span class="chip" style="background:#E5F5EA;color:#1B7A3D;border-color:#BFE3CB;" title="${pcEsc(PC.motivos_excl)}">&#10004; Precios validados: se descartaron&nbsp;<b>${PC.excluidos.toLocaleString('es-CO')}</b>&nbsp;de ${PC.leidos.toLocaleString('es-CO')} registros no creibles</span>` : '')
+      + (PC.excluidos ? `<span class="chip" title="${pcEsc(PC.motivos_excl)}">&#10004; Precios validados: se descartaron&nbsp;<b>${PC.excluidos.toLocaleString('es-CO')}</b>&nbsp;de ${PC.leidos.toLocaleString('es-CO')} registros no creibles</span>` : '')
     : '<span class="titulo">Filtros activos</span>'
       + act.map(c => `<span class="chip">${PC_ETQ[c]}: <b>${pcEsc(corto(pcSel[c]))}</b><span class="x" title="Quitar" onclick="pcQuitar('${c}')">&times;</span></span>`).join('')
       + '<button class="chip-limpiar" onclick="pcLimpiar()">Limpiar todo</button>';
@@ -4692,161 +4702,160 @@ function pcSelector() {
   pcBase('categoria').forEach(r => { const k = r[ix.categoria] || '(sin categoria)'; cnt.set(k, (cnt.get(k) || 0) + 1); });
   const sel = document.getElementById('sel-pc-cat'); if (!sel) return;
   sel.innerHTML = `<option value="">Todas las categorias (${PC.total.toLocaleString('es-CO')} tomas)</option>`
-    + [...cnt.entries()].sort((a, b) => b[1] - a[1]).map(([k, n]) => `<option value="${pcEsc(k)}">${pcEsc(k)} (${n.toLocaleString('es-CO')})</option>`).join('');
+    + [...cnt.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([k, n]) => `<option value="${pcEsc(k)}">${pcEsc(k)} (${n.toLocaleString('es-CO')})</option>`).join('');
   sel.value = pcSel.categoria || '';
 }
 
-function pcKpis() {
-  const ix = PC.idx, f = pcBase(), t = pcIndice(f);
-  const prop = f.filter(r => r[ix.tipo] === 'PROPIO'), comp = f.filter(r => r[ix.tipo] !== 'PROPIO');
-  const sfx = PC.porKilo ? ' x kg' : '';
-  const br = t.idx !== null ? t.idx - 100 : null;
-  const k = [
-    { v: pcIdxTxt(t.idx), e: 'Indice de precio (100 = paridad)', c: pcColorIdx(t.idx), color: true },
-    { v: br === null ? '-' : (br > 0 ? '+' : '') + br.toFixed(1).replace('.', ',') + '%',
-      e: br === null ? 'Brecha vs competencia' : (br > 0 ? 'Mas caros que la competencia' : 'Mas baratos que la competencia'), c: pcColorIdx(t.idx), color: true },
-    { v: pcMon(pcProm(prop.map(pcVal))), e: 'Precio promedio propio' + sfx, c: PC_PROPIO },
-    { v: pcMon(pcProm(comp.map(pcVal))), e: 'Precio promedio competencia' + sfx, c: PC_COMP },
-    { v: f.length.toLocaleString('es-CO'), e: `Tomas (${prop.length.toLocaleString('es-CO')} propias / ${comp.length.toLocaleString('es-CO')} comp.)`, c: '#8E44AD' },
-    { v: new Set(f.map(r => r[ix.codigo]).filter(Boolean)).size.toLocaleString('es-CO'), e: 'PDV con toma', c: '#ED7D31' },
-  ];
-  document.getElementById('pc-kpis').innerHTML = k.map(x => `<div class="kpi-card" style="--color:${x.c}">
-      <div class="top"><div><div class="valor"${x.color ? ` style="color:${x.c}"` : ''}>${x.v}</div><div class="etiqueta">${x.e}</div></div></div></div>`).join('');
+function pcTarjetas(id, items, color) {
+  document.getElementById(id).innerHTML = items.map(x => `<div class="kpi-card" style="--color:${x.c || color}">
+      <div class="top"><div><div class="valor">${x.v}</div><div class="etiqueta">${x.e}</div></div></div></div>`).join('');
 }
 
-const pcLinea100 = {
-  id: 'pcLinea100',
-  afterDatasetsDraw(ch, a, o) {
-    if (!o || !o.activo) return;
-    const hz = ch.options.indexAxis === 'y', esc = hz ? ch.scales.x : ch.scales.y, ar = ch.chartArea;
-    if (!esc) return;
-    const p = esc.getPixelForValue(100), c = ch.ctx;
-    c.save(); c.setLineDash([5, 4]); c.strokeStyle = '#5C6B7F'; c.lineWidth = 1.3; c.beginPath();
-    if (hz) { c.moveTo(p, ar.top); c.lineTo(p, ar.bottom); } else { c.moveTo(ar.left, p); c.lineTo(ar.right, p); }
-    c.stroke();
-    c.setLineDash([]); c.fillStyle = '#5C6B7F'; c.font = 'bold 10px Segoe UI, sans-serif';
-    if (hz) { c.textAlign = 'center'; c.fillText('100', p, ar.top - 4); } else { c.textAlign = 'left'; c.fillText('100', ar.left + 4, p - 4); }
-    c.restore();
-  }
-};
+function pcKpis() {
+  const ix = PC.idx, f = pcBase(), p = pcPropias(f).map(pcVal), c = pcComps(f).map(pcVal), s = pcSfx();
+  pcTarjetas('pc-kpis-p', [
+    { v: pcMon(pcProm(p)), e: 'Precio promedio' + s }, { v: pcMon(pcModa(p)), e: 'Precio moda' + s },
+    { v: pcMon(pcMax(p)), e: 'Precio maximo' + s }, { v: pcMon(pcMin(p)), e: 'Precio minimo' + s },
+  ], PC_P);
+  pcTarjetas('pc-kpis-c', [
+    { v: pcMon(pcProm(c)), e: 'Precio promedio' + s }, { v: pcMon(pcModa(c)), e: 'Precio moda' + s },
+    { v: pcMon(pcMax(c)), e: 'Precio maximo' + s }, { v: pcMon(pcMin(c)), e: 'Precio minimo' + s },
+  ], PC_C);
+  const pp = pcProm(p), pc = pcProm(c), d = pcDif(pp, pc);
+  pcTarjetas('pc-kpis-d', [
+    { v: pcDifTxt(d), e: d === null ? 'Diferencia %' : (d >= 0 ? 'El precio propio esta mas caro que la competencia' : 'El precio propio esta mas barato que la competencia') },
+    { v: (pp !== null && pc) ? (pp - pc >= 0 ? '+' : '-') + pcMon(Math.abs(pp - pc)) : '-', e: 'Diferencia en pesos (propio - competencia)' + s },
+    { v: f.length.toLocaleString('es-CO'), e: `Tomas (${p.length.toLocaleString('es-CO')} propias / ${c.length.toLocaleString('es-CO')} competencia)` },
+    { v: new Set(f.map(r => r[ix.codigo]).filter(Boolean)).size.toLocaleString('es-CO'), e: 'PDV con toma' },
+  ], PC_P);
+}
 
-function pcChartIndice(id, pares, campo, opc) {
+/* barras agrupadas: precio promedio propio vs competencia por grupo */
+function pcChartDoble(id, campo, filas, opc) {
   opc = opc || {};
   const cv = document.getElementById(id); if (!cv) return;
   if (pcCharts[id]) pcCharts[id].destroy();
-  pares.sort((a, b) => b[1] - a[1]);
-  const etq = pares.map(p => String(p[0])), vals = pares.map(p => p[1]);
-  cv.parentElement.style.height = Math.max(260, pares.length * (opc.alto || 30) + 70) + 'px';
-  const sel = pcSel[campo];
-  const mn = Math.min(85, ...vals), mx = Math.max(115, ...vals);
+  const res = pcComparar(filas, campo).sort((a, b) => Math.max(b.pp || 0, b.pc || 0) - Math.max(a.pp || 0, a.pc || 0));
+  const etq = res.map(x => x.k), sel = pcSel[campo];
+  cv.parentElement.style.height = Math.max(260, res.length * (opc.alto || 46) + 70) + 'px';
+  const col = (base, at) => etq.map(k => (sel && k !== sel) ? at : base);
   pcCharts[id] = new Chart(cv, {
-    type: 'bar', plugins: [pcLinea100],
-    data: { labels: etq.map(v => pcLineas(v, opc.ancho || 30)),
-      datasets: [{ data: vals, borderRadius: 5, borderWidth: 0,
-        backgroundColor: vals.map((v, i) => (sel && etq[i] !== sel) ? 'rgba(154,168,184,0.35)' : pcColorIdx(v)) }] },
+    type: 'bar',
+    data: { labels: etq.map(v => pcLineas(v, opc.ancho || 28)), datasets: [
+      { label: 'Propio', data: res.map(x => x.pp), backgroundColor: col(PC_P, PC_P_AT), borderRadius: 4, borderWidth: 0, maxBarThickness: 18 },
+      { label: 'Competencia', data: res.map(x => x.pc), backgroundColor: col(PC_C, PC_C_AT), borderRadius: 4, borderWidth: 0, maxBarThickness: 18 },
+    ] },
     options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
       onClick: (e, els) => { if (els && els.length) pcFiltrar(campo, etq[els[0].index]); },
       onHover: (e, els) => { e.native.target.style.cursor = (els && els.length) ? 'pointer' : 'default'; },
-      plugins: { legend: { display: false }, pcLinea100: { activo: true },
-        tooltip: { callbacks: { title: it => etq[it[0].dataIndex], label: it => 'Indice: ' + pcIdxTxt(it.raw) + ' (' + pares[it.dataIndex][2] + ' tomas)' } },
-        datalabels: { anchor: 'end', align: 'end', offset: 2, color: '#33414F', font: { size: 10, weight: 'bold' }, formatter: v => pcIdxTxt(v) } },
-      scales: { x: { min: Math.max(0, Math.floor((mn - 10) / 10) * 10), max: Math.ceil((mx + 12) / 10) * 10, ticks: { font: { size: 10 } } },
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { title: it => etq[it[0].dataIndex],
+          label: it => it.dataset.label + ': ' + pcMon(it.raw),
+          footer: it => { const x = res[it[0].dataIndex]; return x.dif === null ? '' : 'Diferencia propio vs competencia: ' + pcDifTxt(x.dif); } } },
+        datalabels: { anchor: 'end', align: 'end', offset: 2, color: '#33414F', font: { size: 9.5, weight: 'bold' }, formatter: v => v === null ? '' : pcMon(v) } },
+      scales: { x: { beginAtZero: true, grace: '16%', ticks: { font: { size: 10 }, callback: v => pcMon(v) } },
                 y: { ticks: { font: { size: 10 }, autoSkip: false }, grid: { display: false },
                      afterFit: opc.eje ? (sc) => { sc.width = opc.eje; } : undefined } },
-      layout: { padding: { right: 18, top: 16 } } }
+      layout: { padding: { right: 16 } } }
   });
 }
 
 function pcChartMarcas() {
-  const ix = PC.idx, f = pcBase('marca'), g = new Map();
-  f.forEach(r => { const k = r[ix.marca]; if (!g.has(k)) g.set(k, { v: [], t: r[ix.tipo] }); g.get(k).v.push(pcVal(r)); });
+  const ix = PC.idx, g = new Map();
+  pcBase('marca').forEach(r => { const k = r[ix.marca]; if (!g.has(k)) g.set(k, { v: [], t: r[ix.tipo] }); g.get(k).v.push(pcVal(r)); });
   const pares = [...g.entries()].map(([k, o]) => [k, pcProm(o.v), o.t, o.v.length]).filter(p => p[1] !== null).sort((a, b) => b[1] - a[1]);
   const id = 'chart-pc-marcas', cv = document.getElementById(id); if (!cv) return;
   if (pcCharts[id]) pcCharts[id].destroy();
-  document.getElementById('pc-t-marcas').textContent = PC.porKilo ? 'Precio promedio por kilo por marca' : 'Precio promedio por marca';
+  document.getElementById('pc-t-marcas').textContent = 'Precio promedio por marca' + pcSfx();
   cv.parentElement.style.height = Math.max(260, pares.length * 34 + 60) + 'px';
   const sel = pcSel.marca;
   pcCharts[id] = new Chart(cv, {
     type: 'bar',
     data: { labels: pares.map(p => p[0]), datasets: [{ data: pares.map(p => p[1]), borderRadius: 5, borderWidth: 0,
-      backgroundColor: pares.map(p => (sel && p[0] !== sel) ? (p[2] === 'PROPIO' ? PC_ATEN_P : PC_ATEN) : (p[2] === 'PROPIO' ? PC_PROPIO : PC_COMP)) }] },
+      backgroundColor: pares.map(p => (sel && p[0] !== sel) ? (p[2] === 'PROPIO' ? PC_P_AT : PC_C_AT) : (p[2] === 'PROPIO' ? PC_P : PC_C)) }] },
     options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
       onClick: (e, els) => { if (els && els.length) pcFiltrar('marca', pares[els[0].index][0]); },
       onHover: (e, els) => { e.native.target.style.cursor = (els && els.length) ? 'pointer' : 'default'; },
       plugins: { legend: { display: false },
-        tooltip: { callbacks: { label: it => (PC.porKilo ? 'Precio x kg: ' : 'Precio promedio: ') + pcMon(it.raw) + ' (' + pares[it.dataIndex][3] + ' tomas)' } },
+        tooltip: { callbacks: { label: it => 'Precio promedio: ' + pcMon(it.raw) + ' (' + pares[it.dataIndex][3] + ' tomas)' } },
         datalabels: { anchor: 'end', align: 'end', offset: 2, color: '#33414F', font: { size: 10, weight: 'bold' }, formatter: v => pcMon(v) } },
       scales: { x: { beginAtZero: true, grace: '14%', ticks: { font: { size: 10 }, callback: v => pcMon(v) } },
                 y: { ticks: { font: { size: 10 } }, grid: { display: false } } },
-      layout: { padding: { right: 24 } } }
+      layout: { padding: { right: 16 } } }
   });
 }
 
 function pcChartFechas() {
   const nf = k => { const p = String(k).split('/'); return (p[2] || '') + (p[1] || '') + (p[0] || ''); };
-  const pares = pcIndicePor('fecha', pcBase('fecha')).sort((a, b) => nf(a[0]).localeCompare(nf(b[0])));
+  const res = pcComparar(pcBase('fecha'), 'fecha').sort((a, b) => nf(a.k).localeCompare(nf(b.k)));
   const id = 'chart-pc-fechas', cv = document.getElementById(id); if (!cv) return;
   if (pcCharts[id]) pcCharts[id].destroy();
-  const etq = pares.map(p => p[0]), sel = pcSel.fecha;
-  const vals = pares.map(p => p[1]);
+  const etq = res.map(x => x.k);
   pcCharts[id] = new Chart(cv, {
-    type: 'line', plugins: [pcLinea100],
-    data: { labels: etq, datasets: [{ label: 'Indice', data: vals, borderColor: '#1F4E78',
-      backgroundColor: 'rgba(31,78,120,0.08)', fill: true, tension: .3,
-      pointBackgroundColor: pares.map(p => (sel && p[0] !== sel) ? '#C5CED8' : pcColorIdx(p[1])) }] },
+    type: 'line',
+    data: { labels: etq, datasets: [
+      { label: 'Propio', data: res.map(x => x.pp), borderColor: PC_P, backgroundColor: 'rgba(31,78,120,0.06)', fill: false, tension: .3, pointBackgroundColor: PC_P, spanGaps: true,
+        datalabels: { align: 'top', anchor: 'end', color: PC_P, font: { size: 9.5, weight: 'bold' }, formatter: v => v === null ? '' : pcMon(v) } },
+      { label: 'Competencia', data: res.map(x => x.pc), borderColor: PC_C, backgroundColor: 'rgba(59,191,207,0.06)', fill: false, tension: .3, pointBackgroundColor: PC_C, spanGaps: true,
+        datalabels: { align: 'bottom', anchor: 'start', color: '#1a7a86', font: { size: 9.5, weight: 'bold' }, formatter: v => v === null ? '' : pcMon(v) } },
+    ] },
     options: { responsive: true, maintainAspectRatio: false,
       onClick: (e, els) => { if (els && els.length) pcFiltrar('fecha', etq[els[0].index]); },
       onHover: (e, els) => { e.native.target.style.cursor = (els && els.length) ? 'pointer' : 'default'; },
-      plugins: { legend: { display: false }, pcLinea100: { activo: true },
-        tooltip: { callbacks: { label: it => 'Indice: ' + pcIdxTxt(it.raw) } },
-        datalabels: { align: 'top', anchor: 'end', color: '#1F4E78', font: { size: 10, weight: 'bold' }, formatter: v => pcIdxTxt(v) } },
+      plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+        tooltip: { callbacks: { label: it => it.dataset.label + ': ' + pcMon(it.raw),
+          footer: it => { const x = res[it[0].dataIndex]; return x.dif === null ? '' : 'Diferencia: ' + pcDifTxt(x.dif); } } } },
       scales: { x: { ticks: { font: { size: 10 }, maxRotation: 40 }, grid: { display: false } },
-                y: { suggestedMin: Math.min(85, ...vals) - 5, suggestedMax: Math.max(115, ...vals) + 5, ticks: { font: { size: 10 } } } } }
+                y: { beginAtZero: false, grace: '12%', ticks: { font: { size: 10 }, callback: v => pcMon(v) } } } }
   });
 }
 
 function pcTablaComparativo() {
-  const f = pcBase(), t = pcIndice(f), u = pcUnidad();
-  document.getElementById('pc-t-comp').textContent = 'Comparativo propio vs competencia por ' + pcNomUnidad().toLowerCase();
-  const sfx = PC.porKilo ? ' x kg' : '';
-  document.getElementById('pc-comp-head').innerHTML = `<tr><th>${pcNomUnidad()}</th><th>Precio propio${sfx}</th><th>Precio competencia${sfx}</th>`
-    + `<th>Competidor mas barato</th><th>Brecha $</th><th>Indice</th><th>Tomas propias</th><th>Tomas comp.</th></tr>`;
-  const res = t.unidades.sort((a, b) => (b.idx === null ? -1 : b.idx) - (a.idx === null ? -1 : a.idx));
+  const u = pcUnidad(), s = pcSfx();
+  const res = pcComparar(pcBase(), u).sort((a, b) => (b.dif === null ? -1e9 : b.dif) - (a.dif === null ? -1e9 : a.dif));
+  document.getElementById('pc-t-comp').textContent = 'Precio propio vs competencia por ' + pcNomUnidad().toLowerCase();
+  document.getElementById('pc-comp-head').innerHTML = `<tr><th>${pcNomUnidad()}</th><th>Precio propio${s}</th><th>Precio competencia${s}</th>`
+    + `<th>Diferencia $</th><th>Diferencia %</th><th>Situacion</th><th>Competidor mas barato</th><th>Tomas propias</th><th>Tomas comp.</th></tr>`;
+  const f = pcBase(), pp = pcProm(pcPropias(f).map(pcVal)), pc = pcProm(pcComps(f).map(pcVal)), dt = pcDif(pp, pc);
   document.getElementById('pc-comp-body').innerHTML = res.length ? res.map(x => '<tr>'
       + `<td class="txt pr-cat" onclick="pcFiltrar('${u}','${pcJs(x.k)}')">${pcEsc(x.k)}</td>`
-      + `<td class="num" style="color:${PC_PROPIO};font-weight:700">${pcMon(x.pp)}</td><td class="num">${pcMon(x.pc)}</td>`
+      + `<td class="num" style="color:${PC_P};font-weight:700">${pcMon(x.pp)}</td><td class="num">${pcMon(x.pc)}</td>`
+      + `<td class="num">${x.difp === null ? '-' : (x.difp >= 0 ? '+' : '-') + pcMon(Math.abs(x.difp))}</td>`
+      + `<td class="num">${pcDifCelda(x.dif)}</td><td>${pcSituacion(x.dif)}</td>`
       + `<td>${x.barato ? pcEsc(x.barato.m) + ' · ' + pcMon(x.barato.v) : '-'}</td>`
-      + `<td class="num">${(x.pp !== null && x.pc) ? pcMon(x.pp - x.pc) : '-'}</td>`
-      + `<td class="num" style="font-weight:700;color:${pcColorIdx(x.idx)}">${pcIdxTxt(x.idx)}</td>`
       + `<td class="num">${x.np}</td><td class="num">${x.nc}</td></tr>`).join('')
-      + `<tr class="subtotal"><td>Total ponderado</td><td></td><td></td><td></td><td></td><td class="num" style="color:${pcColorIdx(t.idx)}">${pcIdxTxt(t.idx)}</td><td></td><td></td></tr>`
-    : '<tr><td colspan="8" class="vacio">No hay datos con los filtros actuales.</td></tr>';
-  const sin = res.filter(x => x.idx === null).length;
-  document.getElementById('pc-comp-info').textContent = `${res.length} ${pcNomUnidadPl()}` + (sin ? ` — ${sin} sin contraparte medida (sin indice).` : '.')
-    + (PC.porKilo ? ' BIOS se compara por precio por kilo, con los pares del informe comparativo.' : '');
+      + `<tr class="subtotal"><td>Total</td><td class="num">${pcMon(pp)}</td><td class="num">${pcMon(pc)}</td>`
+      + `<td class="num">${(pp !== null && pc) ? (pp - pc >= 0 ? '+' : '-') + pcMon(Math.abs(pp - pc)) : '-'}</td>`
+      + `<td class="num">${pcDifCelda(dt)}</td><td>${pcSituacion(dt)}</td><td></td><td></td><td></td></tr>`
+    : '<tr><td colspan="9" class="vacio">No hay datos con los filtros actuales.</td></tr>';
+  document.getElementById('pc-comp-info').textContent = 'Diferencia % = cuanto esta el precio propio por encima (+) o por debajo (-) del precio promedio de la competencia. Ordenado de mas caro a mas barato.'
+    + (PC.porKilo ? ' BIOS se compara por precio por kilo, producto contra su competidor directo.' : '');
 }
 
-function pcMatriz() {
-  const ix = PC.idx, f = pcBase(), u = pcUnidad();
-  const marcas = new Map();
-  f.forEach(r => { if (!marcas.has(r[ix.marca])) marcas.set(r[ix.marca], r[ix.tipo]); });
-  const cols = [...marcas.entries()].sort((a, b) => ((a[1] === 'PROPIO' ? 0 : 1) - (b[1] === 'PROPIO' ? 0 : 1)) || a[0].localeCompare(b[0]));
-  const g = new Map();
-  f.forEach(r => { const k = r[ix[u]] || r[ix.categoria]; if (!g.has(k)) g.set(k, new Map()); const m = g.get(k);
-    if (!m.has(r[ix.marca])) m.set(r[ix.marca], []); m.get(r[ix.marca]).push(pcVal(r)); });
-  document.getElementById('pc-mat-head').innerHTML = `<tr><th>${pcNomUnidad()}</th>` + cols.map(([m, t]) =>
-    `<th style="${t === 'PROPIO' ? 'background:#DCE8F3;color:#1F4E78;' : ''}cursor:pointer;text-align:right;" onclick="pcFiltrar('marca','${pcJs(m)}')">${pcEsc(m)}</th>`).join('') + '</tr>';
-  document.getElementById('pc-mat-body').innerHTML = [...g.keys()].sort().map(k => {
-    const m = g.get(k);
-    const ref = pcProm(cols.filter(c => c[1] === 'PROPIO').map(c => m.get(c[0]) || []).flat());
-    return `<tr><td class="txt pr-cat" onclick="pcFiltrar('${u}','${pcJs(k)}')">${pcEsc(k)}</td>` + cols.map(([mc, t]) => {
-      const vs = m.get(mc); if (!vs) return '<td class="num" style="color:#C5CED8">·</td>';
-      const v = pcProm(vs);
-      if (t === 'PROPIO' || ref === null) return `<td class="num" style="${t === 'PROPIO' ? 'background:#F1F6FB;font-weight:700;color:#1F4E78;' : ''}">${pcMon(v)}</td>`;
-      const d = (v / ref - 1) * 100, col = d < -5 ? '#C0392B' : (d > 5 ? '#2E7D32' : '#7A8699');
-      return `<td class="num">${pcMon(v)}<br><span style="font-size:10.5px;font-weight:700;color:${col}">${d > 0 ? '+' : ''}${d.toFixed(1).replace('.', ',')}%</span></td>`;
-    }).join('') + '</tr>';
-  }).join('') || '<tr><td class="vacio">Sin datos.</td></tr>';
+/* propio vs cada competidor, solo en lo que tienen en comun */
+function pcTablaRivales() {
+  const ix = PC.idx, u = pcUnidad(), f = pcBase('marca');
+  const prop = new Map();
+  pcPropias(f).forEach(r => { const k = r[ix[u]]; if (!prop.has(k)) prop.set(k, []); prop.get(k).push(pcVal(r)); });
+  const riv = new Map();
+  pcComps(f).forEach(r => { const m = r[ix.marca], k = r[ix[u]];
+    if (!riv.has(m)) riv.set(m, new Map()); const g = riv.get(m); if (!g.has(k)) g.set(k, []); g.get(k).push(pcVal(r)); });
+  const res = [];
+  riv.forEach((g, m) => {
+    const comunes = [...g.keys()].filter(k => prop.has(k));
+    if (!comunes.length) return;
+    const pc = pcProm(comunes.map(k => pcProm(g.get(k)))), pp = pcProm(comunes.map(k => pcProm(prop.get(k))));
+    res.push({ m, pp, pc, dif: pcDif(pp, pc), difp: pp - pc, n: comunes.length, t: comunes.reduce((a, k) => a + g.get(k).length, 0) });
+  });
+  res.sort((a, b) => b.dif - a.dif);
+  const s = pcSfx();
+  document.getElementById('pc-riv-head').innerHTML = `<tr><th>Competidor</th><th>Precio competidor${s}</th><th>Precio propio${s}</th><th>Diferencia $</th><th>Diferencia %</th><th>Situacion</th><th>${PC.modo === 'par' ? 'Productos' : 'Categorias'} en comun</th><th>Tomas competidor</th></tr>`;
+  document.getElementById('pc-riv-body').innerHTML = res.length ? res.map(x => '<tr>'
+    + `<td class="txt pr-cat" onclick="pcFiltrar('marca','${pcJs(x.m)}')">${pcEsc(x.m)}</td>`
+    + `<td class="num">${pcMon(x.pc)}</td><td class="num" style="color:${PC_P};font-weight:700">${pcMon(x.pp)}</td>`
+    + `<td class="num">${(x.difp >= 0 ? '+' : '-') + pcMon(Math.abs(x.difp))}</td><td class="num">${pcDifCelda(x.dif)}</td><td>${pcSituacion(x.dif)}</td>`
+    + `<td class="num">${x.n}</td><td class="num">${x.t}</td></tr>`).join('')
+    : '<tr><td colspan="8" class="vacio">No hay competidores con categorias en comun con los filtros actuales.</td></tr>';
 }
 
 function pcResumenProd(filas) {
@@ -4854,7 +4863,7 @@ function pcResumenProd(filas) {
   filas.forEach(r => { const k = r[ix.producto]; if (!g.has(k)) g.set(k, { r, v: [], pdv: new Set() });
     const o = g.get(k); o.v.push(r[ix.precio]); if (r[ix.codigo]) o.pdv.add(r[ix.codigo]); });
   return [...g.entries()].map(([k, o]) => ({ k, tipo: o.r[ix.tipo], marca: o.r[ix.marca], cat: o.r[ix.categoria],
-    moda: pcModa(o.v), prom: pcProm(o.v), max: Math.max(...o.v), min: Math.min(...o.v), n: o.v.length, pdv: o.pdv.size }))
+    moda: pcModa(o.v), prom: pcProm(o.v), max: pcMax(o.v), min: pcMin(o.v), n: o.v.length, pdv: o.pdv.size }))
     .sort((a, b) => (a.cat || '').localeCompare(b.cat || '') || ((a.tipo === 'PROPIO' ? 0 : 1) - (b.tipo === 'PROPIO' ? 0 : 1)) || (b.prom - a.prom));
 }
 
@@ -4864,7 +4873,7 @@ function pcTablaProductos() {
   if (q) res = res.filter(p => (p.k + ' ' + p.marca + ' ' + p.cat).toLowerCase().includes(q));
   document.getElementById('pc-prod-head').innerHTML = '<tr><th>Categoria</th><th>Tipo</th><th>Marca</th><th>Producto</th><th>Moda</th><th>Promedio</th><th>Maximo</th><th>Minimo</th><th>Tomas</th><th>PDV</th></tr>';
   document.getElementById('pc-prod-body').innerHTML = res.length ? res.map(p => `<tr style="${p.tipo === 'PROPIO' ? 'background:#F1F6FB;' : ''}">`
-    + `<td>${pcEsc(p.cat)}</td><td style="font-weight:700;color:${p.tipo === 'PROPIO' ? PC_PROPIO : '#1a7a86'}">${p.tipo === 'PROPIO' ? 'Propio' : 'Competencia'}</td>`
+    + `<td>${pcEsc(p.cat)}</td><td style="font-weight:700;color:${p.tipo === 'PROPIO' ? PC_P : '#1a7a86'}">${p.tipo === 'PROPIO' ? 'Propio' : 'Competencia'}</td>`
     + `<td>${pcEsc(p.marca)}</td><td class="txt pr-cat" onclick="pcFiltrar('producto','${pcJs(p.k)}')">${pcEsc(p.k)}</td>`
     + `<td class="num">${pcMon(p.moda)}</td><td class="num">${pcMon(p.prom)}</td><td class="num">${pcMon(p.max)}</td><td class="num">${pcMon(p.min)}</td>`
     + `<td class="num">${p.n}</td><td class="num">${p.pdv}</td></tr>`).join('')
@@ -4873,19 +4882,25 @@ function pcTablaProductos() {
 }
 
 function pcTablaPdv() {
-  const ix = PC.idx, g = new Map();
+  const ix = PC.idx, u = pcUnidad(), g = new Map();
   pcBase('pdv').forEach(r => { const k = r[ix.pdv]; if (!g.has(k)) g.set(k, []); g.get(k).push(r); });
   const res = [];
-  g.forEach((fs, k) => { const t = pcIndice(fs); if (t.idx !== null) res.push({ k, cod: fs[0][ix.codigo], cad: fs[0][ix.cadena], ciu: fs[0][ix.ciudad],
-      idx: t.idx, u: t.unidades.filter(x => x.idx !== null).length, n: fs.length }); });
-  res.sort((a, b) => b.idx - a.idx);
-  document.getElementById('pc-pdv-head').innerHTML = `<tr><th>COD PLF</th><th>Punto de Venta</th><th>Cadena</th><th>Ciudad</th><th>Indice</th><th>${PC.modo === 'par' ? 'Productos comparados' : 'Categorias comparadas'}</th><th>Tomas</th></tr>`;
+  g.forEach((fs, k) => {
+    const comp = pcComparar(fs, u).filter(x => x.dif !== null);
+    if (!comp.length) return;
+    const pp = pcProm(comp.map(x => x.pp)), pc = pcProm(comp.map(x => x.pc));
+    res.push({ k, cod: fs[0][ix.codigo], cad: fs[0][ix.cadena], ciu: fs[0][ix.ciudad], pp, pc, dif: pcDif(pp, pc), n: comp.length });
+  });
+  res.sort((a, b) => b.dif - a.dif);
+  const s = pcSfx();
+  document.getElementById('pc-pdv-head').innerHTML = `<tr><th>COD PLF</th><th>Punto de Venta</th><th>Cadena</th><th>Ciudad</th><th>Precio propio${s}</th><th>Precio competencia${s}</th><th>Diferencia %</th><th>Situacion</th></tr>`;
   document.getElementById('pc-pdv-body').innerHTML = res.length ? res.map(p => '<tr>'
     + `<td>${pcEsc(p.cod)}</td><td class="txt pr-cat" onclick="pcFiltrar('pdv','${pcJs(p.k)}')">${pcEsc(p.k)}</td><td>${pcEsc(p.cad)}</td><td>${pcEsc(p.ciu)}</td>`
-    + `<td class="num" style="font-weight:700;color:${pcColorIdx(p.idx)}">${pcIdxTxt(p.idx)}</td><td class="num">${p.u}</td><td class="num">${p.n}</td></tr>`).join('')
-    : '<tr><td colspan="7" class="vacio">Ningun PDV tiene propio y competencia medidos con los filtros actuales.</td></tr>';
-  const caros = res.filter(p => p.idx > 105).length, bar = res.filter(p => p.idx < 95).length;
-  document.getElementById('pc-pdv-info').textContent = `${res.length} PDV con comparacion — ${caros} donde estamos mas caros (>105), ${bar} mas baratos (<95) y ${res.length - caros - bar} en paridad.`;
+    + `<td class="num" style="color:${PC_P};font-weight:700">${pcMon(p.pp)}</td><td class="num">${pcMon(p.pc)}</td>`
+    + `<td class="num">${pcDifCelda(p.dif)}</td><td>${pcSituacion(p.dif)}</td></tr>`).join('')
+    : '<tr><td colspan="8" class="vacio">Ningun PDV tiene propio y competencia medidos en las mismas categorias con los filtros actuales.</td></tr>';
+  const caros = res.filter(p => p.dif > 0.5).length, bar = res.filter(p => p.dif < -0.5).length;
+  document.getElementById('pc-pdv-info').textContent = `${res.length} PDV comparables — en ${caros} el precio propio esta mas caro y en ${bar} mas barato.`;
 }
 
 function pcFilasBD() {
@@ -4900,12 +4915,12 @@ function pcColsBD() {
 
 function pcTablaBD() {
   const ix = PC.idx, cols = PC.cols, f = pcFilasBD(), tope = f.slice(0, 500), ver = pcColsBD();
-  document.getElementById('pc-bd-head').innerHTML = '<tr>' + ver.map(i => `<th>${cols[i]}</th>`).join('') + '<th>Foto</th></tr>';
+  document.getElementById('pc-bd-head').innerHTML = '<tr>' + ver.map(i => `<th>${i === ix.par ? 'Comparable' : cols[i]}</th>`).join('') + '<th>Foto</th></tr>';
   document.getElementById('pc-bd-body').innerHTML = tope.length ? tope.map(r => '<tr>' + ver.map(i => {
       const v = r[i];
       if (i === ix.precio || i === ix.pkg) return `<td class="num">${pcMon(v)}</td>`;
       if (i === ix.producto || i === ix.pdv) return `<td class="txt">${pcEsc(v)}</td>`;
-      if (i === ix.tipo) return `<td style="font-weight:700;color:${v === 'PROPIO' ? PC_PROPIO : '#1a7a86'}">${v === 'PROPIO' ? 'Propio' : 'Competencia'}</td>`;
+      if (i === ix.tipo) return `<td style="font-weight:700;color:${v === 'PROPIO' ? PC_P : '#1a7a86'}">${v === 'PROPIO' ? 'Propio' : 'Competencia'}</td>`;
       return `<td>${pcEsc(v)}</td>`;
     }).join('') + `<td>${r[ix.foto] ? `<a href="${pcEsc(r[ix.foto])}" target="_blank" rel="noopener">Ver</a>` : ''}</td></tr>`).join('')
     : `<tr><td colspan="${ver.length + 1}" class="vacio">No hay registros con los filtros actuales.</td></tr>`;
@@ -4925,13 +4940,11 @@ function pcExportar() {
 }
 
 function pcExportarResumen() {
-  const f = pcBase(), t = pcIndice(f), lb = XLSX.utils.book_new();
-  const r = v => (v === null || v === undefined) ? '' : Math.round(v);
-  const h1 = XLSX.utils.aoa_to_sheet([[pcNomUnidad(), 'Precio propio', 'Precio competencia', 'Competidor mas barato', 'Precio comp. mas barato', 'Brecha $', 'Indice', 'Tomas propias', 'Tomas comp.'],
-    ...t.unidades.map(x => [x.k, r(x.pp), r(x.pc), x.barato ? x.barato.m : '', x.barato ? r(x.barato.v) : '',
-      (x.pp !== null && x.pc) ? r(x.pp - x.pc) : '', x.idx !== null ? Math.round(x.idx * 10) / 10 : '', x.np, x.nc]),
-    ['Total ponderado', '', '', '', '', '', t.idx !== null ? Math.round(t.idx * 10) / 10 : '', '', '']]);
-  XLSX.utils.book_append_sheet(lb, h1, 'Comparativo');
+  const f = pcBase(), lb = XLSX.utils.book_new(), r = v => (v === null || v === undefined) ? '' : Math.round(v);
+  const pct = d => d === null ? '' : Math.round(d * 10) / 10;
+  const h1 = XLSX.utils.aoa_to_sheet([[pcNomUnidad(), 'Precio propio', 'Precio competencia', 'Diferencia $', 'Diferencia %', 'Situacion', 'Competidor mas barato', 'Precio comp. mas barato', 'Tomas propias', 'Tomas comp.'],
+    ...pcComparar(f, pcUnidad()).map(x => [x.k, r(x.pp), r(x.pc), r(x.difp), pct(x.dif), pcSituacion(x.dif), x.barato ? x.barato.m : '', x.barato ? r(x.barato.v) : '', x.np, x.nc])]);
+  XLSX.utils.book_append_sheet(lb, h1, 'Propio vs Competencia');
   const h2 = XLSX.utils.aoa_to_sheet([['Categoria', 'Tipo', 'Marca', 'Producto', 'Moda', 'Promedio', 'Maximo', 'Minimo', 'Tomas', 'PDV'],
     ...pcResumenProd(f).map(p => [p.cat, p.tipo, p.marca, p.k, p.moda, r(p.prom), p.max, p.min, p.n, p.pdv])]);
   XLSX.utils.book_append_sheet(lb, h2, 'Por Producto');
@@ -4942,13 +4955,12 @@ function pcRender() {
   if (!pcHay()) return;
   pcChips(); pcSelector(); pcKpis();
   const u = pcUnidad();
-  document.getElementById('pc-t-indice').textContent = 'Indice de precio por ' + pcNomUnidad().toLowerCase();
-  pcChartIndice('chart-pc-indice', pcIndicePor(u, pcBase(u)), u,
-    PC.modo === 'par' ? { eje: 300, ancho: 44, alto: 42 } : { eje: 190, ancho: 26, alto: 34 });
+  document.getElementById('pc-t-unidad').textContent = 'Precio promedio por ' + pcNomUnidad().toLowerCase() + pcSfx();
+  pcChartDoble('chart-pc-unidad', u, pcBase(u), PC.modo === 'par' ? { eje: 250, ancho: 36, alto: 52 } : { eje: 170, ancho: 24, alto: 46 });
   pcChartMarcas();
-  pcChartIndice('chart-pc-cadenas', pcIndicePor('cadena', pcBase('cadena')), 'cadena', { eje: 150, ancho: 22, alto: 30 });
+  pcChartDoble('chart-pc-cadenas', 'cadena', pcBase('cadena'), { eje: 150, ancho: 22, alto: 46 });
   pcChartFechas();
-  pcTablaComparativo(); pcMatriz(); pcTablaProductos(); pcTablaPdv(); pcTablaBD();
+  pcTablaComparativo(); pcTablaRivales(); pcTablaProductos(); pcTablaPdv(); pcTablaBD();
 }
 
 function pcCambiar(v) {
