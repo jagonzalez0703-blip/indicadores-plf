@@ -2044,7 +2044,7 @@ return plugin;
 
 }));
 
-Chart.register(ChartDataLabels);
+Chart.register(ChartDataLabels); Chart.defaults.datasets.bar.maxBarThickness = 44;
 /* AJUSTE-RECUADRO: lineas con aire arriba/lados para que ninguna etiqueta se corte */
 Chart.register({ id:'plfAjusteLinea', beforeInit(ch) { try {
   if (ch.config.type !== 'line') return;
@@ -3770,6 +3770,7 @@ function prChips() {
   const corto = t => String(t).length > 46 ? String(t).slice(0,44) + '…' : t;
   const html = !activos.length
     ? `<span class="titulo">Chequeo de precios de ${PR.mes || ''} — haz clic en cualquier barra o categoria para filtrar</span>`
+      + (PR.excluidos ? `<span class="chip" style="background:#E5F5EA;color:#1B7A3D;border-color:#BFE3CB;" title="${PR.motivos_excl || ''}">&#10004; Precios validados: se descartaron <b>&nbsp;${PR.excluidos.toLocaleString('es-CO')}&nbsp;</b> de ${(PR.leidos||0).toLocaleString('es-CO')} registros no creibles (ceros, 1, 1234, cero de mas/menos, fuera de rango)</span>` : '')
     : '<span class="titulo">Filtros activos</span>'
       + activos.map(c => `<span class="chip">${PR_ETIQUETA[c]}: <b>${corto(prSel[c])}</b>`
           + `<span class="x" title="Quitar" onclick="prQuitar('${c}')">&times;</span></span>`).join('')
@@ -3978,7 +3979,9 @@ function renderPreciosTabla() {
   if (info) {
     info.textContent = `Mostrando ${tope.length.toLocaleString('es-CO')} de ${filas.length.toLocaleString('es-CO')} tomas`
       + (filas.length > tope.length ? ' (usa el buscador o descarga a Excel para ver el resto)' : '')
-      + ` — total del mes: ${PR.total.toLocaleString('es-CO')} · fuente: ${PR.archivo || ''}`;
+      + ` — total del mes: ${PR.total.toLocaleString('es-CO')} validas`
+      + (PR.excluidos ? ` (${PR.excluidos.toLocaleString('es-CO')} descartadas por validacion: ${PR.motivos_excl})` : '')
+      + ` · fuente: ${PR.archivo || ''}`;
   }
 }
 
