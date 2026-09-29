@@ -5547,16 +5547,16 @@ function vsKpis() {
   const obj = f.reduce((a, r) => a + r[ix.obj], 0), real = f.reduce((a, r) => a + r[ix.real], 0);
   const pen = f.reduce((a, r) => a + Math.max(r[ix.obj] - r[ix.real], 0), 0), p = vsPct(obj, real);
   const pdv = vsAgrupar(f, 'codigo'), ok = pdv.filter(x => x.real >= x.obj).length;
-  const t = VS.total_plf || {}, pt = vsPct(t.obj, t.real);
+  const conObj = pdv.filter(x => x.obj > 0), cero = conObj.filter(x => x.real === 0).length; /* VS-VISITA-CERO-V1 */
   const k = [
     { v: vsN(obj), e: 'Visitas mandatorias (objetivo)', c: VS_OBJ },
     { v: vsN(real), e: 'Visitas realizadas', c: VS_REAL },
     { v: vsPctTxt(p), e: '% Cumplimiento visitas mandatorias', c: VS_LIN, g: p },
     { v: vsN(pen), e: 'Visitas pendientes por realizar', c: '#ED7D31' },
     { v: `${vsN(ok)} / ${vsN(pdv.length)}`, e: 'PDV con el 100% de sus visitas', c: '#8E44AD' },
-    { v: vsPctTxt(pt), e: 'Referencia: cumplimiento total PLF', c: '#7A8699' },
+    { v: vsN(cero), e: `PDV con visita cero · ${vsPctTxt(vsPct(conObj.length, cero))} de ${vsN(conObj.length)} PDV${vsSoloCero ? ' (tabla filtrada)' : ''}`, c: '#33414F', a: 'vsVerCero()' },
   ];
-  document.getElementById('vs-kpis').innerHTML = k.map(x => `<div class="kpi-card" style="--color:${x.c}">
+  document.getElementById('vs-kpis').innerHTML = k.map(x => `<div class="kpi-card" style="--color:${x.c}${x.a ? ';cursor:pointer' : ''}"${x.a ? ` onclick="${x.a}" title="Ver estos PDV en la tabla de pendientes"` : ''}>
       <div class="top"><div style="width:100%"><div class="valor">${x.v}</div><div class="etiqueta">${x.e}</div>
       ${x.g !== undefined && x.g !== null ? `<div class="vs-gauge"><i style="width:${Math.min(100, x.g).toFixed(1)}%"></i></div>` : ''}</div></div></div>`).join('');
 }
@@ -5662,9 +5662,16 @@ function vsTablaPdv() {
   document.getElementById('vs-pdv-body').innerHTML = html;
 }
 
+let vsSoloCero = false;
+function vsVerCero() {
+  vsSoloCero = !vsSoloCero; vsKpis(); vsTablaPendientes();
+  const t = document.getElementById('vs-pen-body');
+  if (t && vsSoloCero) t.closest('.panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 function vsTablaPendientes() {
   const ix = VS.idx, q = vsBusq.toLowerCase();
   let res = vsAgrupar(vsBase(), 'pdv').filter(x => x.pen > 0);
+  if (vsSoloCero) res = res.filter(x => x.obj > 0 && x.real === 0);
   if (q) res = res.filter(x => [x.k, x.extra[ix.codigo], x.extra[ix.cadena], x.extra[ix.ciudad], x.extra[ix.mercaderista], x.extra[ix.coordinador]].join(' ').toLowerCase().includes(q));
   res.sort((a, b) => (b.pct || 0) - (a.pct || 0) || b.pen - a.pen);
   document.getElementById('vs-pen-head').innerHTML = '<tr><th>COD PLF</th><th>Punto de Venta</th><th>Cadena</th><th>Ciudad</th><th>Mercaderista</th><th>Coordinador</th><th>Mandatorias</th><th>Visitas</th><th>Pendientes</th><th>% Cumpl.</th></tr>';
@@ -5672,9 +5679,9 @@ function vsTablaPendientes() {
     + `<td>${vsEsc(x.extra[ix.codigo])}</td><td class="txt pr-cat" onclick="vsFiltrar('pdv','${vsJs(x.k)}')">${vsEsc(x.k)}</td><td>${vsEsc(x.extra[ix.cadena])}</td><td>${vsEsc(x.extra[ix.ciudad])}</td>`
     + `<td>${vsEsc(x.extra[ix.mercaderista])}</td><td>${vsEsc(x.extra[ix.coordinador])}</td>`
     + `<td class="num">${vsN(x.obj)}</td><td class="num">${vsN(x.real)}</td><td class="num" style="font-weight:700;color:#1F4E78">${vsN(x.pen)}</td>${vsCeldaPct(x.pct)}</tr>`).join('')
-    : '<tr><td colspan="10" class="vacio">Todos los puntos de venta tienen sus visitas completas con los filtros actuales.</td></tr>';
+    : (vsSoloCero ? '<tr><td colspan="10" class="vacio">Ningun punto de venta con visita cero con los filtros actuales.</td></tr>' : '<tr><td colspan="10" class="vacio">Todos los puntos de venta tienen sus visitas completas con los filtros actuales.</td></tr>');
   const tp = res.reduce((a, x) => a + x.pen, 0);
-  document.getElementById('vs-pen-info').textContent = `${res.length} punto(s) de venta con ${vsN(tp)} visitas pendientes — ordenados de mayor a menor % de cumplimiento. Fuente: ${VS.archivo}.`;
+  document.getElementById('vs-pen-info').textContent = (vsSoloCero ? 'SOLO PDV CON VISITA CERO (clic en la tarjeta para ver todos) — ' : '') + `${res.length} punto(s) de venta con ${vsN(tp)} visitas pendientes — ordenados de mayor a menor % de cumplimiento. Fuente: ${VS.archivo}.`;
 }
 
 function vsExportar() {
