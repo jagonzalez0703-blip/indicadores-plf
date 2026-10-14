@@ -416,7 +416,7 @@
         <h2>Detalle — Exhibiciones Negociadas</h2>
         <div class="buscador">
           <input type="text" id="buscador-noexh" placeholder="Buscar PDV, cadena, motivo, mercaderista...">
-          <button class="btn-exportar" onclick="exportarNoImpl('noexh')">⬇ Descargar detalle a Excel</button>
+          <button class="btn-exportar" onclick="exportarNoImpl('exh')">⬇ Descargar detalle a Excel</button>
         </div>
         <div class="tabla-scroll" style="max-height:600px;">
           <table><thead id="noexh-head"></thead><tbody id="noexh-body"></tbody></table>
@@ -452,7 +452,7 @@
         <h2>Detalle — Descuentos POS</h2>
         <div class="buscador">
           <input type="text" id="buscador-nopos" placeholder="Buscar PDV, cadena, motivo, mercaderista...">
-          <button class="btn-exportar" onclick="exportarNoImpl('nopos')">⬇ Descargar detalle a Excel</button>
+          <button class="btn-exportar" onclick="exportarNoImpl('pos')">⬇ Descargar detalle a Excel</button>
         </div>
         <div class="tabla-scroll" style="max-height:600px;">
           <table><thead id="nopos-head"></thead><tbody id="nopos-body"></tbody></table>
@@ -3335,6 +3335,7 @@ function renderNoImpl(k) {
 }
 
 function exportarNoImpl(k) {
+  k = ({noexh:'exh', nopos:'pos'})[k] || k;
   const d = NOIMPL[k];
   if (!d) return;
   const filas = noImplFilas(k);
