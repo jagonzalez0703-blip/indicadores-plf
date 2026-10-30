@@ -5329,5 +5329,475 @@ function vsCambiar(v) {
   setTimeout(() => cambiarVista('visitas'), 0);   // primer indicador del tablero
 })();
 </script>
+<!-- PLF-ASISTENTE-V1: Preguntale al dashboard (motor local, sin internet, sin IA externa) -->
+<style>
+.aq-fab{position:fixed;right:20px;bottom:20px;z-index:9000;background:#1F4E78;color:#fff;border:0;border-radius:999px;padding:12px 18px;font:600 13.5px 'Segoe UI',Arial,sans-serif;box-shadow:0 6px 18px rgba(31,78,120,.35);cursor:pointer}
+.aq-fab:hover{background:#16324f}
+.aq{position:fixed;top:0;right:0;height:100vh;width:min(520px,100vw);background:#fff;z-index:9001;box-shadow:-8px 0 24px rgba(0,0,0,.18);display:none;flex-direction:column;font-family:'Segoe UI',Arial,sans-serif;color:#1f2d3a}
+.aq.on{display:flex}
+.aq .aq-cab{background:#1F4E78;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;letter-spacing:.3px}
+.aq .aq-cab small{display:block;font-weight:400;opacity:.85;font-size:11.5px;letter-spacing:0}
+.aq .aq-cab button{background:transparent;border:0;color:#fff;font-size:20px;cursor:pointer}
+.aq .aq-hist{flex:1;overflow:auto;padding:14px 16px;background:#F3F6F9;display:flex;flex-direction:column}
+.aq .aq-yo{align-self:flex-end;background:#1F4E78;color:#fff;border-radius:12px 12px 2px 12px;padding:8px 12px;margin:8px 0;max-width:85%;font-size:13px}
+.aq .aq-bot{background:#fff;border:1px solid #DCE4EC;border-radius:12px 12px 12px 2px;padding:10px 12px;margin:6px 0;font-size:13px;line-height:1.5}
+.aq .aq-bot p{margin:0 0 6px}
+.aq .aq-bot b{color:#1F4E78}
+.aq .aq-ctx{font-size:11.5px;color:#6b7c8c;margin-top:6px}
+.aq .aq-ej{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.aq .aq-ej button,.aq .aq-ir{border:1px solid #B9DDE6;background:#EAF7FA;color:#1F4E78;border-radius:14px;padding:4px 10px;font:12px 'Segoe UI',Arial,sans-serif;cursor:pointer;text-align:left}
+.aq .aq-ir{margin-top:6px;border-radius:8px;font-weight:600}
+.aq .aq-tw{max-height:330px;overflow:auto;margin-top:8px;border:1px solid #E3E9EF;border-radius:8px}
+.aq table{border-collapse:collapse;width:100%;font-size:12px}
+.aq th{position:sticky;top:0;background:#1F4E78;color:#fff;font-weight:600;padding:6px 7px;text-align:right;white-space:nowrap}
+.aq td{padding:5px 7px;border-top:1px solid #EEF2F6;text-align:right;white-space:nowrap}
+.aq th.l,.aq td.l{text-align:left;white-space:normal;min-width:120px}
+.aq tr:nth-child(even) td{background:#F7FAFC}
+.aq tr.aq-tot td{font-weight:700;background:#E8EFF6}
+.aq form{display:flex;gap:8px;padding:12px;border-top:1px solid #DCE4EC;background:#fff}
+.aq form input{flex:1;border:1px solid #C9D6E2;border-radius:8px;padding:9px 11px;font:13px 'Segoe UI',Arial,sans-serif;outline:none}
+.aq form input:focus{border-color:#3BBFCF;box-shadow:0 0 0 3px rgba(59,191,207,.18)}
+.aq form button{background:#1F4E78;color:#fff;border:0;border-radius:8px;padding:0 16px;font:700 13px 'Segoe UI',Arial,sans-serif;cursor:pointer}
+@media print{.aq,.aq-fab{display:none!important}}
+</style>
+<button class="aq-fab" id="aq-fab" type="button">💬 Pregúntale al dashboard</button>
+<div class="aq" id="aq"><div class="aq-cab"><span>💬 PREGÚNTALE AL DASHBOARD<small>Respuestas calculadas aquí mismo con los datos del informe</small></span><button id="aq-x" type="button" title="Cerrar">✕</button></div>
+<div class="aq-hist" id="aq-hist"></div>
+<form id="aq-f" autocomplete="off"><input id="aq-in" placeholder="Ej: ¿qué coordinador tiene el menor cumplimiento de visitas?"><button type="submit">Preguntar</button></form></div>
+<script>
+/* PLF-ASISTENTE-V1 — motor local de preguntas en lenguaje natural. No usa internet ni IA externa (cero tokens). */
+(function () {
+'use strict';
+const $ = id => document.getElementById(id);
+const nrm = s => String(s == null ? '' : s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[¿?¡!.,;:()"'“”%$#*_]/g, ' ').replace(/\s+/g, ' ').trim();
+const esc = t => String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const fN = v => (v == null || isNaN(v)) ? '—' : Math.round(v).toLocaleString('es-CO');
+const fP = v => (v == null || isNaN(v) || !isFinite(v)) ? '—' : (Math.round(v * 10) / 10).toFixed(1).replace('.', ',') + ' %';
+const fPP = v => (v == null || isNaN(v) || !isFinite(v)) ? '—' : (v > 0 ? '+' : '') + (Math.round(v * 10) / 10).toFixed(1).replace('.', ',') + (Math.abs(v) < 1e9 ? ' pp' : '');
+const fV = v => (v == null || isNaN(v) || !isFinite(v)) ? '—' : (v > 0 ? '+' : '') + (Math.round(v * 10) / 10).toFixed(1).replace('.', ',') + ' %';
+const f$ = v => (v == null || isNaN(v)) ? '—' : '$ ' + Math.round(v).toLocaleString('es-CO');
+const QN = {un: 1, uno: 1, una: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10, once: 11, doce: 12, quince: 15, veinte: 20, treinta: 30};
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const MES3 = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+const ISO = s => { s = String(s == null ? '' : s).trim(); let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if (m) return m[0];
+  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? m[3] + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0') : ''; };
+const dt = s => new Date(s + 'T12:00:00');
+const isoD = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const addD = (s, n) => { const d = dt(s); d.setDate(d.getDate() + n); return isoD(d); };
+const semISO = s => { const d = dt(s); d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7); const w1 = new Date(d.getFullYear(), 0, 4);
+  return 1 + Math.round(((d - w1) / 864e5 - 3 + (w1.getDay() + 6) % 7) / 7); };
+const dmy = s => s ? s.slice(8, 10) + '/' + s.slice(5, 7) : '';
+const mesLab = k => { const p = String(k).split('-'); return p.length > 1 ? MESES[+p[1] - 1] + ' ' + p[0] : k; };
+
+/* ---------------- dimensiones ---------------- */
+const DIM = {
+  mar: {lab: 'Marca', pl: 'marcas', re: /\bmarcas?\b/, g: 'f'},
+  can: {lab: 'Canal', pl: 'canales', re: /\bcanal(es)?\b/, g: 'm'},
+  cad: {lab: 'Cadena', pl: 'cadenas', re: /\b(cadenas?|clientes?)\b/, g: 'f'},
+  coo: {lab: 'Coordinador', pl: 'coordinadores', re: /\b(coordinador(es|as?)?|supervisor(es|as?)?)\b/, g: 'm'},
+  mer: {lab: 'Mercaderista', pl: 'mercaderistas', re: /\b(mercaderistas?|colaborador(es|as?)?|asesor(es|as?)?|impulsador(es|as?)?|usuarios?|personas?|equipos?)\b/, g: 'm'},
+  ciu: {lab: 'Ciudad', pl: 'ciudades', re: /\bciudad(es)?\b/, g: 'f'},
+  dep: {lab: 'Departamento', pl: 'departamentos', re: /\bdepartamentos?\b/, g: 'm'},
+  pdv: {lab: 'Punto de venta', pl: 'puntos de venta', re: /\b(puntos? de venta|pdvs?|tiendas?|almacen(es)?|locales?|sucursal(es)?)\b/, g: 'm'},
+  pro: {lab: 'Producto', pl: 'productos', re: /\b(productos?|referencias?|skus?)\b/, g: 'm'},
+  cat: {lab: 'Categoría', pl: 'categorías', re: /\b(categorias?|lineas?)\b/, g: 'f'},
+  ind: {lab: 'Indicador', pl: 'indicadores', re: /\b(indicador(es)?|tipos? de exhibicion(es)?)\b/, g: 'm'},
+  mot: {lab: 'Motivo', pl: 'motivos', re: /\b(motivos?|causas?|razon(es)?|porque|por que no)\b/, g: 'm'},
+  cau: {lab: 'Causal', pl: 'causales', re: /\b(causal(es)?|problemas?)\b/, g: 'f'},
+  enc: {lab: 'Encuesta', pl: 'encuestas', re: /\b(por|cada) encuestas?\b|\bencuestas (con|que|mas|menos|de mayor|de menor)\b|\b(cual|que) encuesta\b/, g: 'f'},
+  pre: {lab: 'Pregunta', pl: 'preguntas', re: /\bpreguntas?\b/, g: 'f'},
+  res: {lab: 'Respuesta', pl: 'respuestas', re: /\brespuestas?\b/, g: 'f'},
+  par: {lab: 'Par comparado', pl: 'pares', re: /\bpares\b|\bpor par\b/, g: 'm'},
+  tip: {lab: 'Tipo', pl: 'tipos', re: /\btipos? de precio\b|\bformatos?\b/, g: 'm'},
+  dia: {lab: 'Día', pl: 'días', re: /\b(por|cada) dias?\b|\bdiari[oa]\b|\bdia a dia\b/, g: 'm'},
+  sem: {lab: 'Semana', pl: 'semanas', re: /\b(por|cada) semanas?\b|\bsemanal(es)?\b|\bsemana a semana\b/, g: 'f'},
+  mes: {lab: 'Mes', pl: 'meses', re: /\b(por|cada) mes(es)?\b|\bmensual\b|\bmes a mes\b|\bevolucion\b|\bhistoric[oa]\b|\btendencia\b/, g: 'm'}
+};
+
+/* ---------------- carga de datos (lee los mismos bloques que usa el tablero) ---------------- */
+function leer(id) { try { const el = $(id); if (!el) return {}; return JSON.parse(el.textContent) || {}; } catch (e) { return {}; } }
+function tablaCols(o) { // devuelve f(row, nombreCampo) usando idx y la columna Marca del TOTAL
+  const ix = Object.assign({}, o.idx || {}); const cols = o.cols || [];
+  const im = cols.indexOf('Marca'); if (im >= 0 && ix.marca == null) ix.marca = im;
+  if (ix.marca != null && cols[ix.marca] !== 'Marca' && im >= 0) ix.mmarca = im;
+  return ix; }
+let SRC = null;
+function cargar() {
+  if (SRC) return SRC;
+  const S = {}; const N = v => v == null ? '' : String(v).replace(/\s+/g, ' ').trim();
+  // 1. Visitas mandatorias
+  const v = leer('visitas-json');
+  if (v.rows && v.rows.length) { const ix = tablaCols(v), dic = v.dic || null;
+    const val = (r, k) => { const i = ix[k]; if (i == null) return ''; const x = r[i]; return dic && dic[i] ? dic[i][x] : x; };
+    const mm = ix.mmarca != null ? ix.mmarca : (v.cols || []).indexOf('Marca');
+    const rows = v.rows.map(r => ({mes: N(val(r, 'mes')), cod: N(val(r, 'codigo')), pdv: N(val(r, 'pdv')), can: N(val(r, 'canal')), cad: N(val(r, 'cadena')),
+      tip: N(val(r, 'formato')), coo: N(val(r, 'coordinador')), ciu: N(val(r, 'ciudad')), dep: N(val(r, 'depto')), mer: N(val(r, 'mercaderista')),
+      mar: mm >= 0 ? N(r[mm]) : N(v.marca), obj: +val(r, 'obj') || 0, real: +val(r, 'real') || 0}));
+    S.vis = {k: 'vis', lab: 'Cumplimiento de visitas mandatorias', vista: 'visitas', rows, mensual: true, mesAct: v.mesActual || rows.reduce((a, r) => r.mes > a ? r.mes : a, '')}; }
+  // 2. Exhibiciones / registros fotográficos
+  const d = leer('data-json');
+  if (d.registros && d.registros.length) {
+    const rows = d.registros.map(r => ({f: ISO(r.fecha), cod: N(r.pdv), pdv: N(r.punto_venta) || N(r.pdv), can: N(r.canal), cad: N(r.cadena), coo: N(r.coordinador),
+      ciu: N(r.ciudad), mer: N(r.colaborador), ind: N(r.indicador), cat: N(r.categoria), tip: N(r.tipo_exhibicion), mar: N(r.marca || d.marca)}));
+    S.exh = {k: 'exh', lab: 'Exhibiciones y registros fotográficos', vista: 'resumen', rows, orden: d.indicadores_orden || []}; }
+  // 3. Agotados
+  const a = leer('agotados-json');
+  if (a.rows && a.rows.length) { const ix = tablaCols(a), g = (r, k) => ix[k] == null ? '' : N(r[ix[k]]);
+    S.ago = {k: 'ago', lab: 'Agotados', vista: 'agotados', rows: a.rows.map(r => ({f: ISO(g(r, 'fecha')), cod: g(r, 'codigo'), pdv: g(r, 'pdv'), can: g(r, 'canal'), cad: g(r, 'cadena'),
+      ciu: g(r, 'ciudad'), dep: g(r, 'depto'), mer: g(r, 'equipo'), pro: g(r, 'producto'), cat: g(r, 'categoria'), cau: g(r, 'problema'), mar: ix.marca != null ? g(r, 'marca') : N(a.marca),
+      ag: nrm(g(r, 'disponible')) === 'no' ? 1 : 0}))}; }
+  // 4. Facing
+  const fc = leer('facing-json');
+  if (fc.rows && fc.rows.length) { const ix = tablaCols(fc), g = (r, k) => ix[k] == null ? '' : r[ix[k]];
+    const mm = (fc.cols || []).lastIndexOf('Marca');
+    S.fac = {k: 'fac', lab: 'Facing', vista: 'facing', meta: +fc.meta || 40, rows: fc.rows.map(r => ({f: ISO(g(r, 'fecha')), cod: N(g(r, 'codigo')), pdv: N(g(r, 'pdv')), can: N(g(r, 'canal')),
+      cad: N(g(r, 'cadena')), ciu: N(g(r, 'ciudad')), dep: N(g(r, 'depto')), mer: N(g(r, 'equipo')), cat: N(g(r, 'categoria')), tip: N(g(r, 'tipo')),
+      mar: (fc.cols || []).length > (ix.universo || 0) + 1 && mm > (ix.universo || 0) ? N(r[mm]) : N(fc.marca), caras: +g(r, 'caras') || 0, prop: +g(r, 'propios') || 0}))}; }
+  // 5. Precios propios
+  const p = leer('precios-json');
+  if (p.rows && p.rows.length) { const ix = tablaCols(p), g = (r, k) => ix[k] == null ? '' : r[ix[k]], mm = (p.cols || []).lastIndexOf('Marca');
+    S.pre = {k: 'pre', lab: 'Precios', vista: 'precios', rows: p.rows.map(r => ({f: ISO(g(r, 'fecha')), cod: N(g(r, 'codigo')), pdv: N(g(r, 'pdv')), can: N(g(r, 'canal')),
+      cad: N(g(r, 'cadena')), ciu: N(g(r, 'ciudad')) || N(g(r, 'zona')), mer: N(g(r, 'equipo')), pro: N(g(r, 'producto')), cat: N(g(r, 'categoria')), tip: N(g(r, 'subtipo')),
+      mar: mm > 14 ? N(r[mm]) : N(p.marca), precio: +g(r, 'precio') || 0})).filter(r => r.precio > 0)}; }
+  // 6. Precios vs competencia
+  const c = leer('competencia-json');
+  if (c.rows && c.rows.length) { const ix = tablaCols(c), g = (r, k) => ix[k] == null ? '' : r[ix[k]], mm = (c.cols || []).lastIndexOf('Marca'), kilo = !!c.porKilo;
+    S.com = {k: 'com', lab: 'Precios vs competencia', vista: 'competencia', modo: c.modo || 'marca', kilo, rows: c.rows.map(r => ({f: ISO(g(r, 'fecha')), cod: N(g(r, 'codigo')),
+      pdv: N(g(r, 'pdv')), cad: N(g(r, 'cadena')), ciu: N(g(r, 'ciudad')), mer: N(g(r, 'equipo')), cat: N(g(r, 'categoria')), pro: N(g(r, 'producto')), par: N(g(r, 'par')),
+      mc: N(g(r, 'marca')), propio: nrm(g(r, 'tipo')) === 'propio', mar: mm > 17 ? N(r[mm]) : N(c.marca),
+      precio: kilo && +g(r, 'pkg') ? +g(r, 'pkg') : +g(r, 'precio') || 0})).filter(r => r.precio > 0)}; }
+  // 7. No implementacion (exhibiciones negociadas y descuentos POS)
+  const ni = leer('noimpl-json'); const nrows = [];
+  ['exh', 'pos'].forEach(t => { const o = ni[t]; if (!o || !o.rows || !o.cols) return; const cols = o.cols;
+    const ci = names => { for (const n of names) { const j = cols.indexOf(n); if (j >= 0) return j; } return -1; };
+    const iF = ci(['Fecha']), iC = ci(['Cadena']), iK = ci(['Código Local', 'Codigo Local', 'COD PLF', 'Código', 'Codigo']), iP = ci(['PDV', 'Punto de Venta']),
+      iE = ci(['EQUIPO', 'Usuario', 'Mercaderista']), iPr = ci(['Producto', 'Descripción']), iCa = ci(['Categoría', 'Categoria']),
+      iM = o.idx && o.idx.motivo != null ? o.idx.motivo : ci(['Problema', 'Motivo']), iMa = cols.lastIndexOf('Marca');
+    o.rows.forEach(r => nrows.push({f: ISO(r[iF]), cad: N(r[iC]), cod: N(r[iK]), pdv: N(r[iP]), mer: N(r[iE]), pro: N(r[iPr]), cat: N(r[iCa]), mot: N(r[iM]) || '(sin motivo)',
+      tip: t === 'exh' ? 'Exhibiciones negociadas' : 'Descuentos POS', sub: t, mar: iMa >= 0 ? N(r[iMa]) : ''})); });
+  if (nrows.length) S.noi = {k: 'noi', lab: 'No implementación', vista: 'noexh', rows: nrows};
+  // 8. Encuestas
+  const e = leer('encuestas-json');
+  if (e.rows && e.rows.length) { const ix = tablaCols(e), g = (r, k) => ix[k] == null ? '' : N(r[ix[k]]), mm = (e.cols || []).lastIndexOf('Marca');
+    S.enc = {k: 'enc', lab: 'Encuestas', vista: 'encuestas', rows: e.rows.map(r => ({f: ISO(g(r, 'fecha')), cod: g(r, 'codigo'), pdv: g(r, 'pdv'), cad: g(r, 'cadena'),
+      mer: g(r, 'usuario'), enc: g(r, 'encuesta'), pre: g(r, 'pregunta'), res: g(r, 'respuesta') || '(sin respuesta)', tip: g(r, 'tipo'), mar: mm > 12 ? N(r[mm]) : N(e.marca)}))}; }
+  Object.values(S).forEach(s => { s.dims = Object.keys(DIM).filter(k => k === 'dia' || k === 'sem' ? !s.mensual : k === 'mes' ? s.mensual : s.rows.some(r => r[k]));
+    if (!s.mensual) { const fs = [...new Set(s.rows.map(r => r.f).filter(Boolean))].sort(); s.fechas = fs; s.fmax = fs[fs.length - 1] || ''; s.fmin = fs[0] || ''; } });
+  // diccionario de entidades (nombres que aparecen en los datos)
+  const marcas = new Set(); Object.values(S).forEach(s => s.rows.forEach(r => r.mar && marcas.add(r.mar)));
+  const ENT = [], vistos = new Set(), marcaN = marcas.size === 1 ? nrm([...marcas][0]) : '#';
+  const add = (d, val, n) => { n = n || nrm(val); if (n.split(' ').every(w => STOP.has(w) || w === marcaN)) return; if (n.length < 3 || /^(sin|n a|na|otros?|ninguno|si|no)$/.test(n)) return; const k = d + '|' + n; if (vistos.has(k)) return; vistos.add(k); ENT.push({d, v: val, n}); };
+  Object.values(S).forEach(s => s.rows.forEach(r => {
+    ['can', 'cad', 'ciu', 'dep', 'coo', 'ind', 'cat', 'enc'].forEach(d => { if (r[d]) add(d, r[d]); });
+    if (marcas.size > 1 && r.mar) add('mar', r.mar);
+    if (r.cat && r.cat.indexOf(' - ') > 0) { const t = nrm(r.cat.split(' - ').slice(1).join(' ')); if (t.length >= 4 && !t.split(' ').every(w => STOP.has(w))) add('cat', r.cat, t); } }));
+  ENT.sort((a, b) => b.n.length - a.n.length);
+  const marcaUnica = marcas.size === 1 ? nrm([...marcas][0]) : '';
+  SRC = {S, ENT, marcas, marcaUnica, total: marcas.size > 1};
+  return SRC; }
+
+/* ---------------- interpretacion ---------------- */
+const STOP = new Set(('cual cuales cuanto cuanta cuantos cuantas como que quien quienes donde cuando es son fue fueron esta estan estuvo va van vamos llevamos lleva tiene tienen tuvo hay hubo ' +
+  'el la los las lo un una unos unas de del en con por para sin sobre entre vs versus contra frente y o al a se su sus mas menos mayor mayores menor menores mejor mejores peor peores top ranking ' +
+  'dame dime muestrame muestra quiero ver lista listado total totales general resumen informe dashboard tablero datos dato numero cifra cifras porcentaje nivel niveles ' +
+  'visita visitas mandatoria mandatorias cumplimiento cumplen cumple pendiente pendientes faltan falta realizadas hechas programadas objetivo meta metas ' +
+  'exhibicion exhibiciones registro registros foto fotos gestion gestiones implementada implementadas implementacion lineal lineales negociada negociadas gratis pos descuento descuentos promocion promociones lugar ' +
+  'agotado agotados agotamiento quiebre quiebres disponibilidad presencia stock facing caras participacion precio precios promedio moda maximo minimo valor cuesta vale caro cara caros caras barato barata baratos ' +
+  'competencia competidor competidores encuesta encuestas pregunta preguntas respuesta respuestas motivo motivos causa causas causal causales razon razones ' +
+  'producto productos referencia referencias punto puntos venta pdv pdvs tienda tiendas cadena cadenas canal canales ciudad ciudades departamento departamentos coordinador coordinadores ' +
+  'mercaderista mercaderistas colaborador colaboradores asesor asesores persona personas equipo equipos categoria categorias linea lineas marca marcas indicador indicadores tipo tipos formato formatos ' +
+  'dia dias semana semanas mes meses ano anos hoy ayer corte ultimo ultima ultimos ultimas anterior pasado pasada actual corrido acumulado mensual semanal diario evolucion tendencia historico ' +
+  'crece crecen crecio crecimiento cae caen cayo caida sube suben subio baja bajan bajo aumento mejoro empeoro variacion compara comparado comparacion comparar ' +
+  'nos me le les ha han este ese esa estos estas tan muy bien mal hasta desde cada todos todas todo toda alto alta altos altas bajos bajas mucho muchos poco pocos ' +
+  'dijeron dicen respondieron hicimos tengo tenemos hicieron hizo hace hacen esten estamos quedan queda llevan sea sean seria donde aun ahora mismo misma solo sola ademas tambien').split(' '));
+function periodo(t, s) {
+  const comp = s.k !== 'com' && /\b(vs|versus|frente a|compar\w*|contra|variacion|crec\w*|cae|caen|cayo|cayeron|caida|subio|subieron|aument\w*|disminu\w*|mejoro|mejoraron|empeor\w*)\b/.test(t);
+  let m;
+  if (s.mensual) { // visitas: por mes
+    const meses = [...new Set(s.rows.map(r => r.mes))].sort(), act = s.mesAct, pos = meses.indexOf(act), prevM = k => meses[meses.indexOf(k) - 1];
+    const res = (ks, lab, pk, plab) => ({ks, lab, prev: pk, prevLab: plab, test: r => ks.includes(r.mes), ptest: pk ? r => pk.includes(r.mes) : null});
+    if ((m = t.match(/ultim[oa]s? (\d+|[a-z]+) mes(es)?/))) { const n = Math.max(1, Math.min(12, +m[1] || QN[m[1]] || 3)); const ks = meses.slice(Math.max(0, pos - n + 1), pos + 1);
+      return res(ks, 'los últimos ' + n + ' meses (' + mesLab(ks[0]) + ' a ' + mesLab(ks[ks.length - 1]) + ')', null, ''); }
+    if (/\b(mes pasado|mes anterior)\b/.test(t) && !comp) { const k = prevM(act); if (k) return res([k], mesLab(k), prevM(k) ? [prevM(k)] : null, prevM(k) ? mesLab(prevM(k)) : ''); }
+    const mi = MESES.findIndex(x => new RegExp('\\b' + x + '\\b').test(t));
+    if (mi >= 0) { const yy = (t.match(/\b(20\d\d)\b/) || [])[1]; let k = meses.filter(x => +x.slice(5) === mi + 1 && (!yy || x.startsWith(yy))).pop();
+      if (k) return res([k], mesLab(k), prevM(k) ? [prevM(k)] : null, prevM(k) ? mesLab(prevM(k)) : '');
+      return {vacio: 'No hay visitas mandatorias de ' + MESES[mi] + (yy ? ' ' + yy : '') + ' en este informe (meses disponibles: ' + meses.map(mesLab).join(', ') + ').'}; }
+    if (/\b(ano|acumulad\w*|en lo corrido|historic\w*)\b/.test(t)) { const yy = act.slice(0, 4), ks = meses.filter(x => x.startsWith(yy) && x <= act);
+      return res(ks, 'el acumulado ' + yy + ' (' + mesLab(ks[0]) + ' a ' + mesLab(act) + ')', null, ''); }
+    return res([act], mesLab(act) + ' (mes vigente)', prevM(act) ? [prevM(act)] : null, prevM(act) ? mesLab(prevM(act)) : ''); }
+  // fuentes diarias
+  const fx = s.fmax, fs = s.fechas; if (!fx) return {lab: 'todo el periodo', test: () => true};
+  const rango = (a, b) => (a === b ? 'el ' + dmy(a) : 'del ' + dmy(a) + ' al ' + dmy(b));
+  const rng = (a, b, lab, pa, pb, plab) => ({lab: lab + ' (' + rango(a, b) + ')', test: r => r.f >= a && r.f <= b, prevLab: pa ? plab + ' (' + rango(pa, pb) + ')' : '', ptest: pa ? r => r.f >= pa && r.f <= pb : null});
+  const prevDia = f => fs.filter(x => x < f).pop();
+  if (/\b(ayer|hoy|ultimo dia|dia de corte|al corte|ultima fecha|ultimo corte)\b/.test(t)) { const p = prevDia(fx); return rng(fx, fx, 'el último día con datos', p, p, 'el día anterior con datos'); }
+  if ((m = t.match(/ultim[oa]s? (\d+|[a-z]+) dias?/))) { const n = Math.max(1, Math.min(60, +m[1] || QN[m[1]] || 7)), a = addD(fx, -(n - 1));
+    return rng(a, fx, 'los últimos ' + n + ' días', addD(a, -n), addD(a, -1), 'los ' + n + ' días anteriores'); }
+  if ((m = t.match(/\bsemana (\d{1,2})\b/))) { const w = +m[1], ds = fs.filter(f => semISO(f) === w), dp = fs.filter(f => semISO(f) === w - 1);
+    if (!ds.length) return {vacio: 'No hay datos de la semana ' + w + ' en este informe (semanas disponibles: ' + [...new Set(fs.map(semISO))].join(', ') + ').'};
+    return rng(ds[0], ds[ds.length - 1], 'la semana ' + w, dp[0], dp[dp.length - 1], 'la semana ' + (w - 1)); }
+  const wAct = semISO(fx);
+  if (/\b(esta semana|ultima semana|semana actual|semana de corte)\b/.test(t) || (comp && !/\b(mes|dia|dias)\b/.test(t) && !/\bdel? \d{1,2}\b/.test(t))) {
+    const ds = fs.filter(f => semISO(f) === wAct), dp = fs.filter(f => semISO(f) === wAct - 1);
+    return rng(ds[0], ds[ds.length - 1], 'la semana ' + wAct + (comp && !/semana/.test(t) ? ' (semana de corte)' : ''), dp[0], dp[dp.length - 1], 'la semana ' + (wAct - 1)); }
+  if (/\b(semana pasada|semana anterior)\b/.test(t)) { const ds = fs.filter(f => semISO(f) === wAct - 1), dp = fs.filter(f => semISO(f) === wAct - 2);
+    if (ds.length) return rng(ds[0], ds[ds.length - 1], 'la semana ' + (wAct - 1), dp[0], dp[dp.length - 1], 'la semana ' + (wAct - 2)); }
+  const ym = fx.slice(0, 7);
+  if ((m = t.match(/\b(?:del|desde el|entre el) (\d{1,2}) (?:al|hasta el|y el) (\d{1,2})\b/))) { const a = ym + '-' + m[1].padStart(2, '0'), b = ym + '-' + m[2].padStart(2, '0');
+    return rng(a, b, 'el rango pedido', null, null, ''); }
+  if ((m = t.match(/\b(\d{1,2})(?: de ([a-z]+)|\/(\d{1,2}))\b/))) { const mi = m[2] ? MESES.indexOf(m[2]) : +m[3] - 1;
+    if (mi >= 0 && +m[1] <= 31) { const f = fx.slice(0, 4) + '-' + String(mi + 1).padStart(2, '0') + '-' + m[1].padStart(2, '0'); const p = prevDia(f);
+      return rng(f, f, 'el día pedido', p, p, 'el día anterior con datos'); } }
+  const mi = MESES.findIndex(x => new RegExp('\\b' + x + '\\b').test(t));
+  if (mi >= 0 && String(mi + 1).padStart(2, '0') !== fx.slice(5, 7)) return {vacio: 'Este informe tiene datos de ' + MESES[+fx.slice(5, 7) - 1] + ' ' + fx.slice(0, 4) + ' (' + rango(s.fmin, fx) + '); no tiene datos de ' + MESES[mi] + '.'};
+  return {lab: 'el mes en curso (' + rango(s.fmin, fx) + ')', test: () => true, prevLab: '', ptest: null}; }
+
+function elegirFuente(t, S, dimsP) {
+  const reglas = [
+    ['com', /\b(competencia|competidor\w*|mas car[oa]s? que|mas barat[oa]s? que|vs competencia|indice de precio)\b/],
+    ['fac', /\b(facing|caras|participacion en (gondola|anaquel|lineal)|share)\b/],
+    ['ago', /\b(agotad\w*|agotamiento|quiebres?|disponibilidad|presencia|sin stock)\b/],
+    ['noi', /\b(no implement\w*|no (se )?implement\w*|no (la |lo )?(quiere|quisieron|dejaron|permit\w*)|rechaz\w*|motivos?|razon(es)?|por que no)\b/],
+    ['pre', /\b(precios?|cuesta|cuestan|vale|valen|moda|car[oa]s?|barat[oa]s?)\b/],
+    ['enc', /\b(encuestas?|preguntas?|respuestas?|respondi\w*|contest\w*)\b/],
+    ['vis', /\b(visitas?|mandatori\w*|cumplimiento|pendientes?|visitad\w*|programad\w*)\b/],
+    ['exh', /\b(exhibicion\w*|registros?|fotos?|lineal(es)?|negociad\w*|gratis|pos|descuentos?|promocion\w*|lugar\w*|gestion\w*|implementad\w*|foto categoria)\b/]];
+  for (const [k, re] of reglas) if (re.test(t)) return {k, expl: true, ok: !!S[k]};
+  for (const d of dimsP) { if (S.vis && S.vis.dims.includes(d) && ['coo', 'mer', 'can', 'cad', 'ciu', 'pdv', 'mar', 'dep', 'mes'].includes(d)) return {k: 'vis', expl: false, ok: true};
+    for (const k of ['exh', 'ago', 'pre', 'fac', 'enc', 'noi', 'com']) if (S[k] && S[k].dims.includes(d)) return {k, expl: false, ok: true}; }
+  if (S.exh) return {k: 'exh', expl: false, ok: true};
+  const k = Object.keys(S)[0]; return {k, expl: false, ok: !!k}; }
+
+/* ---------------- metricas por fuente ---------------- */
+const moda = arr => { const c = new Map(); let best = null, bn = 0; arr.forEach(x => c.set(x, (c.get(x) || 0) + 1));
+  c.forEach((n, x) => { if (n > bn || (n === bn && x > best)) { best = x; bn = n; } }); return best; };
+function agregar(s, rows) {
+  const k = s.k;
+  if (k === 'vis') { let o = 0, r = 0, p = 0; const pdv = new Set(), full = new Map(); rows.forEach(x => { o += x.obj; r += x.real; p += Math.max(x.obj - x.real, 0); pdv.add(x.cod);
+      const a = full.get(x.cod) || [0, 0]; a[0] += x.obj; a[1] += x.real; full.set(x.cod, a); });
+    let c100 = 0; full.forEach(a => { if (a[0] > 0 && a[1] >= a[0]) c100++; });
+    return {obj: o, real: r, pend: p, pct: o ? r / o * 100 : null, n: rows.length, pdv: pdv.size, c100}; }
+  if (k === 'exh') { const pdv = new Set(); rows.forEach(x => pdv.add(x.cod)); return {n: rows.length, pdv: pdv.size}; }
+  if (k === 'ago') { let a = 0; const pdv = new Set(); rows.forEach(x => { a += x.ag; pdv.add(x.cod); }); return {n: rows.length, a, pct: rows.length ? a / rows.length * 100 : null, pdv: pdv.size}; }
+  if (k === 'fac') { let c = 0, p = 0; rows.forEach(x => { c += x.caras; p += x.prop; }); const pct = c ? p / c * 100 : null; return {n: rows.length, caras: c, prop: p, pct, cumpl: pct == null ? null : pct / s.meta * 100}; }
+  if (k === 'pre') { const v = rows.map(x => x.precio); if (!v.length) return {n: 0}; let sm = 0, mx = -Infinity, mn = Infinity; v.forEach(x => { sm += x; if (x > mx) mx = x; if (x < mn) mn = x; });
+    return {n: v.length, prom: sm / v.length, moda: moda(v), max: mx, min: mn}; }
+  if (k === 'com') { let sp = 0, np = 0, sc = 0, nc = 0; rows.forEach(x => { if (x.propio) { sp += x.precio; np++; } else { sc += x.precio; nc++; } });
+    const pp = np ? sp / np : null, pc = nc ? sc / nc : null; return {n: rows.length, np, nc, pp, pc, dif: pp != null && pc ? (pp / pc - 1) * 100 : null}; }
+  if (k === 'noi') { const pdv = new Set(); rows.forEach(x => pdv.add(x.cod)); return {n: rows.length, pdv: pdv.size}; }
+  if (k === 'enc') { const e = new Set(), pdv = new Set(); rows.forEach(x => { e.add(x.enc); pdv.add(x.cod); }); return {n: rows.length, encs: e.size, pdv: pdv.size}; }
+  return {n: rows.length}; }
+// medida principal segun la pregunta: [campo, etiqueta, formato, mayorEsMejor]
+function medida(s, t) {
+  const k = s.k;
+  if (k === 'vis') { if (/\bpendient\w*|\bfalta\w*/.test(t)) return ['pend', 'Visitas pendientes', fN, false];
+    if (/\bmandatori\w*|programad\w*/.test(t) && !/cumplimiento|%|porcentaje/.test(t)) return ['obj', 'Mandatorias', fN, true];
+    if (/\b(cuantas visitas|visitas (hechas|realizadas))\b/.test(t)) return ['real', 'Visitas realizadas', fN, true];
+    return ['pct', '% Cumplimiento', fP, true]; }
+  if (k === 'exh') return /\b(cuantos (pdv|puntos)|cobertura|pdv cubiertos|puntos cubiertos)\b/.test(t) ? ['pdv', 'PDV con registro', fN, true] : ['n', 'Registros', fN, true];
+  if (k === 'ago') return /\b(cuantos|cantidad|numero de) agotad/.test(t) ? ['a', 'Agotados', fN, false] : ['pct', '% Agotado', fP, false];
+  if (k === 'fac') return /\bcumplimiento|\bmeta\b/.test(t) ? ['cumpl', '% Cumplimiento facing', fP, true] : ['pct', '% Facing', fP, true];
+  if (k === 'pre') { if (/\bmoda|mas comun|frecuente\b/.test(t)) return ['moda', 'Precio moda', f$, null];
+    if (/\bmaxim\w*|mas alto\b/.test(t)) return ['max', 'Precio máximo', f$, null]; if (/\bminim\w*|mas bajo\b/.test(t)) return ['min', 'Precio mínimo', f$, null];
+    return ['prom', 'Precio promedio', f$, null]; }
+  if (k === 'com') return ['dif', 'Diferencia vs competencia', fV, null];
+  if (k === 'noi') return ['n', 'Casos', fN, false];
+  if (k === 'enc') return /\bcuantas encuestas|encuestas diferentes|tipos de encuesta\b/.test(t) && !/\bpor encuesta\b/.test(t) ? ['encs', 'Encuestas diferentes', fN, true] : ['n', 'Respuestas', fN, true];
+  return ['n', 'Registros', fN, true]; }
+function columnas(s) {
+  const k = s.k;
+  if (k === 'vis') return [['obj', 'Mandatorias', fN], ['real', 'Visitas', fN], ['pct', '% Cumpl.', fP], ['pend', 'Pendientes', fN]];
+  if (k === 'exh') return [['n', 'Registros', fN], ['pdv', 'PDV', fN]];
+  if (k === 'ago') return [['n', 'Chequeos', fN], ['a', 'Agotados', fN], ['pct', '% Agotado', fP]];
+  if (k === 'fac') return [['caras', 'Caras', fN], ['prop', 'Propias', fN], ['pct', '% Facing', fP], ['cumpl', '% Cumpl.', fP]];
+  if (k === 'pre') return [['n', 'Tomas', fN], ['prom', 'Promedio', f$], ['moda', 'Moda', f$], ['max', 'Máx', f$], ['min', 'Mín', f$]];
+  if (k === 'com') return [['pp', 'Prom. propio', f$], ['pc', 'Prom. competencia', f$], ['dif', 'Dif. %', fV]];
+  if (k === 'noi') return [['n', 'Casos', fN], ['pdv', 'PDV', fN]];
+  if (k === 'enc') return [['n', 'Respuestas', fN], ['encs', 'Encuestas', fN], ['pdv', 'PDV', fN]];
+  return [['n', 'Registros', fN]]; }
+const esPct = c => c === 'pct' || c === 'cumpl' || c === 'dif';
+
+function frase(s, a, c) { // resumen en una frase
+  const k = s.k;
+  if (k === 'vis') return `<b>${fP(a.pct)}</b> de cumplimiento: <b>${fN(a.real)}</b> visitas de <b>${fN(a.obj)}</b> mandatorias, <b>${fN(a.pend)}</b> pendientes en ${fN(a.pdv)} PDV (${fN(a.c100)} PDV al 100 %).`;
+  if (k === 'exh') return `<b>${fN(a.n)}</b> registros en <b>${fN(a.pdv)}</b> puntos de venta.`;
+  if (k === 'ago') return `<b>${fP(a.pct)}</b> de agotado: <b>${fN(a.a)}</b> productos agotados en ${fN(a.n)} chequeos (${fN(a.pdv)} PDV).`;
+  if (k === 'fac') return `<b>${fP(a.pct)}</b> de facing (${fN(a.prop)} caras propias de ${fN(a.caras)}), cumplimiento <b>${fP(a.cumpl)}</b> frente a la meta de ${fP(s.meta)}.`;
+  if (k === 'pre') return a.n ? `Precio promedio <b>${f$(a.prom)}</b> · moda <b>${f$(a.moda)}</b> · máximo ${f$(a.max)} · mínimo ${f$(a.min)} (${fN(a.n)} tomas).` : 'Sin tomas de precio.';
+  if (k === 'com') return a.dif == null ? `Hay ${fN(a.np)} tomas propias y ${fN(a.nc)} de competencia; no alcanza para comparar.` :
+    `El precio promedio propio (<b>${f$(a.pp)}</b>) está <b>${fP(Math.abs(a.dif))}</b> ${a.dif >= 0 ? 'por encima' : 'por debajo'} del de la competencia (<b>${f$(a.pc)}</b>)${s.kilo ? ' · precio por kilo' : ''}.`;
+  if (k === 'noi') return `<b>${fN(a.n)}</b> casos de no implementación en <b>${fN(a.pdv)}</b> puntos de venta.`;
+  if (k === 'enc') return `<b>${fN(a.n)}</b> respuestas de <b>${fN(a.encs)}</b> encuestas en ${fN(a.pdv)} puntos de venta.`;
+  return fN(a.n) + ' registros.'; }
+function variacion(c, a, b) { if (a == null || b == null) return null; return esPct(c) ? a - b : (b ? (a / b - 1) * 100 : null); }
+const fVar = (c, v) => v == null ? '—' : (esPct(c) ? fPP(v) : fV(v));
+
+/* ---------------- responder ---------------- */
+function responder(q) {
+  const D = cargar(), S = D.S;
+  if (!Object.keys(S).length) return '<p>Este informe no tiene datos cargados para consultar.</p>';
+  let t = ' ' + nrm(q) + ' ';
+  if (/^\s*(ayuda|que puedo preguntar|que preguntas|como funciona|ejemplos?)\s*$/.test(t)) return ayuda();
+  if (/^\s*(resumen( general)?|como vamos|como va todo|estado general|como esta todo|como va el informe|indicadores|kpis?|resultados( generales)?)\s*$/.test(t)) return resumenGeneral();
+  if (D.marcaUnica) t = t.replace(new RegExp('\\b' + D.marcaUnica.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g'), ' ');
+  // indicadores de exhibicion por sinonimo
+  const ent = {}; const entLab = [];
+  const setE = (d, v) => { (ent[d] = ent[d] || new Set()).add(v); };
+  if (S.exh) { const ord = S.exh.orden.length ? S.exh.orden : [...new Set(S.exh.rows.map(r => r.ind))];
+    const sin = [[/\blineal(es)?\b/, 'LINEAL'], [/\bnegociad[oa]s?\b/, 'NEGOCIAD'], [/\bgratis\b/, 'GRATIS'], [/\b(pos|descuentos?|promocion(es)?)\b/, 'POS'], [/\bfoto(s)? (de )?categorias?\b/, 'FOTO CATEGORIA'], [/\blugar(es)? de exhibicion\b/, 'LUGAR']];
+    const noiQ = /\bno implement|motivo|razon|por que no|precio/.test(t);
+    if (!noiQ) sin.forEach(([re, w]) => { if (re.test(t)) { const v = ord.find(x => x.toUpperCase().includes(w)); if (v) { setE('ind', v); t = t.replace(re, ' exhibicion '); } } }); }
+  const per0 = t;
+  // entidades por nombre
+  D.ENT.forEach(e => { const re = new RegExp('\\b' + e.n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b'); if (re.test(t)) { setE(e.d, e.v); t = t.replace(re, ' '); } });
+  // dimension pedida (agrupar por)
+  const dimsP = Object.keys(DIM).map(d => ({d, p: t.search(DIM[d].re)})).filter(o => o.p >= 0).sort((a, b) => a.p - b.p).map(o => o.d);
+  let fu = elegirFuente(per0, S, dimsP);
+  if (!fu.expl && !Object.keys(ent).length) { // la pregunta solo nombra un producto, PDV o persona: buscar el indicador que lo tiene
+    const ws = t.split(' ').filter(w => w.length >= 4 && !STOP.has(w) && !MESES.includes(w) && !/^\d+$/.test(w));
+    if (ws.length) { let best = null, bn = 0;
+      for (const k of ['vis', 'exh', 'ago', 'pre', 'fac', 'enc', 'noi', 'com']) { const sk = S[k]; if (!sk) continue;
+        const c = ws.filter(w => sk.rows.some(r => (r.pro && nrm(r.pro).includes(w)) || (r.pdv && nrm(r.pdv).includes(w)) || (r.mer && nrm(r.mer).includes(w)))).length;
+        if (c > bn) { bn = c; best = k; } }
+      if (best && best !== fu.k && (!dimsP.length || S[best].dims.includes(dimsP[0]))) fu = {k: best, expl: false, ok: true}; } }
+  if (!fu.ok) { const nom = {com: 'precios vs competencia', fac: 'facing', ago: 'agotados', noi: 'no implementación', pre: 'precios', enc: 'encuestas', vis: 'visitas mandatorias', exh: 'exhibiciones'}[fu.k];
+    return `<p>Este informe no tiene datos de <b>${nom}</b> en el periodo publicado.</p><p>Sí tiene: ${Object.values(S).map(s => s.lab).join(' · ')}.</p>`; }
+  const s = S[fu.k];
+  // si es fuente de no implementacion, separar exh/pos
+  let subNoi = null; if (s.k === 'noi') { if (/\b(pos|descuentos?|promocion\w*)\b/.test(per0)) subNoi = 'pos'; else if (/\b(exhibicion\w*|negociad\w*)\b/.test(per0)) subNoi = 'exh'; }
+  const per = periodo(per0, s); if (per.vacio) return `<p>${esc(per.vacio)}</p>`;
+  t = t.replace(/ultim[oa]s? (\d+|[a-z]+) (dias?|semanas?|mes(es)?)|semana \d{1,2}|\b\d{1,2} de [a-z]+|\b\d{1,2}\/\d{1,2}(\/\d{2,4})?|\b20\d\d\b/g, ' ');
+  // palabras libres -> producto, punto de venta, mercaderista, coordinador, encuesta o pregunta
+  const libres = t.split(' ').filter(w => w.length >= 4 && !STOP.has(w) && !MESES.includes(w) && !(w in QN) && !/^\d+$/.test(w));
+  const noRec = []; const libreSets = {};
+  const campos = ['pro', 'pdv', 'mer', 'coo', 'enc', 'pre'].filter(d => s.rows.some(r => r[d]));
+  const cacheN = {}; const nv = (d, v) => { const k = d + '|' + v; return cacheN[k] || (cacheN[k] = nrm(v)); };
+  libres.forEach(w => { for (const d of campos) { const vals = new Set(); s.rows.forEach(r => { if (r[d] && nv(d, r[d]).includes(w)) vals.add(r[d]); });
+      if (vals.size) { libreSets[d] = libreSets[d] ? new Set([...vals].filter(x => libreSets[d].has(x))) : vals; return; } } noRec.push(w); });
+  Object.keys(libreSets).forEach(d => { if (!libreSets[d].size) return; ent[d] = libreSets[d]; });
+  if (!fu.expl && !dimsP.length && !Object.keys(ent).length && noRec.length && !/\b(ayer|hoy|semana|dias?|mes|total|resumen|general|cuant\w*|como va\w*)\b/.test(per0))
+    return '<p>No entendí la pregunta. Así me puedes preguntar:</p>' + ayuda();
+  Object.keys(ent).forEach(d => { const vs = [...ent[d]]; entLab.push(DIM[d].lab + ': ' + (vs.length > 3 ? vs.slice(0, 3).join(', ') + ' y ' + (vs.length - 3) + ' más' : vs.join(', '))); });
+  // filtro de filas
+  const ok = r => { for (const d in ent) { if (!s.dims.includes(d)) continue; if (!ent[d].has(r[d])) return false; } return !subNoi || r.sub === subNoi; };
+  const fueraDim = Object.keys(ent).filter(d => !s.dims.includes(d));
+  const rows = s.rows.filter(r => ok(r));
+  const rp = rows.filter(per.test), rprev = per.ptest ? rows.filter(per.ptest) : null;
+  // dimension de agrupacion valida para la fuente
+  let dim = dimsP.find(d => s.dims.includes(d) && !(ent[d] && ent[d].size === 1 && !/\b(cada|por)\b/.test(per0)));
+  if (!dim && fu.k === 'noi' && /\b(motivos?|causas?|razon\w*|por que)\b/.test(per0)) dim = 'mot';
+  if (!dim && fu.k === 'ago' && /\b(causal\w*|causas?|problemas?)\b/.test(per0)) dim = 'cau';
+  if (!dim && fu.k === 'com' && /\b(pares?|productos?)\b/.test(per0)) dim = s.modo === 'par' ? 'par' : 'pro';
+  if (!dim && fu.k === 'enc' && ent.pre && /\b(respond\w*|respuesta|dijeron|contest\w*)\b/.test(per0)) dim = 'res';
+  if (dim === 'pro' && fu.k === 'com' && s.modo === 'par') dim = 'par';
+  const comp = /\b(vs|versus|frente a|compar\w*|contra|variacion|crec\w*|cae|caen|cayo|cayeron|caida|subio|subieron|aument\w*|disminu\w*|mejoro|mejoraron|empeor\w*)\b/.test(per0) && !!rprev && fu.k !== 'com';
+  const down = /\b(cae|caen|cayo|cayeron|caida|disminu\w*|empeor\w*|bajaron|bajo mas)\b/.test(per0), up = /\b(crec\w*|subio|subieron|aument\w*|mejoro|mejoraron)\b/.test(per0);
+  let [mc, ml, mf, mejor] = medida(s, per0);
+  if (dim === 'cau') { [mc, ml, mf, mejor] = ['a', 'Agotados', fN, false]; }
+  const ctx = `Fuente: ${s.lab}${subNoi ? ' (' + (subNoi === 'pos' ? 'descuentos POS' : 'exhibiciones negociadas') + ')' : ''} · Periodo: ${per.lab}${comp ? ' · Comparado con ' + per.prevLab : ''}${entLab.length ? ' · Filtro: ' + entLab.join(' · ') : ''}`;
+  const avisos = (noRec.length ? `<div class="aq-ctx">No reconocí: "${esc(noRec.join(', '))}".</div>` : '') +
+    (fueraDim.length ? `<div class="aq-ctx">El indicador de ${esc(s.lab.toLowerCase())} no se puede filtrar por ${fueraDim.map(d => DIM[d].lab.toLowerCase()).join(', ')}; ese filtro no se aplicó.</div>` : '');
+  const vista = s.k === 'noi' && subNoi === 'pos' ? 'nopos' : s.vista;
+  const ir = vista ? `<button class="aq-ir" type="button" data-aq-vista="${vista}">Ver el capítulo ${esc(s.lab)} en el tablero →</button>` : '';
+  if (!rp.length) return `<p>No hay datos de <b>${esc(s.lab.toLowerCase())}</b>${entLab.length ? ' para ' + esc(entLab.join(' · ')) : ''} en ${esc(per.lab)}.</p><div class="aq-ctx">${esc(ctx)}</div>${avisos}`;
+  const cols = columnas(s);
+  // ---- sin dimension: respuesta de una cifra
+  const dimNo = dimsP.filter(d => !s.dims.includes(d) && !['dia', 'sem', 'mes'].includes(d));
+  if (!dim && dimNo.length) { const disp = s.dims.filter(d => !['dia', 'sem', 'mes', 'tip', 'res', 'pre', 'mar'].includes(d) || (d === 'mar' && D.total)).map(d => DIM[d].pl);
+    return `<p>El indicador de <b>${esc(s.lab.toLowerCase())}</b> de este informe no trae ${dimNo.map(d => DIM[d].lab.toLowerCase()).join(' ni ')}, así que no puedo abrirlo por ese campo.</p><p>Total: ${frase(s, agregar(s, rp))}</p><p>Lo puedo abrir por: ${esc(disp.join(', '))}.</p><div class="aq-ctx">${esc(ctx)}</div>${avisos}`; }
+  if (!dim) { const a = agregar(s, rp); let h = `<p>${entLab.length ? '<b>' + esc(Object.values(ent).map(x => [...x].slice(0, 3).join(', ')).join(' · ')) + '</b> — ' : ''}${frase(s, a)}</p>`;
+    if (comp) { const b = agregar(s, rprev); const v = variacion(mc, a[mc], b[mc]);
+      h += `<p>Frente a ${esc(per.prevLab)}: ${ml} ${mf(b[mc])} → <b>${mf(a[mc])}</b> (${fVar(mc, v)}).</p>`; }
+    return h + `<div class="aq-ctx">${esc(ctx)}</div>${avisos}${ir}`; }
+  // ---- con dimension: ranking
+  const grp = new Map(); rp.forEach(r => { const k = r[dim] || '(sin dato)'; let a = grp.get(k); if (!a) grp.set(k, a = []); a.push(r); });
+  const ext = {pdv: 'cad', pro: 'cat'}[dim];
+  const extV = {}; if (ext) rp.forEach(r => { if (r[dim] && r[ext] && !extV[r[dim]]) extV[r[dim]] = r[ext]; });
+  let L = [...grp.entries()].map(([k, rs]) => ({k, a: agregar(s, rs)}));
+  if (comp) { const gp = new Map(); rprev.forEach(r => { const k = r[dim] || '(sin dato)'; let a = gp.get(k); if (!a) gp.set(k, a = []); a.push(r); });
+    L.forEach(o => { o.b = gp.has(o.k) ? agregar(s, gp.get(o.k)) : null; o.v = o.b ? variacion(mc, o.a[mc], o.b[mc]) : null; }); }
+  const tot = agregar(s, rp);
+  if (dim === 'cau') L = L.filter(o => o.a.a > 0);
+  const asc = /\b(menos|menor(es)?|minim[oa]s?|mas baj[oa]s?|bajo|baja|mas barat[oa]s?|ultimos? lugar\w*)\b/.test(per0);
+  const peor = /\bpeor(es)?\b/.test(per0), mejorQ = /\bmejor(es)?\b/.test(per0);
+  let orden, desc;
+  if (comp && (up || down)) { L = L.filter(o => o.v != null); L.sort((x, y) => down ? x.v - y.v : y.v - x.v); orden = down ? 'que más caen' : 'que más crecen'; }
+  else { let dsc = !asc; if (mejor != null && (peor || mejorQ)) dsc = mejorQ ? mejor : !mejor;
+    L = L.filter(o => o.a[mc] != null && !isNaN(o.a[mc]));
+    const vol = o => o.a.n || o.a.obj || o.a.caras || 0;
+    // en porcentajes, un grupo muy chico no debe encabezar el ranking si hay suficientes grupos con volumen
+    if (esPct(mc) && L.length > 15) { const vs = L.map(vol).sort((x, y) => x - y), umbral = Math.max(3, vs[Math.floor(vs.length * .25)]); const big = L.filter(o => vol(o) >= umbral); if (big.length >= 10) L = big; }
+    L.sort((x, y) => (dsc ? y.a[mc] - x.a[mc] : x.a[mc] - y.a[mc]) || vol(y) - vol(x));
+    orden = esPct(mc) || /^precio/i.test(ml) ? (dsc ? 'con mayor ' : 'con menor ') + ml.toLowerCase() : (dsc ? 'con más ' : 'con menos ') + ml.toLowerCase(); desc = dsc; }
+  let n = 10, m; if ((m = per0.match(/\btop (\d+)\b/)) || (m = per0.match(/\b(\d+) (primer\w*|ultim\w*|mejor\w*|peor\w*|productos?|puntos?|pdvs?|tiendas?|cadenas?|canales?|ciudades?|coordinador\w*|mercaderistas?|categorias?|marcas?|motivos?|referencias?)\b/))) n = Math.min(200, +m[1]);
+  else if ((m = per0.match(/\b(dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|quince|veinte) /))) n = QN[m[1]];
+  if (/\b(todos|todas|completo|completa|lista completa)\b/.test(per0)) n = 200;
+  const singular = /\b(cual es|quien es|que|cual) (el|la) \b|\b(que|cual|quien) (canal|cadena|ciudad|coordinador|coordinadora|mercaderista|punto|pdv|tienda|producto|referencia|categoria|marca|motivo|encuesta|causal|departamento)\b|\b(el|la) (canal|cadena|ciudad|coordinador|coordinadora|mercaderista|punto|pdv|tienda|producto|referencia|categoria|marca|motivo|encuesta|causal|departamento|dia|semana|mes)\b/.test(per0) && !/\b(los|las|cuales|quienes|top|ranking)\b/.test(per0);
+  if (dim === 'dia' || dim === 'sem' || dim === 'mes') { // series de tiempo en orden cronologico
+    const key = dim === 'mes' ? (r => r.mes) : dim === 'dia' ? (r => r.f) : (r => r.f ? 'Semana ' + String(semISO(r.f)).padStart(2, '0') : '');
+    const g2 = new Map(); rp.forEach(r => { const k = key(r); if (!k) return; let a = g2.get(k); if (!a) g2.set(k, a = []); a.push(r); });
+    L = [...g2.entries()].sort((a, b) => a[0] < b[0] ? -1 : 1).map(([k, rs]) => ({k: dim === 'mes' ? mesLab(k) : dim === 'dia' ? dmy(k) : k.replace(' 0', ' '), a: agregar(s, rs)}));
+    if (dim === 'mes' && !/\b(ano|acumulad|ultim)/.test(per0) && s.mensual) { const all = new Map(); rows.forEach(r => { let a = all.get(r.mes); if (!a) all.set(r.mes, a = []); a.push(r); });
+      L = [...all.entries()].sort((a, b) => a[0] < b[0] ? -1 : 1).map(([k, rs]) => ({k: mesLab(k), a: agregar(s, rs)})); }
+    orden = 'en el tiempo'; n = 200; }
+  const top = L.slice(0, singular ? Math.max(n, 5) : n);
+  if (!top.length) return `<p>No hay ${DIM[dim].pl} que cumplan la condición.</p><div class="aq-ctx">${esc(ctx)}</div>${avisos}`;
+  const nomK = o => o.k + (ext && extV[o.k] && !String(o.k).includes(extV[o.k]) ? ' · ' + extV[o.k] : '');
+  let cab;
+  if (orden === 'en el tiempo') cab = `${s.lab} por ${DIM[dim].lab.toLowerCase()} — ${esc(dim === 'mes' && L.length > 1 ? 'evolución de ' + L.length + ' meses' : per.lab)}:`;
+  else if (singular) { const o = top[0]; const art = DIM[dim].g === 'f' ? 'La' : 'El';
+    cab = `${art} ${DIM[dim].lab.toLowerCase()} ${orden.replace('con mayor', 'con mayor').replace('que más', 'que más')} en ${esc(per.lab)} es <b>${esc(nomK(o))}</b> con <b>${mf(o.a[mc])}</b>${comp && o.v != null ? ' (' + fVar(mc, o.v) + ' vs ' + esc(per.prevLab) + ')' : ''}.`; }
+  else cab = `${top.length === L.length && L.length <= n ? (DIM[dim].g === 'f' ? 'Estas son las' : 'Estos son los') : 'Top'} ${top.length} ${DIM[dim].pl} ${orden} en ${esc(per.lab)}${L.length > top.length ? ' (de ' + fN(L.length) + ')' : ''}:`;
+  const head = `<tr><th>#</th><th class="l">${DIM[dim].lab}</th>${cols.map(c => `<th>${c[1]}</th>`).join('')}${comp ? `<th>Anterior</th><th>Var.</th>` : ''}</tr>`;
+  const body = top.map((o, i) => `<tr><td>${i + 1}</td><td class="l">${esc(nomK(o))}</td>${cols.map(c => `<td>${c[2](o.a[c[0]])}</td>`).join('')}${comp ? `<td>${o.b ? mf(o.b[mc]) : '—'}</td><td>${fVar(mc, o.v)}</td>` : ''}</tr>`).join('');
+  const totRow = `<tr class="aq-tot"><td></td><td class="l">TOTAL</td>${cols.map(c => `<td>${c[2](tot[c[0]])}</td>`).join('')}${comp ? (() => { const b = agregar(s, rprev); return `<td>${mf(b[mc])}</td><td>${fVar(mc, variacion(mc, tot[mc], b[mc]))}</td>`; })() : ''}</tr>`;
+  return `<p>${cab}</p><div class="aq-tw"><table><thead>${head}</thead><tbody>${body}${totRow}</tbody></table></div><div class="aq-ctx">${esc(ctx)} · Total: ${frase(s, tot).replace(/<[^>]+>/g, '')}</div>${avisos}${ir}`; }
+
+function resumenGeneral() {
+  const S = cargar().S; const L = [];
+  Object.values(S).forEach(s => { const per = periodo('', s); const rp = s.rows.filter(per.test); if (!rp.length) return;
+    L.push(`<p><b>${esc(s.lab)}</b> — ${esc(per.lab)}: ${frase(s, agregar(s, rp))}</p>`); });
+  return '<p>Así va el informe:</p>' + L.join('') + '<div class="aq-ctx">Pregunta por cualquiera de estos indicadores para ver el detalle por cadena, ciudad, coordinador, mercaderista, punto de venta o producto.</div>'; }
+
+/* ---------------- ayuda con ejemplos construidos con los datos reales ---------------- */
+function ayuda() {
+  const D = cargar(), S = D.S, ej = [];
+  const top = (s, d) => { const c = new Map(); s.rows.forEach(r => { if (r[d]) c.set(r[d], (c.get(r[d]) || 0) + 1); }); let b = '', bn = 0; c.forEach((n, k) => { if (n > bn) { bn = n; b = k; } }); return b; };
+  if (S.vis) { ej.push('¿Cómo va el cumplimiento de visitas?'); if (S.vis.dims.includes('coo')) ej.push('¿Qué coordinador tiene el menor cumplimiento de visitas?');
+    ej.push('Top 10 puntos de venta con más visitas pendientes'); ej.push('Evolución del cumplimiento de visitas por mes'); }
+  const tit = x => x.toLowerCase().replace(/(^|\s)\S/g, y => y.toUpperCase());
+  if (S.exh) { const neg = {k: 'x', rows: S.exh.rows.filter(r => /NEGOCIAD/i.test(r.ind))}; const c = top(neg, 'cad');
+    ej.push(c ? '¿Cuántas exhibiciones negociadas hay en ' + tit(c) + '?' : 'Registros por indicador'); ej.push('Mercaderistas con más registros la última semana'); }
+  if (S.ago) { ej.push('Productos con más agotado'); ej.push('¿Qué cadena tiene menos agotados?'); }
+  if (S.fac) ej.push('% de facing por categoría');
+  if (S.pre) ej.push('Precio promedio por producto');
+  if (S.com) ej.push('¿Cómo estamos en precio frente a la competencia?');
+  if (S.noi) ej.push('Motivos de no implementación');
+  if (S.enc) ej.push('Encuestas con más respuestas');
+  if (D.total) ej.push('Ranking de marcas por cumplimiento de visitas');
+  const temas = Object.values(S).map(s => s.lab.toLowerCase()).join(', ');
+  return `<div>Pregúntame en tus palabras sobre ${esc(temas)}. Entiendo cadenas, canales, ciudades, coordinadores, mercaderistas, puntos de venta, productos y categorías${D.total ? ', marcas' : ''}; periodos como "ayer", "semana 42", "últimos 7 días" o "mes pasado"; rankings ("top 10", "el que menos…") y comparaciones ("vs semana anterior", "cuáles caen").<div class="aq-ej">${ej.slice(0, 9).map(e => `<button type="button" data-aq-ej="${esc(e)}">${esc(e)}</button>`).join('')}</div></div>`; }
+
+/* ---------------- interfaz ---------------- */
+function iniciar() {
+  const box = $('aq'), hist = $('aq-hist'); if (!box || box.dataset.ok) return; box.dataset.ok = '1';
+  let listo = false;
+  const preparar = () => { if (listo) return; listo = true; const d = document.createElement('div'); d.className = 'aq-bot'; try { d.innerHTML = ayuda(); } catch (e) { d.textContent = 'Escribe tu pregunta.'; } hist.appendChild(d); };
+  const preguntar = q => { if (!q || !q.trim()) return; hist.insertAdjacentHTML('beforeend', `<div class="aq-yo">${esc(q)}</div>`);
+    let r; try { r = responder(q); } catch (e) { console.error('[asistente]', e); r = '<p>No pude interpretar la pregunta. Prueba con alguno de los ejemplos o escribe "ayuda".</p>'; }
+    const d = document.createElement('div'); d.className = 'aq-bot'; d.innerHTML = r; hist.appendChild(d); hist.scrollTop = hist.scrollHeight; };
+  $('aq-fab').onclick = () => { box.classList.add('on'); preparar(); $('aq-in').focus(); };
+  $('aq-x').onclick = () => box.classList.remove('on');
+  $('aq-f').onsubmit = e => { e.preventDefault(); const i = $('aq-in'); const q = i.value; i.value = ''; preguntar(q); };
+  hist.addEventListener('click', e => { const b = e.target.closest('[data-aq-ej]'); if (b) return preguntar(b.dataset.aqEj);
+    const v = e.target.closest('[data-aq-vista]'); if (v && typeof window.cambiarVista === 'function') { try { window.cambiarVista(v.dataset.aqVista); box.classList.remove('on'); } catch (x) {} } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') box.classList.remove('on'); });
+  window.PLF_ASISTENTE = {responder, cargar, reset: () => { SRC = null; }};
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar); else iniciar();
+})();
+</script>
+<!-- /PLF-ASISTENTE-V1 -->
 </body>
 </html>
