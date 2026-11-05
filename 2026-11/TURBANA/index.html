@@ -6205,5 +6205,51 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 </script>
 <!-- /PLF-ASISTENTE-V3 -->
+<!-- PLF-PERIODO-V1 -->
+<style>
+.pp-per{margin:4px 12px 14px;font-family:'Segoe UI',Arial,sans-serif}
+.pp-tit{font-size:10.5px;font-weight:800;letter-spacing:.6px;color:#9FB3C8;text-transform:uppercase;margin:0 2px 5px}
+.pp-btn{width:100%;display:flex;justify-content:space-between;align-items:center;background:#fff;color:#1F4E78;border:2px solid #3BBFCF;border-radius:8px;padding:8px 10px;font:700 12.5px 'Segoe UI',Arial,sans-serif;cursor:pointer}
+.pp-panel{position:fixed;z-index:9000;background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.3);padding:12px;width:250px;color:#22303F}
+.pp-acc{font-size:11.5px;display:flex;flex-wrap:wrap;gap:4px 10px;margin-bottom:8px}.pp-acc a{color:#1F4E78;font-weight:700;cursor:pointer}
+.pp-anio{font-weight:800;color:#1F4E78;font-size:12.5px;margin:4px 0}
+.pp-meses{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.pp-meses span{text-align:center;padding:6px 2px;font-size:11.5px;border:1px solid #CBD8E4;border-radius:6px;cursor:pointer;user-select:none}
+.pp-meses span.on{background:#EAF7F9;border-color:#3BBFCF;color:#1F4E78;font-weight:700}
+.pp-ap{margin-top:10px;width:100%;background:#1F4E78;color:#fff;border:0;padding:8px;border-radius:7px;font-weight:700;cursor:pointer}
+.pp-nota{font-size:10.5px;color:#7A8699;margin-top:6px}
+</style>
+<script>
+(function(){
+var NOM=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+var m=location.pathname.match(/^(.*\/)(\d{4})-(\d{2})\/([^\/]+)\/?/); if(!m) return;   // solo en links .../AAAA-MM/MARCA/
+var raiz=m[1]+m[4]+'/', anio=+m[2], mes=+m[3], este=m[2]+'-'+m[3];
+var todos=[]; for(var a=2026;a<=anio;a++) for(var k=1;k<=(a===anio?mes:12);k++) todos.push(a+'-'+String(k).padStart(2,'0'));
+var sel=[este], panel=null;
+function lbl(k){return NOM[+k.slice(5)-1]+'-'+k.slice(2,4);}
+function txt(){return sel.length===1?(NOM[+sel[0].slice(5)-1]+' '+sel[0].slice(0,4)):(lbl(sel[0])+' a '+lbl(sel[sel.length-1])+' ('+sel.length+' meses)');}
+function ir(){ sel.sort(); if(sel.length===1&&sel[0]===este){cerrar(false);return;} location.href=raiz+'#p='+encodeURIComponent(sel.join('|')); }
+function pintar(){ if(!panel) return; var h='<div class="pp-acc"><a data-r="v">Este mes</a><a data-r="3">Últimos 3</a><a data-r="a">Año en curso</a><a data-r="t">Todos</a></div>';
+  var anios={}; todos.forEach(function(k){(anios[k.slice(0,4)]=anios[k.slice(0,4)]||[]).push(k);});
+  Object.keys(anios).sort().reverse().forEach(function(a){ h+='<div class="pp-anio">'+a+'</div><div class="pp-meses">'+anios[a].map(function(k){return '<span data-k="'+k+'" class="'+(sel.indexOf(k)>=0?'on':'')+'">'+(sel.indexOf(k)>=0?'✓ ':'')+NOM[+k.slice(5)-1]+'</span>';}).join('')+'</div>'; });
+  var igual=sel.length===1&&sel[0]===este;
+  h+='<button class="pp-ap">'+(igual?'Cerrar':('Ver '+sel.length+(sel.length===1?' mes':' meses')))+'</button><div class="pp-nota">Elige uno o varios meses: el informe los carga juntos.</div>';
+  panel.innerHTML=h; document.getElementById('pp-txt').textContent=txt(); }
+function cerrar(aplicar){ if(!panel) return; panel.remove(); panel=null; if(aplicar&&!(sel.length===1&&sel[0]===este)&&sel.length) ir(); else {sel=[este]; document.getElementById('pp-txt').textContent=txt();} }
+function abrir(e){ e.stopPropagation(); if(panel){cerrar(true);return;} panel=document.createElement('div'); panel.className='pp-panel';
+  var r=e.currentTarget.getBoundingClientRect(); panel.style.left=Math.max(8,r.left)+'px'; panel.style.top=(r.bottom+6)+'px'; document.body.appendChild(panel);
+  panel.addEventListener('click',function(ev){ ev.stopPropagation(); var t=ev.target, k=t.getAttribute('data-k'), q=t.getAttribute('data-r');
+    if(k){ var i=sel.indexOf(k); if(i>=0) sel.splice(i,1); else sel.push(k); pintar(); }
+    else if(q){ sel = q==='v'?[este]: q==='3'?todos.slice(-3): q==='a'?todos.filter(function(x){return x.slice(0,4)===String(anio);}): todos.slice(); pintar(); }
+    else if(t.classList.contains('pp-ap')){ if(!sel.length){alert('Elige al menos un mes');return;} cerrar(true); } });
+  pintar(); }
+function iniciar(){ var nav=document.querySelector('.sidebar nav'); if(!nav||document.querySelector('.pp-per')) return;
+  var d=document.createElement('div'); d.className='pp-per'; d.innerHTML='<div class="pp-tit">Periodo · Año / Mes</div><button type="button" class="pp-btn"><span id="pp-txt"></span><small>▾</small></button>';
+  nav.parentNode.insertBefore(d,nav); d.querySelector('button').addEventListener('click',abrir); document.getElementById('pp-txt').textContent=txt();
+  document.addEventListener('click',function(){ cerrar(true); }); }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',iniciar); else iniciar();
+})();
+</script>
+<!-- /PLF-PERIODO-V1 -->
 </body>
 </html>
