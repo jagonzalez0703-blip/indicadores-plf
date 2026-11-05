@@ -5329,5 +5329,828 @@ function vsCambiar(v) {
   setTimeout(() => cambiarVista('visitas'), 0);   // primer indicador del tablero
 })();
 </script>
+<!-- PLF-CODCOMERCIO-V1: COD COMERCIO 1 por PDV (regla por marca) -->
+<script>
+(function(){
+var MARCA="DON CHICHARRON", MAP={"NMER1376":"7701001003504","NMER6817":"22","NMER1641":"7701001633008","NMER6865":"46","NMER1491":"7701001034102","NMER1416":"7701001009506","NMER1408":"7701001053400","NMER1409":"7701001059907","NMER6823":"43","NMER6824":"88","NMER8116":"23","NMER1406":"7701001368009","NMER1402":"7701001028002","NMER1420":"7701001481609","NMER1403":"7701001362007","NMER1396":"7701001004105","NMER1418":"7701001480008","NMER6825":"86","NMER8136":"4","NMER1488":"7701001033808","NMER1668":"7701001072708","NMER1489":"7701001033907","NMER1669":"7701001072807","NMER1844":"7701001480107","NMER1377":"7701001003702","NMER1670":"7701001072906","NMER6818":"148","NMER1526":"7701001040905","NMER1371":"7701001002903","NMER1374":"7701001003108","NMER6813":"24","NMER6842":"23","NMER6843":"25","NMER8130":"5","NMER1525":"7701001040806","NMER1424":"7701001405100","NMER6844":"7707185378063","NMER1667":"7701001072609","NMER1598":"7701001552002","NMER1370":"7701001002804","NMER1375":"7701001003306","NMER1666":"7701001072500","NMER8125":"18","NMER1490":"7701001034003","NMER7957":"EYM-0109","NMER1695":"7701001159508","NMER1690":"7701001005409","NMER6719":"CO04094006","NMER1687":"7701001005119","NMER6839":"30","NMER8119":"13","NMER8133":"3","NMER6841":"7707185370753","NMER6732":"CO04094021","NMER6733":"CO04094023","NMER6735":"CO040945631","NMER6881":"31","NMER1692":"7701001040202","NMER1710":"7701001421902","NMER6882":"32","NMER1694":"7701001059402","NMER6731":"CO04094020","NMER6721":"CO04094010","NMER6722":"CO04094012","NMER1691":"7701001005607","NMER6840":"13","NMER1734":"7701001040585","NMER1701":"7701001073200","NMER1720":"7701001047812","NMER1696":"7701001159607","NMER1769":"7701001051802","NMER6851":"44","NMER6852":"191","NMER8321":"7701001040714","NMER8118":"20","NMER1682":"7701001480602","NMER1833":"7701001040394","NMER1831":"7701001009605","NMER1745":"7701001634005","NMER6897":"174","NMER1744":"7701001053905","NMER1739":"7701001367002","NMER1741":"7701001371009","NMER1747":"7701001064703","NMER6904":"45","NMER1941":"7701001062907","NMER1943":"7701001480404","NMER1942":"7701001066509","NMER1940":"7701001363004","NMER8131":"14","NMER1965":"7701001354002","NMER6879":"87","NMER6880":"184","NMER8134":"22","NMER1884":"7701001357003","NMER1882":"7701001026206","NMER6878":"85","NMER8128":"16","NMER6896":"83","NMER1740":"7701001370002","NMER1737":"7701001004402","NMER8121":"10","NMER1743":"7701001053806","NMER1591":"7701001054209","NMER6814":"27","NMER1901":"7701001006307","NMER6869":"9","NMER1900":"7701001006208","NMER1911":"7701001481203","NMER8124":"7","NMER1386":"7701001006505","NMER6780":"PENDIENTE CODIGO","NMER6788":"PENDIENTE CODIGO","NMER8531":"PENDIENTE CODIGO","NMER6782":"PENDIENTE CODIGO","NMER6786":"PENDIENTE CODIGO","NMER1684":"7701001042008","NMER1880":"7701001480503","NMER6784":"PENDIENTE CODIGO","NMER6785":"PENDIENTE CODIGO","NMER1872":"7701001038308","NMER1870":"7701001033402","NMER6905":"80","NMER1910":"7701001481104","NMER8449":"7701001047836","NMER8122":"15","NMER6871":"128","NMER1899":"7701001042206","NMER1898":"7701001005805","NMER6872":"171","NMER1811":"7701001032009","NMER1662":"7701001031903","NMER6856":"84","NMER6853":"34","NMER6858":"39","NMER1664":"7701001352008","NMER6857":"108","NMER6855":"103","NMER1661":"7701001007106","NMER6715":"CO04094001","NMER6867":"7707185370067","NMER6717":"CO04094005","NMER6716":"CO04094004","NMER6866":"35","NMER8102":"36","NMER1919":"7701001043500","NMER8104":"76","NMER1961":"7701001007908","NMER8163":"28","NMER8169":"97","NMER1962":"7701001058009","NMER8132":"17","NMER1955":"7701001057804","NMER1978":"7701001480909","NMER1973":"7701001358000","NMER1970":"7701001015903","NMER8137":"12","NMER1886":"7701001017303","NMER1806":"7701001009001","NMER6849":"73","NMER6848":"7707185370746","NMER1842":"7701001015606","NMER6860":"42","NMER8127":"9"}, NOM={"EXITO - CARULLA SAN FERNANDO - CALI":"NMER1695","CENCOSUD - JUMBO BARRANQUILLA BUENAVISTA - BARRANQUILLA":"NMER6825","EXITO - EXITO ENVIGADO - ENVIGADO":"NMER1376","EXITO - CARULLA MALL PLAZA BUENAVISTA - BARRANQUILLA":"NMER1420","CENCOSUD - METRO METRO DUITAMA - DUITAMA":"NMER8163","EXITO - CARULLA AVENIDA COLOMBIA - CALI":"NMER1710","CENCOSUD - METRO PASTO - PASTO":"NMER6871","CENCOSUD - METRO FLORIDABLANCA - FLORIDABLANCA":"NMER6853","CANAVERAL - SUPERTIENDAS CANAVERAL CENTENARIO - CALI":"NMER6732","EXITO - CARULLA SAN MARCEL - MANIZALES":"NMER1880","EXITO - CARULLA VISITACION - MEDELLIN":"NMER1598","MERCALDAS - MANIZALES SAN MARCEL - MANIZALES":"NMER6786","CENCOSUD - JUMBO CARTAGENA CARIBE PLAZA - CARTAGENA":"NMER6896","CANAVERAL - SUPERTIENDAS CANAVERAL PANCE - CALI":"NMER6731","MERCALDAS - MANIZALES ENEA - MANIZALES":"NMER6782","CANAVERAL - PASOANCHO - CALI":"NMER7957","EXITO - EXITO POBLADO - MEDELLIN":"NMER1375","EXITO - CARULLA PANCE CALI - CALI":"NMER1694","EXITO - CARULLA CASTILLO GRANDE - CARTAGENA":"NMER1745","EXITO - EXITO ORIENTAL BUCARAMANGA CV - BUCARAMANGA":"NMER1664","CANAVERAL - SUPERTIENDAS CANAVERAL COUNTRY MALL - CALI":"NMER6735","EXITO - EXITO LA FLORA - CALI":"NMER1690","CANAVERAL - SUPERTIENDAS CANAVERAL CARRERA 1 - CALI":"NMER6719","MAKRO - MAKRO MAKRO IBAGUE - IBAGUE":"NMER8127","EXITO - EXITO LAURELES - MEDELLIN":"NMER1377","EXITO - CARULLA LAURELES - MEDELLIN":"NMER1670","CENCOSUD - METRO CUCUTA LIBERTADORES - CUCUTA":"NMER6905","EXITO - EXITO COLOMBIA - MEDELLIN":"NMER1374","CENCOSUD - JUMBO MEDELLIN DE LA 65 - MEDELLIN":"NMER6842","MAKRO - MAKRO MAKRO SAN JUAN - MEDELLIN":"NMER8130","EXITO - CARULLA RAMBLAS - CARTAGENA":"NMER1747","EXITO - CARULLA PALMAS - MEDELLIN":"NMER1489","EXITO - CARULLA SAN LUCAS - MEDELLIN":"NMER1669","MAKRO - MAKRO MAKRO DOS QUEBRADAS - PEREIRA":"NMER8124","EXITO - CARULLA MANIZALES - MANIZALES":"NMER1870","MERCALDAS - MANIZALES PALMAS - MANIZALES":"NMER6785","EXITO - EXITO DEL ESTE - MEDELLIN":"NMER1370","EXITO - CARULLA POBLADO - MEDELLIN":"NMER1666","MAKRO - MAKRO MAKRO ESTACION POBLADO - MEDELLIN":"NMER8125","EXITO - CARULLA PEREIRA CERRITOS - PEREIRA":"NMER1910","EXITO - EXITO GRAN VIA - MEDELLIN":"NMER1371","EXITO - EXITO UNICENTRO ARMENIA - ARMENIA":"NMER1386","EXITO - EXITO BARRANQUILLA - BARRANQUILLA":"NMER1396","EXITO - CARULLA VILLA COUNTRY - BARRANQUILLA":"NMER1402","EXITO - EXITO BUENA VISTA (CV) BLLA - BARRANQUILLA":"NMER1403","EXITO - EXITO SAN FRANCISCO (CV) BLLA - BARRANQUILLA":"NMER1406","EXITO - CARULLA CALLE 86 B/QUILLA - BARRANQUILLA":"NMER1408","EXITO - CARULLA CALLE 82 - BARRANQUILLA":"NMER1409","EXITO - EXITO SABANETA - SABANETA-ANTIOQUIA":"NMER1416","EXITO - CARULLA CIUDAD DEL MAR - BARRANQUILLA":"NMER1418","EXITO - EXITO PARQUE FABRICATO - BELLO":"NMER1424","EXITO - CARULLA OVIEDO - MEDELLIN":"NMER1488","EXITO - CARULLA PINAR DEL RIO - MEDELLIN":"NMER1490","EXITO - CARULLA SAO PAULO - MEDELLIN":"NMER1491","EXITO - EXITO SANDIEGO - MEDELLIN":"NMER1525","EXITO - EXITO UNICENTRO MEDELLIN - MEDELLIN":"NMER1526","EXITO - EXITO ENVIGADO CENTRO - ENVIGADO":"NMER1568","EXITO - CARULLA LLANO GRANDE - RIONEGRO-ANTIOQUIA":"NMER1591","EXITO - CARULLA CITY PLAZA - ENVIGADO":"NMER1641","EXITO - EXITO BUCARAMANGA - BUCARAMANGA":"NMER1661","EXITO - EXITO BUCARAMANGA CABECERA - BUCARAMANGA":"NMER1662","EXITO - CARULLA TESORO - MEDELLIN":"NMER1667","EXITO - CARULLA RINCON OVIEDO - MEDELLIN":"NMER1668","EXITO - CARULLA ISLA NATURA - CAJICA-CUNDINAMARCA":"NMER1682","EXITO - EXITO SANCANCIO - CALDAS":"NMER1684","EXITO - EXITO SAN FERNANDO - CALI":"NMER1687","EXITO - EXITO UNICALI - CALI":"NMER1691","EXITO - EXITO CHIPICHAPE - CALI":"NMER1692","EXITO - CARULLA TRADE CENTER - CALI":"NMER1696","EXITO - CARULLA CIUDAD JARDIN - CALI":"NMER1701","EXITO - SUPER INTER LA MARIA - CALI":"NMER1720","EXITO - EXITO VALLE DEL LILI - CALI":"NMER1734","EXITO - EXITO CARTAGENA - CARTAGENA":"NMER1737","EXITO - EXITO SAN DIEGO CARTAGENA (CV) - CARTAGENA":"NMER1739","EXITO - EXITO CASTELLANA CARTAGENA (CV - CARTAGENA":"NMER1740","EXITO - EXITO MATUNA CARTAGENA (CV) - CARTAGENA":"NMER1741","EXITO - CARULLA SANTA LUCIA - CARTAGENA":"NMER1743","EXITO - CARULLA VILLA SUSANA - CARTAGENA":"NMER1744","EXITO - CARULLA CENTRO CHIA - CHIA-CUNDINAMARCA":"NMER1769","EXITO - EXITO FACATATIVA - FACATATIVA":"NMER1806","EXITO - EXITO CANAVERAL FLORIDA BLANCA - FLORIDA BLANCA":"NMER1811","EXITO - EXITO IBAGUE - IBAGUE":"NMER1842","EXITO - CARULLA VIVA PALMAS - MEDELLIN":"NMER1844","EXITO - EXITO MANIZALES FUNDADORES - MANIZALES":"NMER1872","EXITO - EXITO MONTERIA NORTE - MONTERIA-CORDOBA":"NMER1882","EXITO - EXITO ALAMEDAS DEL SINU MONTERIA - MONTERIA-CORDOBA":"NMER1884","EXITO - EXITO MOSQUERA - MOSQUERA-CUNDINAMARCA":"NMER1886","EXITO - EXITO PASTO - PASTO":"NMER1898","EXITO - EXITO PASTO CENTRO - PASTO":"NMER1899","EXITO - EXITO PARQUE ARBOLEDA - PEREIRA":"NMER1900","EXITO - EXITO PEREIRA - PEREIRA":"NMER1901","EXITO - CARULLA PEREIRA PINARES - PEREIRA":"NMER1911","EXITO - EXITO PANAMERICANA POPAYAN - POPAYAN":"NMER1919","EXITO - EXITO BUENA VISTA SANTA MARTA - SANTA MARTA":"NMER1940","EXITO - CARULLA ARRECIFE - SANTA MARTA":"NMER1941","EXITO - CARULLA ZAZUE - SANTA MARTA":"NMER1942","EXITO - CARULLA BELLAVISTA - SANTA MARTA":"NMER1943","EXITO - EXITO SOGAMOSO - SOGAMOSO":"NMER1955","EXITO - EXITO VIVA TUNJA - TUNJA":"NMER1961","EXITO - EXITO TUNJA - TUNJA":"NMER1962","EXITO - EXITO LAS FLORES VALLEDUPAR - VALLEDUPAR":"NMER1965","EXITO - EXITO LA SABANA VILLAVICENCIO - VILLAVICENCIO":"NMER1970","EXITO - EXITO UNICENTRO VILLAVICENCIO - VILLAVICENCIO":"NMER1973","EXITO - CARULLA PRIMAVERA URBANA - VILLAVICENCIO":"NMER1978","CANAVERAL - SUPERTIENDAS CANAVERAL PALMITEX - PALMIRA":"NMER6715","CANAVERAL - SUPERTIENDAS CANAVERAL BUGA ALBERGUE - BUGA":"NMER6716","CANAVERAL - SUPERTIENDAS CANAVERAL TULUA - TULUA":"NMER6717","CANAVERAL - SUPERTIENDAS CANAVERAL EL LIMONAR - CALI":"NMER6721","CANAVERAL - SUPERTIENDAS CANAVERAL EL INGENIO - CALI":"NMER6722","CANAVERAL - SUPERTIENDAS CANAVERAL LA 34 - CALI":"NMER6733","MERCALDAS - MANIZALES CENTRO - MANIZALES":"NMER6780","MERCALDAS - MANIZALES PALERMO - MANIZALES":"NMER6784","MERCALDAS - MANIZALES VERSALLES - MANIZALES":"NMER6788","CENCOSUD - JUMBO MEDELLIN PREMIUM PLAZA - MEDELLIN":"NMER6813","CENCOSUD - JUMBO RIONEGRO - RIONEGRO":"NMER6814","CENCOSUD - JUMBO ENVIGADO LAS VEGAS - ENVIGADO":"NMER6817","CENCOSUD - JUMBO MEDELLIN SANTA FE - MEDELLIN":"NMER6818","CENCOSUD - JUMBO BARRANQUILLA ALTOS DEL PRADO - BARRANQUILLA":"NMER6823","CENCOSUD - JUMBO BARRANQUILLA AMERICANO - BARRANQUILLA":"NMER6824","CENCOSUD - JUMBO CALI LIMONAR - CALI":"NMER6839","CENCOSUD - JUMBO CALI VALLE DE LILI - CALI":"NMER6840","CENCOSUD - METRO SIMON BOLIVAR - CALI":"NMER6841","CENCOSUD - METRO BELLO - BELLO":"NMER6843","CENCOSUD - METRO MEDELLIN FATELARES - MEDELLIN":"NMER6844","CENCOSUD - METRO FACATATIVA - FACATATIVA":"NMER6848","CENCOSUD - METRO MOSQUERA - MOSQUERA":"NMER6849","CENCOSUD - JUMBO CHIA - CHIA":"NMER6851","CENCOSUD - JUMBO CHIA BAZAR - CHIA":"NMER6852","CENCOSUD - JUMBO BUCARAMANGA CABECERA - BUCARAMANGA":"NMER6855","CENCOSUD - JUMBO BUCARAMANGA MEGA MALL - BUCARAMANGA":"NMER6856","CENCOSUD - JUMBO FLORIDABLANCA CANAVERAL - FLORIDABLANCA":"NMER6857","CENCOSUD - METRO GIRON - GIRON":"NMER6858","CENCOSUD - METRO IBAGUE - IBAGUE":"NMER6860","CENCOSUD - METRO ITAGUI - ITAGUI":"NMER6865","CENCOSUD - METRO BUGA - BUGA":"NMER6866","CENCOSUD - METRO PALMIRA - PALMIRA":"NMER6867","CENCOSUD - JUMBO PEREIRA UNICENTRO - PEREIRA":"NMER6869","CENCOSUD - METRO PASTO UNICO - PASTO":"NMER6872","CENCOSUD - METRO MONTERIA - MONTERIA":"NMER6878","CENCOSUD - JUMBO VALLEDUPAR GUATAPURI - VALLEDUPAR":"NMER6879","CENCOSUD - METRO VALLEDUPAR MAYALES - VALLEDUPAR":"NMER6880","CENCOSUD - JUMBO CALI CHIPICHAPE - CALI":"NMER6881","CENCOSUD - METRO CALI LA 70 - CALI":"NMER6882","CENCOSUD - JUMBO CARTAGENA EL CASTILLO - CARTAGENA":"NMER6897","CENCOSUD - JUMBO SANTA MARTA - SANTA MARTA":"NMER6904","CENCOSUD - JUMBO JUMBO POPAYAN - POPAYAN":"NMER8102","CENCOSUD - JUMBO JUMBO TUNJA - TUNJA":"NMER8104","MAKRO - MAKRO MAKRO ALTO PRADO BARRANQUILLA - BARRANQUILLA":"NMER8116","MAKRO - MAKRO MAKRO CAJICA - CAJICA":"NMER8118","MAKRO - MAKRO MAKRO CALI-NORTE - CALI":"NMER8119","MAKRO - MAKRO MAKRO CARTAGENA - CARTAGENA":"NMER8121","MAKRO - MAKRO MAKRO CUCUTA - CUCUTA":"NMER8122","MAKRO - MAKRO MAKRO FLORIDABLANCA - FLORIDA BLANCA":"NMER8126","MAKRO - MAKRO MAKRO MONTERIA - MONTERIA":"NMER8128","MAKRO - MAKRO MAKRO SANTA MARTA - SANTA MARTA":"NMER8131","MAKRO - MAKRO MAKRO TUNJA - TUNJA":"NMER8132","MAKRO - MAKRO MAKRO VALLE DE LILI - CALI":"NMER8133","MAKRO - MAKRO MAKRO VALLEDUPAR - VALLEDUPAR":"NMER8134","MAKRO - MAKRO MAKRO VILLA SANTOS - BARRANQUILLA":"NMER8136","MAKRO - MAKRO MAKRO VILLAVICENCIO - VILLAVICENCIO":"NMER8137","CENCOSUD - METRO METRO SOGAMOSO - SOGAMOSO":"NMER8169","EXITO - EXITO PRADILLA-4071 - CHIA":"NMER8321","CARULLA - CARULLA - CARULLA CASTILLA - PEREIRA - PEREIRA":"NMER8449","MERCALDAS - MERCALDAS PARQUE - CALDAS":"NMER8531","EXITO - EXITO FUSAGASUGA - FUSAGASUGA":"NMER1831","EXITO - EXITO UNICENTRO GIRARDOT - GIRARDOT":"NMER1833"};
+function norm(s){return String(s==null?'':s).toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();}
+try{ if(typeof RAW!=='undefined' && RAW && RAW.marca && norm(RAW.marca)!==norm(MARCA)) return; }catch(e){}
+var RX=/^NMER\d+$/i;
+function codeOf(v){var s=String(v==null?'':v).trim(); if(!s) return ''; if(RX.test(s)) return s.toUpperCase();
+  var m=s.match(/NMER\d+/i); if(m) return m[0].toUpperCase();
+  s=s.replace(/^[▸▾▶▼‣•>\-\s]+/,''); var r=NOM[norm(s)]; if(!r&&s.indexOf('\u00b7')>0) r=NOM[norm(s.split('\u00b7')[0])]; return r||'';}
+function c1(code){return MAP[code]||'';}
+var HC='COD COMERCIO 1';
+/* ---------- descargas a Excel ---------- */
+function plan(aoa){
+  if(!Array.isArray(aoa)||aoa.length<2||!Array.isArray(aoa[0])) return null;
+  var h=aoa[0].map(norm); if(h.indexOf(HC)>=0) return null;
+  var n=h.length, rs=aoa.slice(1,Math.min(aoa.length,600)), j;
+  for(j=0;j<n;j++){var hit=0,tot=0; rs.forEach(function(r){var v=r[j]; if(v!==''&&v!=null){tot++; if(RX.test(String(v).trim())) hit++;}}); if(tot&&hit/tot>=0.5) break;}
+  if(j<n){var ci=j; return {at:ci+1,add:1,rows:aoa.map(function(r,i){var x=r.slice(); x.splice(ci+1,0,i===0?HC:c1(codeOf(r[ci]))); return x;})};}
+  for(j=0;j<n;j++){ if(/PUNTO DE VENTA|^PDV$/.test(h[j])){var hit2=0,tot2=0; rs.forEach(function(r){var v=r[j]; if(v!==''&&v!=null){tot2++; if(codeOf(v)) hit2++;}}); if(tot2&&hit2/tot2>=0.3) break;} }
+  if(j<n){var ni=j; return {at:ni,add:2,rows:aoa.map(function(r,i){var x=r.slice(); if(i===0) x.splice(ni,0,'COD PLF',HC); else {var c=codeOf(r[ni]); x.splice(ni,0,c,c1(c));} return x;})};}
+  return null;
+}
+function wrapX(){
+  if(typeof XLSX==='undefined'||!XLSX.utils||XLSX.utils.__plfcc) return;
+  var o=XLSX.utils.aoa_to_sheet;
+  XLSX.utils.aoa_to_sheet=function(aoa,opts){
+    var p=null; try{p=plan(aoa);}catch(e){p=null;}
+    if(!p) return o.call(this,aoa,opts);
+    var ws=o.call(this,p.rows,opts), cols;
+    Object.defineProperty(ws,'!cols',{configurable:true,enumerable:true,get:function(){return cols;},set:function(v){
+      if(Array.isArray(v)&&v.length===p.rows[0].length-p.add){v=v.slice(); var ad=p.add===1?[{wch:16}]:[{wch:12},{wch:16}]; Array.prototype.splice.apply(v,[p.at,0].concat(ad));}
+      cols=v;}});
+    return ws;
+  };
+  XLSX.utils.__plfcc=1;
+}
+/* ---------- tablas en pantalla ---------- */
+function span(c){return c.colSpan||1;}
+function ancho(tr){var s=0; for(var i=0;i<tr.cells.length;i++) s+=span(tr.cells[i]); return s;}
+function txt(c){return c?c.textContent.trim():'';}
+function celdaEn(tr,pos){var p=0; for(var i=0;i<tr.cells.length;i++){var s=span(tr.cells[i]); if(pos>=p&&pos<p+s) return (s===1)?tr.cells[i]:null; p+=s;} return null;}
+function insertar(tr,at,vals){
+  var p=0;
+  for(var i=0;i<tr.cells.length;i++){var c=tr.cells[i],s=span(c);
+    if(p===at){ for(var k=vals.length-1;k>=0;k--){var nc=document.createElement(c.tagName.toLowerCase()); nc.className=c.className; nc.textContent=vals[k]; nc.style.whiteSpace='nowrap'; nc.style.textAlign='left'; tr.insertBefore(nc,c); c=nc;} return; }
+    if(at>p&&at<p+s){ c.colSpan=s+vals.length; return; }
+    p+=s;}
+  var ref=tr.cells[tr.cells.length-1];
+  vals.forEach(function(v){var nc=document.createElement(ref?ref.tagName.toLowerCase():'td'); if(ref) nc.className=ref.className; nc.textContent=v; nc.style.whiteSpace='nowrap'; tr.appendChild(nc);});
+}
+function filasCuerpo(t){var out=[]; for(var b=0;b<t.tBodies.length;b++) for(var r=0;r<t.tBodies[b].rows.length;r++) out.push(t.tBodies[b].rows[r]); if(t.tFoot) for(var f=0;f<t.tFoot.rows.length;f++) out.push(t.tFoot.rows[f]); return out;}
+function procesar(t){
+  if(t.closest&&t.closest('#plf-asistente,.plf-asis,[id^="plfa"]')) return;
+  var hr=(t.tHead&&t.tHead.rows.length)?t.tHead.rows[t.tHead.rows.length-1]:null; if(!hr) return;
+  var cfg=t.__plfcc;
+  if(!cfg||!hr.getAttribute('data-plfcc')){
+    var hs=[]; for(var i=0;i<hr.cells.length;i++) hs.push(norm(txt(hr.cells[i])));
+    if(hs.indexOf(HC)>=0) return;
+    var n=ancho(hr), rows=filasCuerpo(t).slice(0,800), j, mode=null, col=-1;
+    for(j=0;j<n&&mode===null;j++){var hit=0,tot=0; rows.forEach(function(r){var v=txt(celdaEn(r,j)); if(v){tot++; if(RX.test(v)) hit++;}}); if(hit&&hit/tot>=0.5){mode='cod';col=j;}}
+    if(mode===null){ for(j=0;j<hr.cells.length&&mode===null;j++){ if(/PUNTO DE VENTA|^PDV$/.test(hs[j])){ var pos=0; for(var q=0;q<j;q++) pos+=span(hr.cells[q]); var hit2=0; rows.forEach(function(r){ if(codeOf(txt(celdaEn(r,pos)))) hit2++; }); if(hit2){mode='nom';col=pos;} } } }
+    if(mode===null) return;
+    cfg={mode:mode,col:col,n:n}; t.__plfcc=cfg;
+    filasCuerpo(t).forEach(function(r){r.removeAttribute('data-plfcc');});
+    if(mode==='cod') insertar(hr,col+1,[HC]); else insertar(hr,col,['COD PLF',HC]);
+    hr.setAttribute('data-plfcc','1');
+    for(var e=0;e<t.tHead.rows.length-1;e++){var er=t.tHead.rows[e]; if(ancho(er)===n){ if(mode==='cod') insertar(er,col+1,['']); else insertar(er,col,['','']); } }
+  }
+  filasCuerpo(t).forEach(function(r){
+    if(r.getAttribute('data-plfcc')) return;
+    r.setAttribute('data-plfcc','1');
+    if(ancho(r)!==cfg.n) return;
+    if(cfg.mode==='cod'){ insertar(r,cfg.col+1,[c1(codeOf(txt(celdaEn(r,cfg.col))))]); }
+    else { var c=codeOf(txt(celdaEn(r,cfg.col))); insertar(r,cfg.col,[c,c1(c)]); }
+  });
+}
+var pend=false;
+function barrer(){pend=false; wrapX(); var ts=document.querySelectorAll('table'); for(var i=0;i<ts.length;i++){ try{procesar(ts[i]);}catch(e){} }}
+function prog(){ if(!pend){pend=true; setTimeout(barrer,40);} }
+function iniciar(){ wrapX(); barrer(); try{ new MutationObserver(prog).observe(document.body,{childList:true,subtree:true}); }catch(e){} }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',iniciar); else iniciar();
+})();
+</script>
+<!-- /PLF-CODCOMERCIO-V1 -->
+<!-- PLF-ASISTENTE-V2: Preguntale al dashboard (motor local, sin internet, sin IA externa) -->
+<style>
+.aq-fab{position:fixed;right:20px;bottom:20px;z-index:9000;background:#1F4E78;color:#fff;border:0;border-radius:999px;padding:12px 18px;font:600 13.5px 'Segoe UI',Arial,sans-serif;box-shadow:0 6px 18px rgba(31,78,120,.35);cursor:pointer}
+.aq-fab:hover{background:#16324f}
+.aq{position:fixed;top:0;right:0;height:100vh;width:min(520px,100vw);background:#fff;z-index:9001;box-shadow:-8px 0 24px rgba(0,0,0,.18);display:none;flex-direction:column;font-family:'Segoe UI',Arial,sans-serif;color:#1f2d3a}
+.aq.on{display:flex}
+.aq .aq-cab{background:#1F4E78;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;letter-spacing:.3px}
+.aq .aq-cab small{display:block;font-weight:400;opacity:.85;font-size:11.5px;letter-spacing:0}
+.aq .aq-cab button{background:transparent;border:0;color:#fff;font-size:20px;cursor:pointer}
+.aq .aq-hist{flex:1;overflow:auto;padding:14px 16px;background:#F3F6F9;display:flex;flex-direction:column}
+.aq .aq-yo{align-self:flex-end;background:#1F4E78;color:#fff;border-radius:12px 12px 2px 12px;padding:8px 12px;margin:8px 0;max-width:85%;font-size:13px}
+.aq .aq-bot{background:#fff;border:1px solid #DCE4EC;border-radius:12px 12px 12px 2px;padding:10px 12px;margin:6px 0;font-size:13px;line-height:1.5}
+.aq .aq-bot p{margin:0 0 6px}
+.aq .aq-bot b{color:#1F4E78}
+.aq .aq-ctx{font-size:11.5px;color:#6b7c8c;margin-top:6px}
+.aq .aq-ej{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.aq .aq-ej button,.aq .aq-ir{border:1px solid #B9DDE6;background:#EAF7FA;color:#1F4E78;border-radius:14px;padding:4px 10px;font:12px 'Segoe UI',Arial,sans-serif;cursor:pointer;text-align:left}
+.aq .aq-ir{margin-top:6px;border-radius:8px;font-weight:600}
+.aq .aq-tw{max-height:330px;overflow:auto;margin-top:8px;border:1px solid #E3E9EF;border-radius:8px}
+.aq table{border-collapse:collapse;width:100%;font-size:12px}
+.aq th{position:sticky;top:0;background:#1F4E78;color:#fff;font-weight:600;padding:6px 7px;text-align:right;white-space:nowrap}
+.aq td{padding:5px 7px;border-top:1px solid #EEF2F6;text-align:right;white-space:nowrap}
+.aq th.l,.aq td.l{text-align:left;white-space:normal;min-width:120px}
+.aq tr:nth-child(even) td{background:#F7FAFC}
+.aq tr.aq-tot td{font-weight:700;background:#E8EFF6}
+.aq form{display:flex;gap:8px;padding:12px;border-top:1px solid #DCE4EC;background:#fff}
+.aq form input{flex:1;border:1px solid #C9D6E2;border-radius:8px;padding:9px 11px;font:13px 'Segoe UI',Arial,sans-serif;outline:none}
+.aq form input:focus{border-color:#3BBFCF;box-shadow:0 0 0 3px rgba(59,191,207,.18)}
+.aq form button{background:#1F4E78;color:#fff;border:0;border-radius:8px;padding:0 16px;font:700 13px 'Segoe UI',Arial,sans-serif;cursor:pointer}
+.aq .aq-cab .aq-bts{display:flex;gap:4px;align-items:center}
+.aq .aq-cab .aq-bts button{font-size:15px;width:30px;height:30px;border-radius:50%}
+.aq .aq-cab .aq-bts button:hover{background:rgba(255,255,255,.15)}
+.aq .aq-lec{background:#EAF2F8;border-left:3px solid #1F4E78;padding:6px 9px;border-radius:6px;margin:6px 0;font-size:12.5px}
+.aq .aq-acc{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.aq .aq-acc button{border:1px solid #1F4E78;background:#fff;color:#1F4E78;border-radius:8px;padding:4px 9px;font:600 11.5px 'Segoe UI',Arial,sans-serif;cursor:pointer}
+.aq .aq-acc button:hover{background:#1F4E78;color:#fff}
+.aq .aq-seg{margin-top:8px;font-size:11.5px;color:#6b7c8c}
+.aq .aq-seg .aq-ej{margin-top:4px}
+.aq tr.aq-ojo td{background:#EAF2F8!important}
+.aq tr.aq-ojo td:nth-child(2){font-weight:700;color:#1F4E78;border-left:3px solid #1F4E78}
+.aq tr.aq-clic{cursor:pointer}.aq tr.aq-clic:hover td{background:#D9EEF3!important}
+.aq .aq-sv{width:100%;margin-top:8px;display:block}
+.aq .aq-sv text{font:11px 'Segoe UI',Arial,sans-serif;fill:#3a4a5a}
+.aq .aq-h3{font-weight:700;color:#1F4E78;margin:10px 0 2px;font-size:13px}
+.aq .aq-h3:first-child{margin-top:0}
+.aq .aq-sug{display:none;flex-wrap:wrap;gap:6px;padding:8px 12px 0;background:#fff}
+.aq .aq-sug.on{display:flex}
+.aq .aq-sug button{border:1px solid #C9D6E2;background:#F7FAFC;border-radius:12px;padding:3px 9px;font:12px 'Segoe UI',Arial,sans-serif;cursor:pointer;color:#1F4E78}
+.aq form .aq-mic{background:#fff;color:#1F4E78;border:1px solid #C9D6E2;padding:0 11px;font-size:16px}
+.aq form .aq-mic.on{background:#3BBFCF;color:#fff;border-color:#3BBFCF}
+.aq-toast{position:fixed;bottom:80px;right:24px;background:#1F4E78;color:#fff;padding:8px 14px;border-radius:8px;font:13px 'Segoe UI',Arial,sans-serif;z-index:9002;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+@media print{.aq,.aq-fab{display:none!important}}
+</style>
+<button class="aq-fab" id="aq-fab" type="button">💬 Pregúntale al dashboard</button>
+<div class="aq" id="aq"><div class="aq-cab"><span>💬 PREGÚNTALE AL DASHBOARD<small>Respuestas calculadas aquí mismo con los datos del informe</small></span><span class="aq-bts"><button id="aq-help" type="button" title="¿Qué puedo preguntar?">?</button><button id="aq-x" type="button" title="Cerrar">✕</button></span></div>
+<div class="aq-hist" id="aq-hist"></div>
+<div class="aq-sug" id="aq-sug"></div><form id="aq-f" autocomplete="off"><input id="aq-in" placeholder="Escribe tu pregunta… ej: ¿dónde debo actuar hoy?"><button type="button" class="aq-mic" id="aq-mic" title="Preguntar por voz" style="display:none">🎤</button><button type="submit">Preguntar</button></form></div>
+<script>
+/* PLF-ASISTENTE-V2 — motor local de preguntas en lenguaje natural. No usa internet ni IA externa (cero tokens). */
+(function () {
+'use strict';
+const $ = id => document.getElementById(id);
+const nrm = s => String(s == null ? '' : s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[¿?¡!.,;:()"'“”%$#*_]/g, ' ').replace(/\s+/g, ' ').trim();
+const esc = t => String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const fN = v => (v == null || isNaN(v)) ? '—' : Math.round(v).toLocaleString('es-CO');
+const fP = v => (v == null || isNaN(v) || !isFinite(v)) ? '—' : (Math.round(v * 10) / 10).toFixed(1).replace('.', ',') + ' %';
+const fPP = v => (v == null || isNaN(v) || !isFinite(v)) ? '—' : (v > 0 ? '+' : '') + (Math.round(v * 10) / 10).toFixed(1).replace('.', ',') + (Math.abs(v) < 1e9 ? ' pp' : '');
+const fV = v => (v == null || isNaN(v) || !isFinite(v)) ? '—' : (v > 0 ? '+' : '') + (Math.round(v * 10) / 10).toFixed(1).replace('.', ',') + ' %';
+const f$ = v => (v == null || isNaN(v)) ? '—' : '$ ' + Math.round(v).toLocaleString('es-CO');
+const QN = {un: 1, uno: 1, una: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10, once: 11, doce: 12, quince: 15, veinte: 20, treinta: 30};
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const MES3 = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+const ISO = s => { s = String(s == null ? '' : s).trim(); let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if (m) return m[0];
+  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? m[3] + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0') : ''; };
+const dt = s => new Date(s + 'T12:00:00');
+const isoD = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const addD = (s, n) => { const d = dt(s); d.setDate(d.getDate() + n); return isoD(d); };
+const semISO = s => { const d = dt(s); d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7); const w1 = new Date(d.getFullYear(), 0, 4);
+  return 1 + Math.round(((d - w1) / 864e5 - 3 + (w1.getDay() + 6) % 7) / 7); };
+const dmy = s => s ? s.slice(8, 10) + '/' + s.slice(5, 7) : '';
+const mesLab = k => { const p = String(k).split('-'); return p.length > 1 ? MESES[+p[1] - 1] + ' ' + p[0] : k; };
+
+/* ---------------- dimensiones ---------------- */
+const DIM = {
+  mar: {lab: 'Marca', pl: 'marcas', re: /\bmarcas?\b/, g: 'f'},
+  can: {lab: 'Canal', pl: 'canales', re: /\bcanal(es)?\b/, g: 'm'},
+  cad: {lab: 'Cadena', pl: 'cadenas', re: /\b(cadenas?|clientes?)\b/, g: 'f'},
+  coo: {lab: 'Coordinador', pl: 'coordinadores', re: /\b(coordinador(es|as?)?|supervisor(es|as?)?)\b/, g: 'm'},
+  mer: {lab: 'Mercaderista', pl: 'mercaderistas', re: /\b(mercaderistas?|colaborador(es|as?)?|asesor(es|as?)?|impulsador(es|as?)?|usuarios?|personas?|equipos?)\b/, g: 'm'},
+  ciu: {lab: 'Ciudad', pl: 'ciudades', re: /\bciudad(es)?\b/, g: 'f'},
+  dep: {lab: 'Departamento', pl: 'departamentos', re: /\bdepartamentos?\b/, g: 'm'},
+  pdv: {lab: 'Punto de venta', pl: 'puntos de venta', re: /\b(puntos? de venta|pdvs?|tiendas?|almacen(es)?|locales?|sucursal(es)?)\b/, g: 'm'},
+  pro: {lab: 'Producto', pl: 'productos', re: /\b(productos?|referencias?|skus?)\b/, g: 'm'},
+  cat: {lab: 'Categoría', pl: 'categorías', re: /\b(categorias?|lineas?)\b/, g: 'f'},
+  ind: {lab: 'Indicador', pl: 'indicadores', re: /\b(indicador(es)?|tipos? de exhibicion(es)?)\b/, g: 'm'},
+  mot: {lab: 'Motivo', pl: 'motivos', re: /\b(motivos?|causas?|razon(es)?|porque|por que no)\b/, g: 'm'},
+  cau: {lab: 'Causal', pl: 'causales', re: /\b(causal(es)?|problemas?)\b/, g: 'f'},
+  enc: {lab: 'Encuesta', pl: 'encuestas', re: /\b(por|cada) encuestas?\b|\bencuestas (con|que|mas|menos|de mayor|de menor)\b|\b(cual|que) encuesta\b/, g: 'f'},
+  pre: {lab: 'Pregunta', pl: 'preguntas', re: /\bpreguntas?\b/, g: 'f'},
+  res: {lab: 'Respuesta', pl: 'respuestas', re: /\brespuestas?\b/, g: 'f'},
+  par: {lab: 'Par comparado', pl: 'pares', re: /\bpares\b|\bpor par\b/, g: 'm'},
+  tip: {lab: 'Tipo', pl: 'tipos', re: /\btipos? de precio\b|\bformatos?\b/, g: 'm'},
+  dia: {lab: 'Día', pl: 'días', re: /\b(por|cada) dias?\b|\bdiari[oa]\b|\bdia a dia\b/, g: 'm'},
+  sem: {lab: 'Semana', pl: 'semanas', re: /\b(por|cada) semanas?\b|\bsemanal(es)?\b|\bsemana a semana\b/, g: 'f'},
+  mes: {lab: 'Mes', pl: 'meses', re: /\b(por|cada) mes(es)?\b|\bmensual\b|\bmes a mes\b|\bevolucion\b|\bhistoric[oa]\b|\btendencia\b/, g: 'm'}
+};
+
+/* ---------------- carga de datos (lee los mismos bloques que usa el tablero) ---------------- */
+function leer(id) { try { const el = $(id); if (!el) return {}; return JSON.parse(el.textContent) || {}; } catch (e) { return {}; } }
+function tablaCols(o) { // devuelve f(row, nombreCampo) usando idx y la columna Marca del TOTAL
+  const ix = Object.assign({}, o.idx || {}); const cols = o.cols || [];
+  const im = cols.indexOf('Marca'); if (im >= 0 && ix.marca == null) ix.marca = im;
+  if (ix.marca != null && cols[ix.marca] !== 'Marca' && im >= 0) ix.mmarca = im;
+  return ix; }
+let SRC = null;
+function cargar() {
+  if (SRC) return SRC;
+  const S = {}; const N = v => v == null ? '' : String(v).replace(/\s+/g, ' ').trim();
+  // 1. Visitas mandatorias
+  const v = leer('visitas-json');
+  if (v.rows && v.rows.length) { const ix = tablaCols(v), dic = v.dic || null;
+    const val = (r, k) => { const i = ix[k]; if (i == null) return ''; const x = r[i]; return dic && dic[i] ? dic[i][x] : x; };
+    const mm = ix.mmarca != null ? ix.mmarca : (v.cols || []).indexOf('Marca');
+    const rows = v.rows.map(r => ({mes: N(val(r, 'mes')), cod: N(val(r, 'codigo')), pdv: N(val(r, 'pdv')), can: N(val(r, 'canal')), cad: N(val(r, 'cadena')),
+      tip: N(val(r, 'formato')), coo: N(val(r, 'coordinador')), ciu: N(val(r, 'ciudad')), dep: N(val(r, 'depto')), mer: N(val(r, 'mercaderista')),
+      mar: mm >= 0 ? N(r[mm]) : N(v.marca), obj: +val(r, 'obj') || 0, real: +val(r, 'real') || 0}));
+    S.vis = {k: 'vis', lab: 'Cumplimiento de visitas mandatorias', vista: 'visitas', rows, mensual: true, mesAct: v.mesActual || rows.reduce((a, r) => r.mes > a ? r.mes : a, '')}; }
+  // 2. Exhibiciones / registros fotográficos
+  const d = leer('data-json');
+  if (d.registros && d.registros.length) {
+    const rows = d.registros.map(r => ({f: ISO(r.fecha), cod: N(r.pdv), pdv: N(r.punto_venta) || N(r.pdv), can: N(r.canal), cad: N(r.cadena), coo: N(r.coordinador),
+      ciu: N(r.ciudad), mer: N(r.colaborador), ind: N(r.indicador), cat: N(r.categoria), tip: N(r.tipo_exhibicion), mar: N(r.marca || d.marca)}));
+    S.exh = {k: 'exh', lab: 'Exhibiciones y registros fotográficos', vista: 'resumen', rows, orden: d.indicadores_orden || []}; }
+  // 3. Agotados
+  const a = leer('agotados-json');
+  if (a.rows && a.rows.length) { const ix = tablaCols(a), g = (r, k) => ix[k] == null ? '' : N(r[ix[k]]);
+    S.ago = {k: 'ago', lab: 'Agotados', vista: 'agotados', rows: a.rows.map(r => ({f: ISO(g(r, 'fecha')), cod: g(r, 'codigo'), pdv: g(r, 'pdv'), can: g(r, 'canal'), cad: g(r, 'cadena'),
+      ciu: g(r, 'ciudad'), dep: g(r, 'depto'), mer: g(r, 'equipo'), pro: g(r, 'producto'), cat: g(r, 'categoria'), cau: g(r, 'problema'), mar: ix.marca != null ? g(r, 'marca') : N(a.marca),
+      ag: nrm(g(r, 'disponible')) === 'no' ? 1 : 0}))}; }
+  // 4. Facing
+  const fc = leer('facing-json');
+  if (fc.rows && fc.rows.length) { const ix = tablaCols(fc), g = (r, k) => ix[k] == null ? '' : r[ix[k]];
+    const mm = (fc.cols || []).lastIndexOf('Marca');
+    S.fac = {k: 'fac', lab: 'Facing', vista: 'facing', meta: +fc.meta || 40, rows: fc.rows.map(r => ({f: ISO(g(r, 'fecha')), cod: N(g(r, 'codigo')), pdv: N(g(r, 'pdv')), can: N(g(r, 'canal')),
+      cad: N(g(r, 'cadena')), ciu: N(g(r, 'ciudad')), dep: N(g(r, 'depto')), mer: N(g(r, 'equipo')), cat: N(g(r, 'categoria')), tip: N(g(r, 'tipo')),
+      mar: (fc.cols || []).length > (ix.universo || 0) + 1 && mm > (ix.universo || 0) ? N(r[mm]) : N(fc.marca), caras: +g(r, 'caras') || 0, prop: +g(r, 'propios') || 0}))}; }
+  // 5. Precios propios
+  const p = leer('precios-json');
+  if (p.rows && p.rows.length) { const ix = tablaCols(p), g = (r, k) => ix[k] == null ? '' : r[ix[k]], mm = (p.cols || []).lastIndexOf('Marca');
+    S.pre = {k: 'pre', lab: 'Precios', vista: 'precios', rows: p.rows.map(r => ({f: ISO(g(r, 'fecha')), cod: N(g(r, 'codigo')), pdv: N(g(r, 'pdv')), can: N(g(r, 'canal')),
+      cad: N(g(r, 'cadena')), ciu: N(g(r, 'ciudad')) || N(g(r, 'zona')), mer: N(g(r, 'equipo')), pro: N(g(r, 'producto')), cat: N(g(r, 'categoria')), tip: N(g(r, 'subtipo')),
+      mar: mm > 14 ? N(r[mm]) : N(p.marca), precio: +g(r, 'precio') || 0})).filter(r => r.precio > 0)}; }
+  // 6. Precios vs competencia
+  const c = leer('competencia-json');
+  if (c.rows && c.rows.length) { const ix = tablaCols(c), g = (r, k) => ix[k] == null ? '' : r[ix[k]], mm = (c.cols || []).lastIndexOf('Marca'), kilo = !!c.porKilo;
+    S.com = {k: 'com', lab: 'Precios vs competencia', vista: 'competencia', modo: c.modo || 'marca', kilo, rows: c.rows.map(r => ({f: ISO(g(r, 'fecha')), cod: N(g(r, 'codigo')),
+      pdv: N(g(r, 'pdv')), cad: N(g(r, 'cadena')), ciu: N(g(r, 'ciudad')), mer: N(g(r, 'equipo')), cat: N(g(r, 'categoria')), pro: N(g(r, 'producto')), par: N(g(r, 'par')),
+      mc: N(g(r, 'marca')), propio: nrm(g(r, 'tipo')) === 'propio', mar: mm > 17 ? N(r[mm]) : N(c.marca),
+      precio: kilo && +g(r, 'pkg') ? +g(r, 'pkg') : +g(r, 'precio') || 0})).filter(r => r.precio > 0)}; }
+  // 7. No implementacion (exhibiciones negociadas y descuentos POS)
+  const ni = leer('noimpl-json'); const nrows = [];
+  ['exh', 'pos'].forEach(t => { const o = ni[t]; if (!o || !o.rows || !o.cols) return; const cols = o.cols;
+    const ci = names => { for (const n of names) { const j = cols.indexOf(n); if (j >= 0) return j; } return -1; };
+    const iF = ci(['Fecha']), iC = ci(['Cadena']), iK = ci(['Código Local', 'Codigo Local', 'COD PLF', 'Código', 'Codigo']), iP = ci(['PDV', 'Punto de Venta']),
+      iE = ci(['EQUIPO', 'Usuario', 'Mercaderista']), iPr = ci(['Producto', 'Descripción']), iCa = ci(['Categoría', 'Categoria']),
+      iM = o.idx && o.idx.motivo != null ? o.idx.motivo : ci(['Problema', 'Motivo']), iMa = cols.lastIndexOf('Marca');
+    o.rows.forEach(r => nrows.push({f: ISO(r[iF]), cad: N(r[iC]), cod: N(r[iK]), pdv: N(r[iP]), mer: N(r[iE]), pro: N(r[iPr]), cat: N(r[iCa]), mot: N(r[iM]) || '(sin motivo)',
+      tip: t === 'exh' ? 'Exhibiciones negociadas' : 'Descuentos POS', sub: t, mar: iMa >= 0 ? N(r[iMa]) : ''})); });
+  if (nrows.length) S.noi = {k: 'noi', lab: 'No implementación', vista: 'noexh', rows: nrows};
+  // 8. Encuestas
+  const e = leer('encuestas-json');
+  if (e.rows && e.rows.length) { const ix = tablaCols(e), g = (r, k) => ix[k] == null ? '' : N(r[ix[k]]), mm = (e.cols || []).lastIndexOf('Marca');
+    S.enc = {k: 'enc', lab: 'Encuestas', vista: 'encuestas', rows: e.rows.map(r => ({f: ISO(g(r, 'fecha')), cod: g(r, 'codigo'), pdv: g(r, 'pdv'), cad: g(r, 'cadena'),
+      mer: g(r, 'usuario'), enc: g(r, 'encuesta'), pre: g(r, 'pregunta'), res: g(r, 'respuesta') || '(sin respuesta)', tip: g(r, 'tipo'), mar: mm > 12 ? N(r[mm]) : N(e.marca)}))}; }
+  Object.values(S).forEach(s => { s.dims = Object.keys(DIM).filter(k => k === 'dia' || k === 'sem' ? !s.mensual : k === 'mes' ? s.mensual : s.rows.some(r => r[k]));
+    if (!s.mensual) { const fs = [...new Set(s.rows.map(r => r.f).filter(Boolean))].sort(); s.fechas = fs; s.fmax = fs[fs.length - 1] || ''; s.fmin = fs[0] || ''; } });
+  // diccionario de entidades (nombres que aparecen en los datos)
+  const marcas = new Set(); Object.values(S).forEach(s => s.rows.forEach(r => r.mar && marcas.add(r.mar)));
+  const ENT = [], vistos = new Set(), marcaN = marcas.size === 1 ? nrm([...marcas][0]) : '#';
+  const add = (d, val, n) => { n = n || nrm(val); if (n.split(' ').every(w => STOP.has(w) || w === marcaN)) return; if (n.length < 3 || /^(sin|n a|na|otros?|ninguno|si|no)$/.test(n)) return; const k = d + '|' + n; if (vistos.has(k)) return; vistos.add(k); ENT.push({d, v: val, n}); };
+  Object.values(S).forEach(s => s.rows.forEach(r => {
+    ['can', 'cad', 'ciu', 'dep', 'coo', 'ind', 'cat', 'enc'].forEach(d => { if (r[d]) add(d, r[d]); });
+    if (marcas.size > 1 && r.mar) add('mar', r.mar);
+    if (r.cat && r.cat.indexOf(' - ') > 0) { const t = nrm(r.cat.split(' - ').slice(1).join(' ')); if (t.length >= 4 && !t.split(' ').every(w => STOP.has(w))) add('cat', r.cat, t); } }));
+  ENT.sort((a, b) => b.n.length - a.n.length);
+  const marcaUnica = marcas.size === 1 ? nrm([...marcas][0]) : '';
+  SRC = {S, ENT, marcas, marcaUnica, total: marcas.size > 1};
+  return SRC; }
+
+/* ---------------- interpretacion ---------------- */
+const STOP = new Set(('cual cuales cuanto cuanta cuantos cuantas como que quien quienes donde cuando es son fue fueron esta estan estuvo va van vamos llevamos lleva tiene tienen tuvo hay hubo ' +
+  'el la los las lo un una unos unas de del en con por para sin sobre entre vs versus contra frente y o al a se su sus mas menos mayor mayores menor menores mejor mejores peor peores top ranking ' +
+  'dame dime muestrame muestra quiero ver lista listado total totales general resumen informe dashboard tablero datos dato numero cifra cifras porcentaje nivel niveles ' +
+  'visita visitas mandatoria mandatorias cumplimiento cumplen cumple pendiente pendientes faltan falta realizadas hechas programadas objetivo meta metas ' +
+  'exhibicion exhibiciones registro registros foto fotos gestion gestiones implementada implementadas implementacion lineal lineales negociada negociadas gratis pos descuento descuentos promocion promociones lugar ' +
+  'agotado agotados agotamiento quiebre quiebres disponibilidad presencia stock facing caras participacion precio precios promedio moda maximo minimo valor cuesta vale caro cara caros caras barato barata baratos ' +
+  'competencia competidor competidores encuesta encuestas pregunta preguntas respuesta respuestas motivo motivos causa causas causal causales razon razones ' +
+  'producto productos referencia referencias punto puntos venta pdv pdvs tienda tiendas cadena cadenas canal canales ciudad ciudades departamento departamentos coordinador coordinadores ' +
+  'mercaderista mercaderistas colaborador colaboradores asesor asesores persona personas equipo equipos categoria categorias linea lineas marca marcas indicador indicadores tipo tipos formato formatos ' +
+  'dia dias semana semanas mes meses ano anos hoy ayer corte ultimo ultima ultimos ultimas anterior pasado pasada actual corrido acumulado mensual semanal diario evolucion tendencia historico ' +
+  'crece crecen crecio crecimiento cae caen cayo caida sube suben subio baja bajan bajo aumento mejoro empeoro variacion compara comparado comparacion comparar ' +
+  'nos me le les ha han este ese esa estos estas tan muy bien mal hasta desde cada todos todas todo toda alto alta altos altas bajos bajas mucho muchos poco pocos ' +
+  'dijeron dicen respondieron hicimos tengo tenemos hicieron hizo hace hacen esten estamos quedan queda llevan sea sean seria donde aun ahora mismo misma solo sola ademas tambien').split(' '));
+function periodo(t, s) {
+  const comp = s.k !== 'com' && /\b(vs|versus|frente a|compar\w*|contra|variacion|crec\w*|cae|caen|cayo|cayeron|caida|subio|subieron|aument\w*|disminu\w*|mejoro|mejoraron|empeor\w*)\b/.test(t);
+  let m;
+  if (s.mensual) { // visitas: por mes
+    const meses = [...new Set(s.rows.map(r => r.mes))].sort(), act = s.mesAct, pos = meses.indexOf(act), prevM = k => meses[meses.indexOf(k) - 1];
+    const res = (ks, lab, pk, plab) => ({ks, lab, prev: pk, prevLab: plab, test: r => ks.includes(r.mes), ptest: pk ? r => pk.includes(r.mes) : null});
+    if ((m = t.match(/ultim[oa]s? (\d+|[a-z]+) mes(es)?/))) { const n = Math.max(1, Math.min(12, +m[1] || QN[m[1]] || 3)); const ks = meses.slice(Math.max(0, pos - n + 1), pos + 1);
+      return res(ks, 'los últimos ' + n + ' meses (' + mesLab(ks[0]) + ' a ' + mesLab(ks[ks.length - 1]) + ')', null, ''); }
+    if (/\b(mes pasado|mes anterior)\b/.test(t) && !comp) { const k = prevM(act); if (k) return res([k], mesLab(k), prevM(k) ? [prevM(k)] : null, prevM(k) ? mesLab(prevM(k)) : ''); }
+    const mi = MESES.findIndex(x => new RegExp('\\b' + x + '\\b').test(t));
+    if (mi >= 0) { const yy = (t.match(/\b(20\d\d)\b/) || [])[1]; let k = meses.filter(x => +x.slice(5) === mi + 1 && (!yy || x.startsWith(yy))).pop();
+      if (k) return res([k], mesLab(k), prevM(k) ? [prevM(k)] : null, prevM(k) ? mesLab(prevM(k)) : '');
+      return {vacio: 'No hay visitas mandatorias de ' + MESES[mi] + (yy ? ' ' + yy : '') + ' en este informe (meses disponibles: ' + meses.map(mesLab).join(', ') + ').'}; }
+    if (/\b(ano|acumulad\w*|en lo corrido|historic\w*)\b/.test(t)) { const yy = act.slice(0, 4), ks = meses.filter(x => x.startsWith(yy) && x <= act);
+      return res(ks, 'el acumulado ' + yy + ' (' + mesLab(ks[0]) + ' a ' + mesLab(act) + ')', null, ''); }
+    return res([act], mesLab(act) + ' (mes vigente)', prevM(act) ? [prevM(act)] : null, prevM(act) ? mesLab(prevM(act)) : ''); }
+  // fuentes diarias
+  const fx = s.fmax, fs = s.fechas; if (!fx) return {lab: 'todo el periodo', test: () => true};
+  const rango = (a, b) => (a === b ? 'el ' + dmy(a) : 'del ' + dmy(a) + ' al ' + dmy(b));
+  const rng = (a, b, lab, pa, pb, plab) => ({lab: lab + ' (' + rango(a, b) + ')', test: r => r.f >= a && r.f <= b, prevLab: pa ? plab + ' (' + rango(pa, pb) + ')' : '', ptest: pa ? r => r.f >= pa && r.f <= pb : null});
+  const prevDia = f => fs.filter(x => x < f).pop();
+  if (/\b(ayer|hoy|ultimo dia|dia de corte|al corte|ultima fecha|ultimo corte)\b/.test(t)) { const p = prevDia(fx); return rng(fx, fx, 'el último día con datos', p, p, 'el día anterior con datos'); }
+  if ((m = t.match(/ultim[oa]s? (\d+|[a-z]+) dias?/))) { const n = Math.max(1, Math.min(60, +m[1] || QN[m[1]] || 7)), a = addD(fx, -(n - 1));
+    return rng(a, fx, 'los últimos ' + n + ' días', addD(a, -n), addD(a, -1), 'los ' + n + ' días anteriores'); }
+  if ((m = t.match(/\bsemana (\d{1,2})\b/))) { const w = +m[1], ds = fs.filter(f => semISO(f) === w), dp = fs.filter(f => semISO(f) === w - 1);
+    if (!ds.length) return {vacio: 'No hay datos de la semana ' + w + ' en este informe (semanas disponibles: ' + [...new Set(fs.map(semISO))].join(', ') + ').'};
+    return rng(ds[0], ds[ds.length - 1], 'la semana ' + w, dp[0], dp[dp.length - 1], 'la semana ' + (w - 1)); }
+  const wAct = semISO(fx);
+  if (/\b(esta semana|ultima semana|semana actual|semana de corte)\b/.test(t) || (comp && !/\b(mes|dia|dias)\b/.test(t) && !/\bdel? \d{1,2}\b/.test(t))) {
+    const ds = fs.filter(f => semISO(f) === wAct), dp = fs.filter(f => semISO(f) === wAct - 1);
+    return rng(ds[0], ds[ds.length - 1], 'la semana ' + wAct + (comp && !/semana/.test(t) ? ' (semana de corte)' : ''), dp[0], dp[dp.length - 1], 'la semana ' + (wAct - 1)); }
+  if (/\b(semana pasada|semana anterior)\b/.test(t)) { const ds = fs.filter(f => semISO(f) === wAct - 1), dp = fs.filter(f => semISO(f) === wAct - 2);
+    if (ds.length) return rng(ds[0], ds[ds.length - 1], 'la semana ' + (wAct - 1), dp[0], dp[dp.length - 1], 'la semana ' + (wAct - 2)); }
+  const ym = fx.slice(0, 7);
+  if ((m = t.match(/\b(?:del|desde el|entre el) (\d{1,2}) (?:al|hasta el|y el) (\d{1,2})\b/))) { const a = ym + '-' + m[1].padStart(2, '0'), b = ym + '-' + m[2].padStart(2, '0');
+    return rng(a, b, 'el rango pedido', null, null, ''); }
+  if ((m = t.match(/\b(\d{1,2})(?: de ([a-z]+)|\/(\d{1,2}))\b/))) { const mi = m[2] ? MESES.indexOf(m[2]) : +m[3] - 1;
+    if (mi >= 0 && +m[1] <= 31) { const f = fx.slice(0, 4) + '-' + String(mi + 1).padStart(2, '0') + '-' + m[1].padStart(2, '0'); const p = prevDia(f);
+      return rng(f, f, 'el día pedido', p, p, 'el día anterior con datos'); } }
+  const mi = MESES.findIndex(x => new RegExp('\\b' + x + '\\b').test(t));
+  if (mi >= 0 && String(mi + 1).padStart(2, '0') !== fx.slice(5, 7)) return {vacio: 'Este informe tiene datos de ' + MESES[+fx.slice(5, 7) - 1] + ' ' + fx.slice(0, 4) + ' (' + rango(s.fmin, fx) + '); no tiene datos de ' + MESES[mi] + '.'};
+  return {lab: 'el mes en curso (' + rango(s.fmin, fx) + ')', test: () => true, prevLab: '', ptest: null}; }
+
+function elegirFuente(t, S, dimsP) {
+  const reglas = [
+    ['com', /\b(competencia|competidor\w*|mas car[oa]s? que|mas barat[oa]s? que|vs competencia|indice de precio)\b/],
+    ['fac', /\b(facing|caras|participacion en (gondola|anaquel|lineal)|share)\b/],
+    ['ago', /\b(agotad\w*|agotamiento|quiebres?|disponibilidad|presencia|sin stock)\b/],
+    ['noi', /\b(no implement\w*|no (se )?implement\w*|no (la |lo )?(quiere|quisieron|dejaron|permit\w*)|rechaz\w*|motivos?|razon(es)?|por que no)\b/],
+    ['pre', /\b(precios?|cuesta|cuestan|vale|valen|moda|car[oa]s?|barat[oa]s?)\b/],
+    ['enc', /\b(encuestas?|preguntas?|respuestas?|respondi\w*|contest\w*)\b/],
+    ['vis', /\b(visitas?|mandatori\w*|cumplimiento|pendientes?|visitad\w*|programad\w*)\b/],
+    ['exh', /\b(exhibicion\w*|registros?|fotos?|lineal(es)?|negociad\w*|gratis|pos|descuentos?|promocion\w*|lugar\w*|gestion\w*|implementad\w*|foto categoria)\b/]];
+  for (const [k, re] of reglas) if (re.test(t)) return {k, expl: true, ok: !!S[k]};
+  for (const d of dimsP) { if (S.vis && S.vis.dims.includes(d) && ['coo', 'mer', 'can', 'cad', 'ciu', 'pdv', 'mar', 'dep', 'mes'].includes(d)) return {k: 'vis', expl: false, ok: true};
+    for (const k of ['exh', 'ago', 'pre', 'fac', 'enc', 'noi', 'com']) if (S[k] && S[k].dims.includes(d)) return {k, expl: false, ok: true}; }
+  if (S.exh) return {k: 'exh', expl: false, ok: true};
+  const k = Object.keys(S)[0]; return {k, expl: false, ok: !!k}; }
+
+/* ---------------- metricas por fuente ---------------- */
+const moda = arr => { const c = new Map(); let best = null, bn = 0; arr.forEach(x => c.set(x, (c.get(x) || 0) + 1));
+  c.forEach((n, x) => { if (n > bn || (n === bn && x > best)) { best = x; bn = n; } }); return best; };
+function agregar(s, rows) {
+  const k = s.k;
+  if (k === 'vis') { let o = 0, r = 0, p = 0; const pdv = new Set(), full = new Map(); rows.forEach(x => { o += x.obj; r += x.real; p += Math.max(x.obj - x.real, 0); pdv.add(x.cod);
+      const a = full.get(x.cod) || [0, 0]; a[0] += x.obj; a[1] += x.real; full.set(x.cod, a); });
+    let c100 = 0; full.forEach(a => { if (a[0] > 0 && a[1] >= a[0]) c100++; });
+    return {obj: o, real: r, pend: p, pct: o ? r / o * 100 : null, n: rows.length, pdv: pdv.size, c100}; }
+  if (k === 'exh') { const pdv = new Set(); rows.forEach(x => pdv.add(x.cod)); return {n: rows.length, pdv: pdv.size}; }
+  if (k === 'ago') { let a = 0; const pdv = new Set(); rows.forEach(x => { a += x.ag; pdv.add(x.cod); }); return {n: rows.length, a, pct: rows.length ? a / rows.length * 100 : null, pdv: pdv.size}; }
+  if (k === 'fac') { let c = 0, p = 0; rows.forEach(x => { c += x.caras; p += x.prop; }); const pct = c ? p / c * 100 : null; return {n: rows.length, caras: c, prop: p, pct, cumpl: pct == null ? null : pct / s.meta * 100}; }
+  if (k === 'pre') { const v = rows.map(x => x.precio); if (!v.length) return {n: 0}; let sm = 0, mx = -Infinity, mn = Infinity; v.forEach(x => { sm += x; if (x > mx) mx = x; if (x < mn) mn = x; });
+    return {n: v.length, prom: sm / v.length, moda: moda(v), max: mx, min: mn}; }
+  if (k === 'com') { let sp = 0, np = 0, sc = 0, nc = 0; rows.forEach(x => { if (x.propio) { sp += x.precio; np++; } else { sc += x.precio; nc++; } });
+    const pp = np ? sp / np : null, pc = nc ? sc / nc : null; return {n: rows.length, np, nc, pp, pc, dif: pp != null && pc ? (pp / pc - 1) * 100 : null}; }
+  if (k === 'noi') { const pdv = new Set(); rows.forEach(x => pdv.add(x.cod)); return {n: rows.length, pdv: pdv.size}; }
+  if (k === 'enc') { const e = new Set(), pdv = new Set(); rows.forEach(x => { e.add(x.enc); pdv.add(x.cod); }); return {n: rows.length, encs: e.size, pdv: pdv.size}; }
+  return {n: rows.length}; }
+// medida principal segun la pregunta: [campo, etiqueta, formato, mayorEsMejor]
+function medida(s, t) {
+  const k = s.k;
+  if (k === 'vis') { if (/\bpendient\w*|\bfalta\w*/.test(t)) return ['pend', 'Visitas pendientes', fN, false];
+    if (/\bmandatori\w*|programad\w*/.test(t) && !/cumplimiento|%|porcentaje/.test(t)) return ['obj', 'Mandatorias', fN, true];
+    if (/\b(cuantas visitas|visitas (hechas|realizadas))\b/.test(t)) return ['real', 'Visitas realizadas', fN, true];
+    return ['pct', '% Cumplimiento', fP, true]; }
+  if (k === 'exh') return /\b(cuantos (pdv|puntos)|cobertura|pdv cubiertos|puntos cubiertos)\b/.test(t) ? ['pdv', 'PDV con registro', fN, true] : ['n', 'Registros', fN, true];
+  if (k === 'ago') return /\b(cuantos|cantidad|numero de) agotad/.test(t) ? ['a', 'Agotados', fN, false] : ['pct', '% Agotado', fP, false];
+  if (k === 'fac') return /\bcumplimiento|\bmeta\b/.test(t) ? ['cumpl', '% Cumplimiento facing', fP, true] : ['pct', '% Facing', fP, true];
+  if (k === 'pre') { if (/\bmoda|mas comun|frecuente\b/.test(t)) return ['moda', 'Precio moda', f$, null];
+    if (/\bmaxim\w*|mas alto\b/.test(t)) return ['max', 'Precio máximo', f$, null]; if (/\bminim\w*|mas bajo\b/.test(t)) return ['min', 'Precio mínimo', f$, null];
+    return ['prom', 'Precio promedio', f$, null]; }
+  if (k === 'com') return ['dif', 'Diferencia vs competencia', fV, null];
+  if (k === 'noi') return ['n', 'Casos', fN, false];
+  if (k === 'enc') return /\bcuantas encuestas|encuestas diferentes|tipos de encuesta\b/.test(t) && !/\bpor encuesta\b/.test(t) ? ['encs', 'Encuestas diferentes', fN, true] : ['n', 'Respuestas', fN, true];
+  return ['n', 'Registros', fN, true]; }
+function columnas(s) {
+  const k = s.k;
+  if (k === 'vis') return [['obj', 'Mandatorias', fN], ['real', 'Visitas', fN], ['pct', '% Cumpl.', fP], ['pend', 'Pendientes', fN]];
+  if (k === 'exh') return [['n', 'Registros', fN], ['pdv', 'PDV', fN]];
+  if (k === 'ago') return [['n', 'Chequeos', fN], ['a', 'Agotados', fN], ['pct', '% Agotado', fP]];
+  if (k === 'fac') return [['caras', 'Caras', fN], ['prop', 'Propias', fN], ['pct', '% Facing', fP], ['cumpl', '% Cumpl.', fP]];
+  if (k === 'pre') return [['n', 'Tomas', fN], ['prom', 'Promedio', f$], ['moda', 'Moda', f$], ['max', 'Máx', f$], ['min', 'Mín', f$]];
+  if (k === 'com') return [['pp', 'Prom. propio', f$], ['pc', 'Prom. competencia', f$], ['dif', 'Dif. %', fV]];
+  if (k === 'noi') return [['n', 'Casos', fN], ['pdv', 'PDV', fN]];
+  if (k === 'enc') return [['n', 'Respuestas', fN], ['encs', 'Encuestas', fN], ['pdv', 'PDV', fN]];
+  return [['n', 'Registros', fN]]; }
+const esPct = c => c === 'pct' || c === 'cumpl' || c === 'dif';
+
+function frase(s, a, c) { // resumen en una frase
+  const k = s.k;
+  if (k === 'vis') return `<b>${fP(a.pct)}</b> de cumplimiento: <b>${fN(a.real)}</b> visitas de <b>${fN(a.obj)}</b> mandatorias, <b>${fN(a.pend)}</b> pendientes en ${fN(a.pdv)} PDV (${fN(a.c100)} PDV al 100 %).`;
+  if (k === 'exh') return `<b>${fN(a.n)}</b> registros en <b>${fN(a.pdv)}</b> puntos de venta.`;
+  if (k === 'ago') return `<b>${fP(a.pct)}</b> de agotado: <b>${fN(a.a)}</b> productos agotados en ${fN(a.n)} chequeos (${fN(a.pdv)} PDV).`;
+  if (k === 'fac') return `<b>${fP(a.pct)}</b> de facing (${fN(a.prop)} caras propias de ${fN(a.caras)}), cumplimiento <b>${fP(a.cumpl)}</b> frente a la meta de ${fP(s.meta)}.`;
+  if (k === 'pre') return a.n ? `Precio promedio <b>${f$(a.prom)}</b> · moda <b>${f$(a.moda)}</b> · máximo ${f$(a.max)} · mínimo ${f$(a.min)} (${fN(a.n)} tomas).` : 'Sin tomas de precio.';
+  if (k === 'com') return a.dif == null ? `Hay ${fN(a.np)} tomas propias y ${fN(a.nc)} de competencia; no alcanza para comparar.` :
+    `El precio promedio propio (<b>${f$(a.pp)}</b>) está <b>${fP(Math.abs(a.dif))}</b> ${a.dif >= 0 ? 'por encima' : 'por debajo'} del de la competencia (<b>${f$(a.pc)}</b>)${s.kilo ? ' · precio por kilo' : ''}.`;
+  if (k === 'noi') return `<b>${fN(a.n)}</b> casos de no implementación en <b>${fN(a.pdv)}</b> puntos de venta.`;
+  if (k === 'enc') return `<b>${fN(a.n)}</b> respuestas de <b>${fN(a.encs)}</b> encuestas en ${fN(a.pdv)} puntos de venta.`;
+  return fN(a.n) + ' registros.'; }
+function variacion(c, a, b) { if (a == null || b == null) return null; return esPct(c) ? a - b : (b ? (a / b - 1) * 100 : null); }
+const fVar = (c, v) => v == null ? '—' : (esPct(c) ? fPP(v) : fV(v));
+
+/* ---------------- responder ---------------- */
+function responder(q) {
+  const D = cargar(), S = D.S;
+  if (!Object.keys(S).length) return '<p>Este informe no tiene datos cargados para consultar.</p>';
+  let t = ' ' + nrm(q) + ' ';
+  if (/\b(donde (debo|debemos|hay que|tengo que) (actuar|enfocar\w*|atacar|poner)|que (debo|debemos|hay que) (hacer|atacar|revisar|priorizar)|alertas?|prioridad(es)?|plan de accion|que esta mal|que atender)\b/.test(t)) return actuarHoy();
+  if (/^\s*(ayuda|que puedo preguntar|que preguntas|como funciona|ejemplos?)\s*$/.test(t)) return ayuda();
+  if (/^\s*(resumen( general)?|como vamos|como va todo|estado general|como esta todo|como va el informe|indicadores|kpis?|resultados( generales)?)\s*$/.test(t)) return resumenGeneral();
+  if (D.marcaUnica) t = t.replace(new RegExp('\\b' + D.marcaUnica.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g'), ' ');
+  // indicadores de exhibicion por sinonimo
+  const ent = {}; const entLab = [];
+  const setE = (d, v) => { (ent[d] = ent[d] || new Set()).add(v); };
+  if (S.exh) { const ord = S.exh.orden.length ? S.exh.orden : [...new Set(S.exh.rows.map(r => r.ind))];
+    const sin = [[/\blineal(es)?\b/, 'LINEAL'], [/\bnegociad[oa]s?\b/, 'NEGOCIAD'], [/\bgratis\b/, 'GRATIS'], [/\b(pos|descuentos?|promocion(es)?)\b/, 'POS'], [/\bfoto(s)? (de )?categorias?\b/, 'FOTO CATEGORIA'], [/\blugar(es)? de exhibicion\b/, 'LUGAR']];
+    const noiQ = /\bno implement|motivo|razon|por que no|precio/.test(t);
+    if (!noiQ) sin.forEach(([re, w]) => { if (re.test(t)) { const v = ord.find(x => x.toUpperCase().includes(w)); if (v) { setE('ind', v); t = t.replace(re, ' exhibicion '); } } }); }
+  let per0 = t;
+  const perFrase = x => (x.match(PER_RE) || [''])[0].trim();
+  // entidades por nombre
+  D.ENT.forEach(e => { const re = new RegExp('\\b' + e.n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b'); if (re.test(t)) { setE(e.d, e.v); t = t.replace(re, ' '); } });
+  // memoria de contexto: "¿y en agotados?" sigue hablando de lo mismo
+  let heredo = false;
+  if (!Object.keys(ent).length && ULT && /^\s*(y|e|ahora|tambien|pero|que tal|igual|y si)\b/.test(per0)) {
+    Object.keys(ULT.ent).forEach(d => { ent[d] = new Set(ULT.ent[d]); }); heredo = true;
+    if (!perFrase(per0) && ULT.perTxt) { per0 += ' ' + ULT.perTxt + ' '; t += ' ' + ULT.perTxt + ' '; } }
+  // dimension pedida (agrupar por)
+  const dimsP = Object.keys(DIM).map(d => ({d, p: t.search(DIM[d].re)})).filter(o => o.p >= 0).sort((a, b) => a.p - b.p).map(o => o.d);
+  let fu = elegirFuente(per0, S, dimsP);
+  if (!fu.expl && !Object.keys(ent).length) { // la pregunta solo nombra un producto, PDV o persona: buscar el indicador que lo tiene
+    const ws = t.split(' ').filter(w => w.length >= 4 && !STOP.has(w) && !MESES.includes(w) && !/^\d+$/.test(w));
+    if (ws.length) { let best = null, bn = 0;
+      for (const k of ['vis', 'exh', 'ago', 'pre', 'fac', 'enc', 'noi', 'com']) { const sk = S[k]; if (!sk) continue;
+        const c = ws.filter(w => sk.rows.some(r => (r.pro && nrm(r.pro).includes(w)) || (r.pdv && nrm(r.pdv).includes(w)) || (r.mer && nrm(r.mer).includes(w)))).length;
+        if (c > bn) { bn = c; best = k; } }
+      if (best && best !== fu.k && (!dimsP.length || S[best].dims.includes(dimsP[0]))) fu = {k: best, expl: false, ok: true}; } }
+  if (!fu.ok) { const nom = {com: 'precios vs competencia', fac: 'facing', ago: 'agotados', noi: 'no implementación', pre: 'precios', enc: 'encuestas', vis: 'visitas mandatorias', exh: 'exhibiciones'}[fu.k];
+    return `<p>Este informe no tiene datos de <b>${nom}</b> en el periodo publicado.</p><p>Sí tiene: ${Object.values(S).map(s => s.lab).join(' · ')}.</p>`; }
+  if (/\b(vamos a cumplir|cumpliremos|proyecci\w*|al cierre|cierre (del|de) mes|final del mes|fin de mes|alcanza\w*|llegamos|vamos a llegar)\b/.test(per0) && S.vis) return proyeccion(ent, dimsP);
+  const s = S[fu.k];
+  // si es fuente de no implementacion, separar exh/pos
+  let subNoi = null; if (s.k === 'noi') { if (/\b(pos|descuentos?|promocion\w*)\b/.test(per0)) subNoi = 'pos'; else if (/\b(exhibicion\w*|negociad\w*)\b/.test(per0)) subNoi = 'exh'; }
+  const per = periodo(per0, s); if (per.vacio) return `<p>${esc(per.vacio)}</p>`;
+  t = t.replace(/ultim[oa]s? (\d+|[a-z]+) (dias?|semanas?|mes(es)?)|semana \d{1,2}|\b\d{1,2} de [a-z]+|\b\d{1,2}\/\d{1,2}(\/\d{2,4})?|\b20\d\d\b/g, ' ');
+  // palabras libres -> producto, punto de venta, mercaderista, coordinador, encuesta o pregunta
+  const libres = t.split(' ').filter(w => w.length >= 4 && !STOP.has(w) && !MESES.includes(w) && !(w in QN) && !/^\d+$/.test(w));
+  const noRec = []; const libreSets = {};
+  const campos = ['pro', 'pdv', 'mer', 'coo', 'enc', 'pre'].filter(d => s.rows.some(r => r[d]));
+  const cacheN = {}; const nv = (d, v) => { const k = d + '|' + v; return cacheN[k] || (cacheN[k] = nrm(v)); };
+  libres.forEach(w => { for (const d of campos) { const vals = new Set(); s.rows.forEach(r => { if (r[d] && nv(d, r[d]).includes(w)) vals.add(r[d]); });
+      if (vals.size) { libreSets[d] = libreSets[d] ? new Set([...vals].filter(x => libreSets[d].has(x))) : vals; return; } } noRec.push(w); });
+  Object.keys(libreSets).forEach(d => { if (!libreSets[d].size) return; ent[d] = libreSets[d]; });
+  const libresOk = libres.filter(w => !noRec.includes(w));
+  if (!fu.expl && !dimsP.length && !Object.keys(ent).length && noRec.length && !/\b(ayer|hoy|semana|dias?|mes|total|resumen|general|cuant\w*|como va\w*)\b/.test(per0))
+    return '<p>No entendí la pregunta. Así me puedes preguntar:</p>' + ayuda();
+  Object.keys(ent).forEach(d => { const vs = [...ent[d]]; entLab.push(DIM[d].lab + ': ' + (vs.length > 3 ? vs.slice(0, 3).join(', ') + ' y ' + (vs.length - 3) + ' más' : vs.join(', '))); });
+  // filtro de filas
+  const ok = r => { for (const d in ent) { if (!s.dims.includes(d)) continue; if (!ent[d].has(r[d])) return false; } return !subNoi || r.sub === subNoi; };
+  const fueraDim = Object.keys(ent).filter(d => !s.dims.includes(d));
+  const rows = s.rows.filter(r => ok(r));
+  const rp = rows.filter(per.test), rprev = per.ptest ? rows.filter(per.ptest) : null;
+  // dimension de agrupacion valida para la fuente
+  let dim = dimsP.find(d => s.dims.includes(d) && !(ent[d] && ent[d].size === 1 && !/\b(cada|por)\b/.test(per0)));
+  if (!dim && fu.k === 'noi' && /\b(motivos?|causas?|razon\w*|por que)\b/.test(per0)) dim = 'mot';
+  if (!dim && fu.k === 'ago' && /\b(causal\w*|causas?|problemas?)\b/.test(per0)) dim = 'cau';
+  if (!dim && fu.k === 'com' && /\b(pares?|productos?)\b/.test(per0)) dim = s.modo === 'par' ? 'par' : 'pro';
+  if (!dim && fu.k === 'enc' && ent.pre && /\b(respond\w*|respuesta|dijeron|contest\w*)\b/.test(per0)) dim = 'res';
+  if (dim === 'pro' && fu.k === 'com' && s.modo === 'par') dim = 'par';
+  const comp = /\b(vs|versus|frente a|compar\w*|contra|variacion|crec\w*|cae|caen|cayo|cayeron|caida|subio|subieron|aument\w*|disminu\w*|mejoro|mejoraron|empeor\w*)\b/.test(per0) && !!rprev && fu.k !== 'com';
+  const down = /\b(cae|caen|cayo|cayeron|caida|disminu\w*|empeor\w*|bajaron|bajo mas)\b/.test(per0), up = /\b(crec\w*|subio|subieron|aument\w*|mejoro|mejoraron)\b/.test(per0);
+  let [mc, ml, mf, mejor] = medida(s, per0);
+  if (dim === 'cau') { [mc, ml, mf, mejor] = ['a', 'Agotados', fN, false]; }
+  const ctx = `Fuente: ${s.lab}${subNoi ? ' (' + (subNoi === 'pos' ? 'descuentos POS' : 'exhibiciones negociadas') + ')' : ''} · Periodo: ${per.lab}${comp ? ' · Comparado con ' + per.prevLab : ''}${entLab.length ? ' · Filtro: ' + entLab.join(' · ') : ''}`;
+  const avisos = (noRec.length ? `<div class="aq-ctx">No reconocí: "${esc(noRec.join(', '))}".</div>` : '') +
+    (fueraDim.length ? `<div class="aq-ctx">El indicador de ${esc(s.lab.toLowerCase())} no se puede filtrar por ${fueraDim.map(d => DIM[d].lab.toLowerCase()).join(', ')}; ese filtro no se aplicó.</div>` : '');
+  const vista = s.k === 'noi' && subNoi === 'pos' ? 'nopos' : s.vista;
+  const ir = vista ? `<button class="aq-ir" type="button" data-aq-vista="${vista}">Ver el capítulo ${esc(s.lab)} en el tablero →</button>` : '';
+  if (!rp.length) return `<p>No hay datos de <b>${esc(s.lab.toLowerCase())}</b>${entLab.length ? ' para ' + esc(entLab.join(' · ')) : ''} en ${esc(per.lab)}.</p><div class="aq-ctx">${esc(ctx)}</div>${avisos}`;
+  const cols = columnas(s);
+  // ---- sin dimension: respuesta de una cifra
+  const dimNo = dimsP.filter(d => !s.dims.includes(d) && !['dia', 'sem', 'mes'].includes(d));
+  if (!dim && dimNo.length) { const disp = s.dims.filter(d => !['dia', 'sem', 'mes', 'tip', 'res', 'pre', 'mar'].includes(d) || (d === 'mar' && D.total)).map(d => DIM[d].pl);
+    return `<p>El indicador de <b>${esc(s.lab.toLowerCase())}</b> de este informe no trae ${dimNo.map(d => DIM[d].lab.toLowerCase()).join(' ni ')}, así que no puedo abrirlo por ese campo.</p><p>Total: ${frase(s, agregar(s, rp))}</p><p>Lo puedo abrir por: ${esc(disp.join(', '))}.</p><div class="aq-ctx">${esc(ctx)}</div>${avisos}`; }
+  const perTxt = perFrase(per0);
+  const entTxt = Object.keys(ent).filter(d => !libreSets[d] && !(heredo && ULT.libres.length && ['pro', 'pdv', 'mer', 'coo', 'enc', 'pre'].includes(d))).map(d => [...ent[d]].slice(0, 2).join(' ')).concat(heredo ? ULT.libres : libresOk).join(' ').toLowerCase();
+  ULT = {ent: Object.fromEntries(Object.entries(ent).map(([d, v]) => [d, [...v]])), perTxt, libres: heredo ? ULT.libres : libresOk, entTxt, k: s.k};
+  if (!dim && !fu.expl && !comp && Object.keys(ent).length) return ficha(ent, per0, entTxt);
+  if (!dim) { const a = agregar(s, rp); let h = `<p>${entLab.length ? '<b>' + esc(Object.values(ent).map(x => [...x].slice(0, 3).join(', ')).join(' · ')) + '</b> — ' : ''}${frase(s, a)}</p>`;
+    if (comp) { const b = agregar(s, rprev); const v = variacion(mc, a[mc], b[mc]);
+      h += `<p>Frente a ${esc(per.prevLab)}: ${ml} ${mf(b[mc])} → <b>${mf(a[mc])}</b> (${fVar(mc, v)}).</p>`; }
+    return h + `<div class="aq-ctx">${esc(ctx)}</div>${avisos}` + acciones({s, ent, vista, texto: q + '\n' + h.replace(/<[^>]+>/g, '') + '\n' + ctx, tabla: null}) + seguimiento(s, null, entTxt, perTxt, comp); }
+  // ---- con dimension: ranking
+  const grp = new Map(); rp.forEach(r => { const k = r[dim] || '(sin dato)'; let a = grp.get(k); if (!a) grp.set(k, a = []); a.push(r); });
+  const ext = {pdv: 'cad', pro: 'cat'}[dim];
+  const extV = {}; if (ext) rp.forEach(r => { if (r[dim] && r[ext] && !extV[r[dim]]) extV[r[dim]] = r[ext]; });
+  let L = [...grp.entries()].map(([k, rs]) => ({k, a: agregar(s, rs)}));
+  if (comp) { const gp = new Map(); rprev.forEach(r => { const k = r[dim] || '(sin dato)'; let a = gp.get(k); if (!a) gp.set(k, a = []); a.push(r); });
+    L.forEach(o => { o.b = gp.has(o.k) ? agregar(s, gp.get(o.k)) : null; o.v = o.b ? variacion(mc, o.a[mc], o.b[mc]) : null; }); }
+  const tot = agregar(s, rp);
+  if (dim === 'cau') L = L.filter(o => o.a.a > 0);
+  const asc = /\b(menos|menor(es)?|minim[oa]s?|mas baj[oa]s?|bajo|baja|mas barat[oa]s?|ultimos? lugar\w*)\b/.test(per0);
+  const peor = /\bpeor(es)?\b/.test(per0), mejorQ = /\bmejor(es)?\b/.test(per0);
+  let orden, desc;
+  if (comp && (up || down)) { L = L.filter(o => o.v != null); L.sort((x, y) => down ? x.v - y.v : y.v - x.v); orden = down ? 'que más caen' : 'que más crecen'; }
+  else { let dsc = !asc; if (mejor != null && (peor || mejorQ)) dsc = mejorQ ? mejor : !mejor;
+    L = L.filter(o => o.a[mc] != null && !isNaN(o.a[mc]));
+    const vol = o => o.a.n || o.a.obj || o.a.caras || 0;
+    // en porcentajes, un grupo muy chico no debe encabezar el ranking si hay suficientes grupos con volumen
+    if (esPct(mc) && L.length > 15) { const vs = L.map(vol).sort((x, y) => x - y), umbral = Math.max(3, vs[Math.floor(vs.length * .25)]); const big = L.filter(o => vol(o) >= umbral); if (big.length >= 10) L = big; }
+    L.sort((x, y) => (dsc ? y.a[mc] - x.a[mc] : x.a[mc] - y.a[mc]) || vol(y) - vol(x));
+    orden = esPct(mc) || /^precio/i.test(ml) ? (dsc ? 'con mayor ' : 'con menor ') + ml.toLowerCase() : (dsc ? 'con más ' : 'con menos ') + ml.toLowerCase(); desc = dsc; }
+  let n = 10, m; if ((m = per0.match(/\btop (\d+)\b/)) || (m = per0.match(/\b(\d+) (primer\w*|ultim\w*|mejor\w*|peor\w*|productos?|puntos?|pdvs?|tiendas?|cadenas?|canales?|ciudades?|coordinador\w*|mercaderistas?|categorias?|marcas?|motivos?|referencias?)\b/))) n = Math.min(200, +m[1]);
+  else if ((m = per0.match(/\b(dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|quince|veinte) /))) n = QN[m[1]];
+  if (/\b(todos|todas|completo|completa|lista completa)\b/.test(per0)) n = 200;
+  const singular = /\b(cual es|quien es|que|cual) (el|la) \b|\b(que|cual|quien) (canal|cadena|ciudad|coordinador|coordinadora|mercaderista|punto|pdv|tienda|producto|referencia|categoria|marca|motivo|encuesta|causal|departamento)\b|\b(el|la) (canal|cadena|ciudad|coordinador|coordinadora|mercaderista|punto|pdv|tienda|producto|referencia|categoria|marca|motivo|encuesta|causal|departamento|dia|semana|mes)\b/.test(per0) && !/\b(los|las|cuales|quienes|top|ranking)\b/.test(per0);
+  if (dim === 'dia' || dim === 'sem' || dim === 'mes') { // series de tiempo en orden cronologico
+    const key = dim === 'mes' ? (r => r.mes) : dim === 'dia' ? (r => r.f) : (r => r.f ? 'Semana ' + String(semISO(r.f)).padStart(2, '0') : '');
+    const g2 = new Map(); rp.forEach(r => { const k = key(r); if (!k) return; let a = g2.get(k); if (!a) g2.set(k, a = []); a.push(r); });
+    L = [...g2.entries()].sort((a, b) => a[0] < b[0] ? -1 : 1).map(([k, rs]) => ({k: dim === 'mes' ? mesLab(k) : dim === 'dia' ? dmy(k) : k.replace(' 0', ' '), a: agregar(s, rs)}));
+    if (dim === 'mes' && !/\b(ano|acumulad|ultim)/.test(per0) && s.mensual) { const all = new Map(); rows.forEach(r => { let a = all.get(r.mes); if (!a) all.set(r.mes, a = []); a.push(r); });
+      L = [...all.entries()].sort((a, b) => a[0] < b[0] ? -1 : 1).map(([k, rs]) => ({k: mesLab(k), a: agregar(s, rs)})); }
+    orden = 'en el tiempo'; n = 200; }
+  const top = L.slice(0, singular ? Math.max(n, 5) : n);
+  if (!top.length) return `<p>No hay ${DIM[dim].pl} que cumplan la condición.</p><div class="aq-ctx">${esc(ctx)}</div>${avisos}`;
+  const nomK = o => o.k + (ext && extV[o.k] && !String(o.k).includes(extV[o.k]) ? ' · ' + extV[o.k] : '');
+  let cab;
+  if (orden === 'en el tiempo') cab = `${s.lab} por ${DIM[dim].lab.toLowerCase()} — ${esc(dim === 'mes' && L.length > 1 ? 'evolución de ' + L.length + ' meses' : per.lab)}:`;
+  else if (singular) { const o = top[0]; const art = DIM[dim].g === 'f' ? 'La' : 'El';
+    cab = `${art} ${DIM[dim].lab.toLowerCase()} ${orden.replace('con mayor', 'con mayor').replace('que más', 'que más')} en ${esc(per.lab)} es <b>${esc(nomK(o))}</b> con <b>${mf(o.a[mc])}</b>${comp && o.v != null ? ' (' + fVar(mc, o.v) + ' vs ' + esc(per.prevLab) + ')' : ''}.`; }
+  else cab = `${top.length === L.length && L.length <= n ? (DIM[dim].g === 'f' ? 'Estas son las' : 'Estos son los') : 'Top'} ${top.length} ${DIM[dim].pl} ${orden} en ${esc(per.lab)}${L.length > top.length ? ' (de ' + fN(L.length) + ')' : ''}:`;
+  const head = `<tr><th>#</th><th class="l">${DIM[dim].lab}</th>${cols.map(c => `<th>${c[1]}</th>`).join('')}${comp ? `<th>Anterior</th><th>Var.</th>` : ''}</tr>`;
+  const ojo = o => esPct(mc) && mejor != null && tot[mc] != null && o.a[mc] != null && (mejor ? o.a[mc] < tot[mc] : o.a[mc] > tot[mc]) && orden !== 'en el tiempo';
+  const fk = filtrableEn(s.k, dim) && orden !== 'en el tiempo';
+  const body = top.map((o, i) => `<tr${ojo(o) ? ' class="aq-ojo' + (fk ? ' aq-clic' : '') + '"' : fk ? ' class="aq-clic"' : ''}${fk ? ` data-aq-fd="${dim}" data-aq-fv="${esc(o.k)}" data-aq-fs="${s.k}" title="Clic para filtrar el tablero por este valor"` : ''}><td>${i + 1}</td><td class="l">${esc(nomK(o))}</td>${cols.map(c => `<td>${c[2](o.a[c[0]])}</td>`).join('')}${comp ? `<td>${o.b ? mf(o.b[mc]) : '—'}</td><td>${fVar(mc, o.v)}</td>` : ''}</tr>`).join('');
+  const totRow = `<tr class="aq-tot"><td></td><td class="l">TOTAL</td>${cols.map(c => `<td>${c[2](tot[c[0]])}</td>`).join('')}${comp ? (() => { const b = agregar(s, rprev); return `<td>${mf(b[mc])}</td><td>${fVar(mc, variacion(mc, tot[mc], b[mc]))}</td>`; })() : ''}</tr>`;
+  const serie = orden === 'en el tiempo';
+  const lec = lectura(s, L, top, tot, mc, ml, mf, mejor, comp, serie, dim, nomK, ojo);
+  const graf = grafica(top.map(o => ({l: nomK(o), v: o.a[mc]})), mf, serie, esPct(mc) && mejor != null ? tot[mc] : null);
+  const tabla = {head: ['#', DIM[dim].lab].concat(cols.map(c => c[1])).concat(comp ? ['Anterior', 'Var.'] : []),
+    rows: L.slice(0, 500).map((o, i) => [i + 1, nomK(o)].concat(cols.map(c => c[2](o.a[c[0]]))).concat(comp ? [o.b ? mf(o.b[mc]) : '', fVar(mc, o.v)] : []))};
+  const txt = q + '\n' + cab.replace(/<[^>]+>/g, '') + '\n' + top.slice(0, 10).map((o, i) => (i + 1) + '. ' + nomK(o) + ': ' + mf(o.a[mc]) + (comp && o.v != null ? ' (' + fVar(mc, o.v) + ')' : '')).join('\n') + '\nTotal: ' + mf(tot[mc]) + '\n' + ctx;
+  return `<p>${cab}</p>${lec}${graf}<div class="aq-tw"><table><thead>${head}</thead><tbody>${body}${totRow}</tbody></table></div><div class="aq-ctx">${esc(ctx)} · Total: ${frase(s, tot).replace(/<[^>]+>/g, '')}</div>${avisos}` + acciones({s, ent, vista, texto: txt, tabla}) + seguimiento(s, dim, entTxt, perTxt, comp); }
+
+function resumenGeneral() {
+  const S = cargar().S; const L = [];
+  Object.values(S).forEach(s => { const per = periodo('', s); const rp = s.rows.filter(per.test); if (!rp.length) return;
+    L.push(`<p><b>${esc(s.lab)}</b> — ${esc(per.lab)}: ${frase(s, agregar(s, rp))}</p>`); });
+  return '<p>Así va el informe:</p>' + L.join('') + '<div class="aq-ctx">Pregunta por cualquiera de estos indicadores para ver el detalle por cadena, ciudad, coordinador, mercaderista, punto de venta o producto.</div>'; }
+
+
+/* ===================== V2: lectura, grafica, acciones, seguimiento, fichas, proyeccion, donde actuar ===================== */
+let ULT = null; const RESP = {}; let nResp = 0;
+const PER_RE = /ultim[oa]s? (\d+|[a-z]+) (dias?|semanas?|mes(es)?)|semana \d{1,2}|\bayer\b|\bhoy\b|ultimo dia|esta semana|ultima semana|semana (pasada|anterior)|mes (pasado|anterior)|\bdel? \d{1,2} (al|hasta el|y el) \d{1,2}\b|\b\d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b|\b(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)( de 20\d\d)?\b|acumulad\w*/;
+const SRCW = {vis: 'cumplimiento de visitas', exh: 'registros', ago: 'agotados', fac: 'facing', pre: 'precio promedio', com: 'precio vs competencia', noi: 'motivos de no implementacion', enc: 'encuestas'};
+const DIMW = {cad: 'cadena', coo: 'coordinador', mer: 'mercaderista', ciu: 'ciudad', pdv: 'punto de venta', pro: 'producto', cat: 'categoria', mar: 'marca', mot: 'motivo', cau: 'causal', enc: 'encuesta', can: 'canal', dep: 'departamento', ind: 'indicador'};
+const FILTRABLE = {can: 1, cad: 1, coo: 1, ciu: 1, mer: 1, mar: 1, ind: 1, pdv: 1};
+const tit = x => String(x).toLowerCase().replace(/(^|\s)\S/g, y => y.toUpperCase());
+const chip = (t, q) => `<button type="button" data-aq-ej="${esc(q || t)}">${esc(t)}</button>`;
+
+function lectura(s, L, top, tot, mc, ml, mf, mejor, comp, serie, dim, nomK, ojo) {
+  if (!L.length) return '';
+  let x = '';
+  if (serie) { const v = L.filter(o => o.a[mc] != null); if (v.length < 2) return '';
+    const mx = v.reduce((a, b) => b.a[mc] > a.a[mc] ? b : a), mn = v.reduce((a, b) => b.a[mc] < a.a[mc] ? b : a), u = v[v.length - 1];
+    x = `Más alto: <b>${esc(mx.k)}</b> (${mf(mx.a[mc])}) · más bajo: <b>${esc(mn.k)}</b> (${mf(mn.a[mc])}) · último: <b>${esc(u.k)}</b> (${mf(u.a[mc])}).`; }
+  else if (comp) { const v = L.filter(o => o.v != null); if (!v.length) return '';
+    const c = v.reduce((a, b) => b.v < a.v ? b : a), sb = v.reduce((a, b) => b.v > a.v ? b : a);
+    x = `Mayor caída: <b>${esc(nomK(c))}</b> (${fVar(mc, c.v)}) · mayor alza: <b>${esc(nomK(sb))}</b> (${fVar(mc, sb.v)}).`; }
+  else if (esPct(mc) && mejor != null && tot[mc] != null) { const nb = L.filter(ojo).length;
+    x = `<b>${fN(nb)} de ${fN(L.length)}</b> ${DIM[dim].pl} están ${mejor ? 'por debajo' : 'por encima'} del total (${mf(tot[mc])})${nb ? '; van resaltados' : ''}.`; }
+  else if (['n', 'a', 'pend', 'obj', 'real', 'pdv', 'caras', 'prop'].includes(mc) && tot[mc] > 0 && L.length > 3) {
+    const t3 = L.slice(0, 3).reduce((a, o) => a + (o.a[mc] || 0), 0); x = `Los 3 primeros concentran el <b>${fP(t3 / tot[mc] * 100)}</b> del total de ${ml.toLowerCase()} (${mf(tot[mc])}).`; }
+  else if (mc === 'prom' && L.length > 1) { const o1 = L[0], o2 = L[L.length - 1]; x = `Rango: de ${mf(o2.a.prom)} (${esc(nomK(o2))}) a ${mf(o1.a.prom)} (${esc(nomK(o1))}).`; }
+  return x ? `<div class="aq-lec">💡 ${x}</div>` : ''; }
+
+function grafica(items, mf, serie, ref) {
+  items = items.filter(i => i.v != null && isFinite(i.v)); if (items.length < 2) return '';
+  const mx = Math.max(...items.map(i => i.v), ref || 0) || 1;
+  if (serie && items.length > 2) { const W = 480, H = 150, pl = 6, pb = 26, bw = (W - pl * 2) / items.length;
+    let g = items.map((it, i) => { const h = Math.max(1, it.v / mx * (H - pb - 18)), x = pl + i * bw;
+      return `<rect x="${x + bw * .15}" y="${H - pb - h}" width="${bw * .7}" height="${h}" rx="2" fill="${i === items.length - 1 ? '#1F4E78' : '#3BBFCF'}"><title>${esc(it.l)}: ${mf(it.v)}</title></rect>` +
+        (items.length <= 16 ? `<text x="${x + bw / 2}" y="${H - pb - h - 4}" text-anchor="middle">${esc(mf(it.v).replace(' %', '%').replace('$ ', ''))}</text>` : '') +
+        (items.length <= 16 || i % Math.ceil(items.length / 12) === 0 ? `<text x="${x + bw / 2}" y="${H - 8}" text-anchor="middle">${esc(String(it.l).slice(0, 8))}</text>` : ''); }).join('');
+    return `<svg class="aq-sv" viewBox="0 0 ${W} ${H}">${g}</svg>`; }
+  items = items.slice(0, 10); const W = 480, rh = 20, H = items.length * rh + 6, lx = 170, vw = 70, bwM = W - lx - vw;
+  let g = items.map((it, i) => { const w = Math.max(1, it.v / mx * bwM), y = 3 + i * rh, lab = String(it.l);
+    return `<text x="${lx - 6}" y="${y + 13}" text-anchor="end">${esc(lab.length > 27 ? lab.slice(0, 26) + '…' : lab)}</text><rect x="${lx}" y="${y + 3}" width="${w}" height="${rh - 7}" rx="3" fill="#3BBFCF"><title>${esc(lab)}: ${mf(it.v)}</title></rect><text x="${lx + w + 4}" y="${y + 13}">${esc(mf(it.v))}</text>`; }).join('');
+  if (ref != null) { const x = lx + ref / mx * bwM; g += `<line x1="${x}" x2="${x}" y1="0" y2="${H}" stroke="#1F4E78" stroke-dasharray="3 3"><title>Total: ${mf(ref)}</title></line>`; }
+  return `<svg class="aq-sv" viewBox="0 0 ${W} ${H}">${g}</svg>`; }
+
+function acciones(o) {
+  const id = 'r' + (++nResp); RESP[id] = o; const b = [];
+  if (puedeFiltrar(o.s.k) && Object.keys(o.ent).some(d => filtrableEn(o.s.k, d))) b.push(`<button type="button" data-aq-acc="filtro" data-id="${id}">🔎 Aplicar como filtro al tablero</button>`);
+  if (o.s.k === 'exh' && hayFotos()) b.push(`<button type="button" data-aq-acc="fotos" data-id="${id}">📷 Ver fotos</button>`);
+  if (o.tabla) b.push(`<button type="button" data-aq-acc="excel" data-id="${id}">⬇ Descargar Excel</button>`);
+  b.push(`<button type="button" data-aq-acc="wa" data-id="${id}">📋 Copiar para WhatsApp</button>`);
+  if (o.vista) b.push(`<button type="button" data-aq-vista="${o.vista}">↗ Ver capítulo</button>`);
+  return `<div class="aq-acc">${b.join('')}</div>`; }
+
+function seguimiento(s, dim, entTxt, perTxt, comp) {
+  const base = (SRCW[s.k] + ' ' + (entTxt || '') + ' ' + (perTxt || '')).replace(/\s+/g, ' ').trim(), ch = [];
+  const D = cargar();
+  ['cad', 'coo', 'mer', 'ciu', 'pro', 'cat', 'mot', 'cau', 'enc', 'pdv', 'can'].concat(D.total ? ['mar'] : []).filter(d => d !== dim && s.dims.includes(d) && !(ULT && ULT.ent[d] && ULT.ent[d].length === 1))
+    .sort((a, b) => (b === 'mar') - (a === 'mar')).slice(0, 3).forEach(d => ch.push(chip('Por ' + DIMW[d], base + ' por ' + DIMW[d])));
+  if (!comp && s.k !== 'com' && !s.mensual) ch.push(chip('Vs semana anterior', base + (dim ? ' por ' + DIMW[dim] : '') + ' vs semana anterior'));
+  if (!comp && s.mensual) ch.push(chip('Vs mes anterior', base + (dim ? ' por ' + DIMW[dim] : '') + ' vs mes anterior'));
+  if (dim !== 'mes' && dim !== 'dia') ch.push(chip(s.mensual ? 'Evolución por mes' : 'Evolución por día', base + (s.mensual ? ' por mes' : ' por dia')));
+  return ch.length ? `<div class="aq-seg">Seguir explorando:<div class="aq-ej">${ch.join('')}</div></div>` : ''; }
+
+function ficha(ent, per0, entTxt) {
+  const D = cargar(), S = D.S, nom = Object.values(ent).map(v => [...v].slice(0, 3).join(', ') + (v.size > 3 ? ' y ' + (v.size - 3) + ' más' : '')).join(' · ');
+  let h = `<p>Ficha de <b>${esc(nom)}</b>:</p>`, n = 0;
+  Object.values(S).forEach(s => { if (!Object.keys(ent).every(d => s.dims.includes(d))) return;
+    const per = periodo(per0, s); if (per.vacio) return;
+    const rp = s.rows.filter(r => per.test(r) && Object.keys(ent).every(d => ent[d].has(r[d]))); if (!rp.length) return; n++;
+    h += `<div class="aq-h3">${esc(s.lab)} <span style="font-weight:400;color:#6b7c8c">· ${esc(per.lab)}</span></div><p>${frase(s, agregar(s, rp))}</p>`; });
+  if (!n) return `<p>No encontré datos de <b>${esc(nom)}</b> en este informe.</p>`;
+  const ch = Object.values(S).filter(s => Object.keys(ent).every(d => s.dims.includes(d))).slice(0, 4)
+    .map(s => chip(s.lab + ' por ' + (s.k === 'vis' ? 'punto de venta' : s.dims.includes('pro') ? 'producto' : 'cadena'), SRCW[s.k] + ' ' + entTxt + ' por ' + (s.k === 'vis' ? 'punto de venta' : s.dims.includes('pro') ? 'producto' : 'cadena')));
+  return h + acciones({s: Object.values(S).find(s => Object.keys(ent).every(d => s.dims.includes(d))) || Object.values(S)[0], ent, vista: null, texto: 'Ficha de ' + nom + '\n' + h.replace(/<\/p>|<\/div>/g, '\n').replace(/<[^>]+>/g, ''), tabla: null}) +
+    `<div class="aq-seg">Ver detalle:<div class="aq-ej">${ch.join('')}</div></div>`; }
+
+function habiles(a, b) { let n = 0; for (let d = dt(a); d <= dt(b); d.setDate(d.getDate() + 1)) if (d.getDay() !== 0) n++; return n; }
+function proyeccion(ent, dimsP) {
+  const D = cargar(), s = D.S.vis, mes = s.mesAct, y = +mes.slice(0, 4), m = +mes.slice(5, 7);
+  const ini = mes + '-01', fin = isoD(new Date(y, m, 0, 12));
+  let corte = Object.values(D.S).map(x => x.fmax || '').filter(f => f.startsWith(mes)).sort().pop();
+  if (!corte) { const hoy = isoD(new Date()); corte = hoy < fin ? addD(hoy, -1) : fin; }
+  if (corte < ini) return '<p>El mes de visitas vigente aún no tiene días transcurridos para proyectar.</p>';
+  const ht = habiles(ini, corte), hm = habiles(ini, fin), hr = hm - ht;
+  const rows = s.rows.filter(r => r.mes === mes && Object.keys(ent).every(d => !s.dims.includes(d) || ent[d].has(r[d])));
+  if (!rows.length) return '<p>No hay visitas mandatorias con ese filtro en el mes vigente.</p>';
+  const calc = rs => { const a = agregar(s, rs), pr = ht ? a.real / ht * hm : a.real; return {a, pr, pct: a.obj ? pr / a.obj * 100 : null, falta: Math.max(a.obj - a.real, 0)}; };
+  const t = calc(rows), nom = Object.values(ent).map(v => [...v].join(', ')).join(' · ');
+  let h = `<p>${nom ? '<b>' + esc(nom) + '</b> — ' : ''}Al corte del <b>${dmy(corte)}</b> (${ht} de ${hm} días hábiles) van <b>${fN(t.a.real)}</b> de <b>${fN(t.a.obj)}</b> visitas mandatorias (${fP(t.a.pct)}).</p>
+    <p>Al ritmo actual el mes cerraría con unas <b>${fN(t.pr)}</b> visitas = <b>${fP(t.pct)}</b> de cumplimiento${t.pct >= 100 ? ' ✔' : ''}.</p>` +
+    (t.falta > 0 ? `<p>Para llegar al 100 % faltan <b>${fN(t.falta)}</b> visitas${hr > 0 ? ': unas <b>' + fN(Math.ceil(t.falta / hr)) + '</b> por día hábil en los ' + hr + ' días que quedan' : ''}.</p>` : '');
+  const dim = (dimsP || []).find(d => s.dims.includes(d) && FILTRABLE[d]) || null;
+  if (dim) { const g = new Map(); rows.forEach(r => { const k = r[dim] || '(sin dato)'; if (!g.has(k)) g.set(k, []); g.get(k).push(r); });
+    const L = [...g.entries()].map(([k, rs]) => ({k, ...calc(rs)})).sort((a, b) => a.pct - b.pct);
+    h += `<div class="aq-tw"><table><thead><tr><th class="l">${DIM[dim].lab}</th><th>Mandatorias</th><th>Visitas</th><th>Proyección</th><th>% proy.</th><th>Faltan</th></tr></thead><tbody>${
+      L.map(o => `<tr${o.pct < t.pct ? ' class="aq-ojo"' : ''}><td class="l">${esc(o.k)}</td><td>${fN(o.a.obj)}</td><td>${fN(o.a.real)}</td><td>${fN(o.pr)}</td><td>${fP(o.pct)}</td><td>${fN(o.falta)}</td></tr>`).join('')}</tbody></table></div>`; }
+  return h + `<div class="aq-ctx">Proyección lineal con días hábiles de lunes a sábado (no descuenta festivos). Mes ${mesLab(mes)}.</div>` +
+    acciones({s, ent, vista: 'visitas', texto: '¿Vamos a cumplir el mes?\n' + h.replace(/<\/p>/g, '\n').replace(/<[^>]+>/g, ''), tabla: null}) +
+    `<div class="aq-seg">Ver más:<div class="aq-ej">${dim ? '' : chip('Proyección por coordinador', 'proyeccion por coordinador') + chip('Proyección por cadena', 'proyeccion por cadena')}${chip('PDV con más visitas pendientes', 'top 10 puntos de venta con mas visitas pendientes')}</div></div>`; }
+
+function rankRapido(s, rows, dim, mc, asc, minVol, n) {
+  const g = new Map(); rows.forEach(r => { const k = r[dim]; if (!k) return; if (!g.has(k)) g.set(k, []); g.get(k).push(r); });
+  return [...g.entries()].map(([k, rs]) => ({k, a: agregar(s, rs)})).filter(o => o.a[mc] != null && (o.a.n || o.a.obj || o.a.caras || 0) >= minVol)
+    .sort((x, y) => asc ? x.a[mc] - y.a[mc] : y.a[mc] - x.a[mc]).slice(0, n); }
+function actuarHoy() {
+  const D = cargar(), S = D.S; let h = '<p><b>Dónde actuar</b> — lo que más pesa hoy en este informe:</p>', txt = '¿Dónde debo actuar hoy?\n', ch = [];
+  const sec = (tit0, lineas) => { if (!lineas.length) return; h += `<div class="aq-h3">${tit0}</div><p>${lineas.join('<br>')}</p>`; txt += '\n' + tit0 + '\n' + lineas.map(l => '- ' + l.replace(/<[^>]+>/g, '')).join('\n') + '\n'; };
+  if (S.vis) { const s = S.vis, rp = s.rows.filter(r => r.mes === s.mesAct), t = agregar(s, rp), L = [];
+    L.push(`Cumplimiento ${fP(t.pct)} con <b>${fN(t.pend)}</b> visitas pendientes.`);
+    const co = rankRapido(s, rp, 'coo', 'pct', true, 10, 3).filter(o => o.a.pct < t.pct); if (co.length) L.push('Coordinadores más atrasados: ' + co.map(o => `<b>${esc(o.k)}</b> (${fP(o.a.pct)})`).join(', ') + '.');
+    const pd = rankRapido(s, rp, 'pdv', 'pend', false, 1, 3); if (pd.length) L.push('PDV con más pendientes: ' + pd.map(o => `${esc(o.k)} (${fN(o.a.pend)})`).join(', ') + '.');
+    sec('✅ Visitas mandatorias', L); ch.push(chip('¿Vamos a cumplir el mes?'), chip('Proyección por coordinador', 'proyeccion por coordinador')); }
+  if (S.ago) { const s = S.ago, t = agregar(s, s.rows), L = [`Agotado total ${fP(t.pct)} (${fN(t.a)} casos).`];
+    const pr = rankRapido(s, s.rows, 'pro', 'a', false, 1, 3); if (pr.length) L.push('Productos con más agotados: ' + pr.map(o => `<b>${esc(o.k)}</b> (${fN(o.a.a)}, ${fP(o.a.pct)})`).join(', ') + '.');
+    const ca = rankRapido(s, s.rows, 'cad', 'pct', false, 30, 3); if (ca.length) L.push('Cadenas con mayor % agotado: ' + ca.map(o => `${esc(o.k)} (${fP(o.a.pct)})`).join(', ') + '.');
+    sec('📦 Agotados', L); ch.push(chip('Agotados por cadena'), chip('Productos con más agotado')); }
+  if (S.exh && S.exh.fmax) { const s = S.exh, per = periodo(' vs ', s), a = s.rows.filter(per.test), b = per.ptest ? s.rows.filter(per.ptest) : [];
+    if (b.length) { const ga = rankRapido(s, a, 'cad', 'n', false, 0, 999), gb = new Map(rankRapido(s, b, 'cad', 'n', false, 0, 999).map(o => [o.k, o.a.n]));
+      const v = [...gb.entries()].map(([k, nb]) => { const na = (ga.find(o => o.k === k) || {a: {n: 0}}).a.n; return {k, na, nb, v: nb ? (na / nb - 1) * 100 : 0}; }).filter(o => o.nb >= 20).sort((x, y) => x.v - y.v).slice(0, 3).filter(o => o.v < 0);
+      if (v.length) sec('📷 Exhibiciones', ['Cadenas que más caen en registros (' + esc(per.lab) + ' vs ' + esc(per.prevLab) + '): ' + v.map(o => `<b>${esc(o.k)}</b> (${fV(o.v)})`).join(', ') + '.']);
+      ch.push(chip('Cadenas que más caen en registros', 'cadenas que mas caen en registros vs semana anterior')); } }
+  if (S.fac) { const s = S.fac, t = agregar(s, s.rows), L = [`Facing ${fP(t.pct)} vs meta ${fP(s.meta)}.`];
+    const ca = rankRapido(s, s.rows, 'cat', 'pct', true, 20, 3).filter(o => o.a.pct < s.meta); if (ca.length) L.push('Categorías bajo la meta: ' + ca.map(o => `<b>${esc(o.k)}</b> (${fP(o.a.pct)})`).join(', ') + '.');
+    sec('📐 Facing', L); }
+  if (S.com) { const s = S.com, dm = s.modo === 'par' ? 'par' : 'cat', L = rankRapido(s, s.rows, dm, 'dif', false, 1, 3).filter(o => o.a.dif > 0);
+    if (L.length) sec('⚖️ Precios vs competencia', ['Más caros que la competencia: ' + L.map(o => `<b>${esc(o.k)}</b> (${fV(o.a.dif)})`).join(', ') + '.']); }
+  if (S.noi) { const s = S.noi, m = rankRapido(s, s.rows, 'mot', 'n', false, 0, 1)[0]; if (m) sec('🚫 No implementación', [`Motivo principal: <b>${esc(m.k)}</b> (${fN(m.a.n)} casos).`]); }
+  const s0 = S.vis || Object.values(S)[0];
+  return h + acciones({s: s0, ent: {}, vista: null, texto: txt, tabla: null}) + (ch.length ? `<div class="aq-seg">Profundizar:<div class="aq-ej">${ch.join('')}</div></div>` : ''); }
+
+/* ---------------- ejecutar acciones sobre el tablero ---------------- */
+const esTotal = () => typeof tpIr === 'function' && typeof TP !== 'undefined' && TP && TP.F !== undefined;
+const hayFotos = () => !!document.getElementById('vista-fotos') && typeof filtro !== 'undefined';
+function filtrableEn(k, d) { if (esTotal()) return ['can', 'cad', 'coo', 'ciu', 'mer', 'mar'].includes(d); if (k === 'vis') return ['can', 'cad', 'coo', 'ciu', 'mer'].includes(d); if (k === 'exh') return ['ind', 'can', 'cad', 'coo', 'ciu', 'mer', 'pdv'].includes(d); return false; }
+function puedeFiltrar(k) { return esTotal() || (k === 'vis' && typeof vsSel !== 'undefined' && typeof vsRender === 'function') || (k === 'exh' && typeof filtro !== 'undefined' && typeof render === 'function'); }
+function toast(t) { const d = document.createElement('div'); d.className = 'aq-toast'; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
+function aplicar(k, ent, vista) {
+  const uno = d => ent[d] && [...ent[d]].length ? [...ent[d]][0] : '';
+  if (esTotal()) { const F = Object.assign({}, TP.F), mapa = {can: 'canal', cad: 'cadena', coo: 'coordinador', ciu: 'ciudad', mer: 'mercaderista'};
+    Object.keys(mapa).forEach(d => { if (uno(d)) F[mapa[d]] = uno(d); });
+    const marcas = ent.mar ? [...ent.mar] : (TP.todas ? null : TP.sel); tpIr(marcas, vista || null, F); return; }
+  if (k === 'vis' && typeof vsSel !== 'undefined') { const mapa = {can: 'canal', cad: 'cadena', coo: 'coordinador', ciu: 'ciudad', mer: 'mercaderista'};
+    Object.keys(mapa).forEach(d => { if (uno(d)) vsSel[mapa[d]] = uno(d); }); if (typeof cambiarVista === 'function') cambiarVista('visitas'); vsRender(); return; }
+  if (typeof filtro !== 'undefined') { const mapa = {ind: 'indicador', can: 'canal', cad: 'cadena', coo: 'coordinador', ciu: 'ciudad', mer: 'colaborador'};
+    Object.keys(mapa).forEach(d => { if (uno(d)) filtro[mapa[d]] = uno(d); });
+    if (uno('pdv')) { const r = (cargar().S.exh || {rows: []}).rows.find(x => x.pdv === uno('pdv')); if (r) filtro.pdv = r.cod; }
+    if (typeof refrescarTodosLosSelects === 'function') refrescarTodosLosSelects('');
+    Object.keys(filtro).forEach(c => { const el = document.getElementById('f-' + c); if (el) el.value = filtro[c]; });
+    if (typeof cambiarVista === 'function') cambiarVista(vista || 'resumen'); if (typeof render === 'function') render(); } }
+function descargar(o) { const sep = ';', q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+  const csv = '﻿' + [o.tabla.head].concat(o.tabla.rows).map(r => r.map(q).join(sep)).join('\r\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv;charset=utf-8'}));
+  a.download = 'Respuesta_dashboard_' + new Date().toISOString().slice(0, 10) + '.csv'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+function copiar(t) { const ok = () => toast('Copiado: pégalo en WhatsApp o en el correo');
+  const viejo = () => { const ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); ok(); } catch (e) {} ta.remove(); };
+  try { if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok, viejo); else viejo(); } catch (e) { viejo(); } }
+function textoWA(t) { const l = String(t).split('\n').map(x => x.trim()).filter(Boolean); return '*' + l[0] + '*\n' + l.slice(1).join('\n'); }
+
+/* ---------------- ayuda por categorias, sugeridas por vista, historial ---------------- */
+const VISTA_SRC = {visitas: 'vis', resumen: 'exh', fotos: 'exh', basedatos: 'exh', agotados: 'ago', bdagotados: 'ago', facing: 'fac', bdfacing: 'fac', precios: 'pre', bdprecios: 'pre', competencia: 'com', bdcompetencia: 'com', noexh: 'noi', nopos: 'noi', encuestas: 'enc', bdencuestas: 'enc'};
+function ejemplos() {
+  const D = cargar(), S = D.S, E = {};
+  const top = (s, d, f) => { const c = new Map(); s.rows.forEach(r => { if (r[d] && (!f || f(r))) c.set(r[d], (c.get(r[d]) || 0) + 1); }); let b = '', bn = 0; c.forEach((n, k) => { if (n > bn) { bn = n; b = k; } }); return b; };
+  if (S.vis) { const c = top(S.vis, 'coo'), cd = top(S.vis, 'cad'); E.vis = ['¿Cómo va el cumplimiento de visitas?', '¿Qué coordinador tiene el menor cumplimiento de visitas?', 'Top 10 puntos de venta con más visitas pendientes', '¿Vamos a cumplir el mes?', 'Evolución del cumplimiento de visitas por mes'].concat(cd ? ['Cumplimiento de visitas de ' + tit(cd) + ' vs mes anterior'] : []).concat(c ? ['¿Cómo va ' + tit(c) + '?'] : []); }
+  if (S.exh) { const c = top(S.exh, 'cad', r => /NEGOCIAD/i.test(r.ind)); E.exh = ['Registros por indicador', 'Mercaderistas con más registros la última semana', 'Cadenas que más caen en registros vs semana anterior'].concat(c ? ['¿Cuántas exhibiciones negociadas hay en ' + tit(c) + '?'] : []); }
+  if (S.ago) E.ago = ['Productos con más agotado', '¿Qué cadena tiene menos agotados?', 'Agotados por causal', 'Agotados por cadena vs semana anterior'];
+  if (S.fac) E.fac = ['% de facing por categoría', '¿Qué cadena tiene el menor facing?', 'Facing vs semana anterior'];
+  if (S.pre) E.pre = ['Precio promedio por producto', '¿Cuál es el producto más caro?', 'Precios por cadena'];
+  if (S.com) E.com = ['¿Cómo estamos en precio frente a la competencia?', 'Precio vs competencia por ' + (S.com.modo === 'par' ? 'par' : 'producto')];
+  if (S.noi) E.noi = ['Motivos de no implementación', 'Motivos de no implementación de descuentos POS'];
+  if (S.enc) E.enc = ['Encuestas con más respuestas', 'Encuestas por cadena'];
+  const cd = S.exh ? top(S.exh, 'cad') : S.vis ? top(S.vis, 'cad') : '';
+  E.acc = ['¿Dónde debo actuar hoy?', 'Resumen'].concat(S.vis ? ['¿Vamos a cumplir el mes?'] : []).concat(cd ? ['¿Cómo va ' + tit(cd) + '?'] : []).concat(D.total ? ['Ranking de marcas por cumplimiento de visitas', '¿Qué marca tiene más agotado?'] : []);
+  return E; }
+function leerHist() { try { return JSON.parse(localStorage.getItem('plf_aq_hist') || '[]'); } catch (e) { return []; } }
+function guardarHist(q) { try { const h = leerHist().filter(x => x !== q); h.unshift(q); localStorage.setItem('plf_aq_hist', JSON.stringify(h.slice(0, 6))); } catch (e) {} }
+function sugeridas(vista) {
+  const E = ejemplos(), k = VISTA_SRC[vista], S = cargar().S;
+  if (!k || !E[k]) return '';
+  return `<div><b>Sugeridas para ${esc(S[k].lab.toLowerCase())}</b><div class="aq-ej">${E[k].slice(0, 5).map(e => chip(e)).join('')}</div></div>`; }
+function ayudaCompleta() {
+  const D = cargar(), S = D.S, E = ejemplos(); let h = '<p><b>¿Qué puedo preguntar?</b> Escribe como le hablarías a una persona. Ejemplos por tema:</p>';
+  h += `<div class="aq-h3">⚡ Acciones rápidas</div><div class="aq-ej">${E.acc.map(e => chip(e)).join('')}</div>`;
+  Object.keys(S).forEach(k => { if (E[k]) h += `<div class="aq-h3">${esc(S[k].lab)}</div><div class="aq-ej">${E[k].map(e => chip(e)).join('')}</div>`; });
+  return h + '<div class="aq-ctx">Entiendo cadenas, ciudades, coordinadores, mercaderistas, puntos de venta, productos y categorías' + (D.total ? ', marcas' : '') + '; periodos ("ayer", "semana 42", "últimos 7 días", "mes pasado"); rankings ("top 5", "el que menos") y comparaciones ("vs semana anterior"). Puedes seguir la conversación: "¿y en agotados?". También puedes preguntar por voz con 🎤.</div>'; }
+
+/* ---------------- autocompletar ---------------- */
+let NOMBRES = null;
+function nombres() { if (NOMBRES) return NOMBRES; const set = new Map(), S = cargar().S;
+  Object.values(S).forEach(s => s.rows.forEach(r => ['cad', 'coo', 'mer', 'ciu', 'cat', 'mar', 'pro', 'can'].forEach(d => { const v = r[d]; if (v && v.length > 2 && !set.has(v)) set.set(v, nrm(v)); })));
+  return (NOMBRES = [...set.entries()]); }
+function autocompletar(inp, box) {
+  const v = inp.value, m = v.match(/([^\s¿?¡!,;.]{3,})$/); if (!m) { box.classList.remove('on'); return; }
+  const w = nrm(m[1]); const L = nombres().filter(([o, n]) => n.split(' ').some(x => x.startsWith(w)) && n !== w).slice(0, 6);
+  if (!L.length) { box.classList.remove('on'); return; }
+  box.innerHTML = L.map(([o]) => `<button type="button" data-aq-ac="${esc(o)}">${esc(tit(o))}</button>`).join(''); box.classList.add('on');
+  box.dataset.frag = m[1]; }
+
+/* ---------------- ayuda con ejemplos construidos con los datos reales ---------------- */
+function ayuda() { return ayudaInicio(''); }
+function ayudaInicio(vista) {
+  const hs = leerHist(); const sug = sugeridas(vista);
+  return (sug ? sug + '<div style="height:8px"></div>' : '') + `<div><b>Pregúntame lo que necesites</b> sobre este informe, en tus palabras.<div class="aq-ej">${ejemplos().acc.filter(e => !sug.includes(esc(e))).map(e => chip(e)).join('')}</div></div>` +
+    (hs.length ? `<div style="margin-top:8px"><b>Tus últimas preguntas</b><div class="aq-ej">${hs.map(e => chip('↺ ' + e, e)).join('')}</div></div>` : '') +
+    '<div class="aq-ctx">Toca <b>?</b> arriba para ver todo lo que puedo responder.</div>'; }
+function ayudaVieja() {
+  const D = cargar(), S = D.S, ej = [];
+  const top = (s, d) => { const c = new Map(); s.rows.forEach(r => { if (r[d]) c.set(r[d], (c.get(r[d]) || 0) + 1); }); let b = '', bn = 0; c.forEach((n, k) => { if (n > bn) { bn = n; b = k; } }); return b; };
+  if (S.vis) { ej.push('¿Cómo va el cumplimiento de visitas?'); if (S.vis.dims.includes('coo')) ej.push('¿Qué coordinador tiene el menor cumplimiento de visitas?');
+    ej.push('Top 10 puntos de venta con más visitas pendientes'); ej.push('Evolución del cumplimiento de visitas por mes'); }
+  const tit = x => x.toLowerCase().replace(/(^|\s)\S/g, y => y.toUpperCase());
+  if (S.exh) { const neg = {k: 'x', rows: S.exh.rows.filter(r => /NEGOCIAD/i.test(r.ind))}; const c = top(neg, 'cad');
+    ej.push(c ? '¿Cuántas exhibiciones negociadas hay en ' + tit(c) + '?' : 'Registros por indicador'); ej.push('Mercaderistas con más registros la última semana'); }
+  if (S.ago) { ej.push('Productos con más agotado'); ej.push('¿Qué cadena tiene menos agotados?'); }
+  if (S.fac) ej.push('% de facing por categoría');
+  if (S.pre) ej.push('Precio promedio por producto');
+  if (S.com) ej.push('¿Cómo estamos en precio frente a la competencia?');
+  if (S.noi) ej.push('Motivos de no implementación');
+  if (S.enc) ej.push('Encuestas con más respuestas');
+  if (D.total) ej.push('Ranking de marcas por cumplimiento de visitas');
+  const temas = Object.values(S).map(s => s.lab.toLowerCase()).join(', ');
+  return `<div>Pregúntame en tus palabras sobre ${esc(temas)}. Entiendo cadenas, canales, ciudades, coordinadores, mercaderistas, puntos de venta, productos y categorías${D.total ? ', marcas' : ''}; periodos como "ayer", "semana 42", "últimos 7 días" o "mes pasado"; rankings ("top 10", "el que menos…") y comparaciones ("vs semana anterior", "cuáles caen").<div class="aq-ej">${ej.slice(0, 9).map(e => `<button type="button" data-aq-ej="${esc(e)}">${esc(e)}</button>`).join('')}</div></div>`; }
+
+/* ---------------- interfaz ---------------- */
+function iniciar() {
+  const box = $('aq'), hist = $('aq-hist'), inp = $('aq-in'), sug = $('aq-sug'); if (!box || box.dataset.ok) return; box.dataset.ok = '1';
+  let vistaAyuda = null;
+  const vistaAct = () => { try { const a = document.querySelector('.sidebar nav a.active[data-vista]'); if (a) return a.dataset.vista; return esTotal() && typeof tpVista !== 'undefined' ? tpVista : (typeof vistaActual !== 'undefined' ? vistaActual : ''); } catch (e) { return ''; } };
+  const burbuja = h => { const d = document.createElement('div'); d.className = 'aq-bot'; d.innerHTML = h; hist.appendChild(d); hist.scrollTop = hist.scrollHeight; return d; };
+  const abrir = () => { box.classList.add('on'); const v = vistaAct();
+    if (vistaAyuda === null) { try { burbuja(ayudaInicio(v)); } catch (e) { burbuja('Escribe tu pregunta.'); } vistaAyuda = v; }
+    else if (v !== vistaAyuda) { const sg = sugeridas(v); if (sg) burbuja(sg); vistaAyuda = v; }
+    inp.focus(); };
+  const preguntar = q => { if (!q || !q.trim()) return; q = q.trim(); sug.classList.remove('on');
+    hist.insertAdjacentHTML('beforeend', `<div class="aq-yo">${esc(q)}</div>`);
+    let r; try { r = responder(q); guardarHist(q); } catch (e) { console.error('[asistente]', e); r = '<p>No pude interpretar la pregunta. Toca <b>?</b> para ver ejemplos.</p>'; }
+    const d = burbuja(r); hist.scrollTop = Math.max(0, d.offsetTop - 60); };
+  $('aq-fab').onclick = abrir;
+  $('aq-x').onclick = () => box.classList.remove('on');
+  $('aq-help').onclick = () => { try { burbuja(ayudaCompleta()); } catch (e) {} };
+  $('aq-f').onsubmit = e => { e.preventDefault(); const q = inp.value; inp.value = ''; preguntar(q); };
+  inp.addEventListener('input', () => { try { autocompletar(inp, sug); } catch (e) {} });
+  sug.addEventListener('click', e => { const b = e.target.closest('[data-aq-ac]'); if (!b) return; const fr = sug.dataset.frag || '';
+    inp.value = inp.value.slice(0, inp.value.length - fr.length) + tit(b.dataset.aqAc) + ' '; sug.classList.remove('on'); inp.focus(); });
+  hist.addEventListener('click', e => {
+    const b = e.target.closest('[data-aq-ej]'); if (b) return preguntar(b.dataset.aqEj);
+    const v = e.target.closest('[data-aq-vista]'); if (v) { if (esTotal()) { tpIr(TP.todas ? null : TP.sel, v.dataset.aqVista); return; } if (typeof window.cambiarVista === 'function') { try { window.cambiarVista(v.dataset.aqVista); box.classList.remove('on'); } catch (x) {} } return; }
+    const a = e.target.closest('[data-aq-acc]'); if (a) { const o = RESP[a.dataset.id]; if (!o) return; const acc = a.dataset.aqAcc;
+      try { if (acc === 'excel') descargar(o); else if (acc === 'wa') copiar(textoWA(o.texto));
+        else if (acc === 'filtro') { aplicar(o.s.k, o.ent, o.vista); box.classList.remove('on'); toast('Filtro aplicado al tablero'); }
+        else if (acc === 'fotos') { aplicar('exh', o.ent, 'fotos'); box.classList.remove('on'); } } catch (x) { console.error('[asistente]', x); toast('No se pudo completar la acción'); } return; }
+    const f = e.target.closest('[data-aq-fd]'); if (f && puedeFiltrar(f.dataset.aqFs)) { const ent = {}; ent[f.dataset.aqFd] = new Set([f.dataset.aqFv]);
+      try { aplicar(f.dataset.aqFs, ent, null); box.classList.remove('on'); toast('Filtro aplicado: ' + f.dataset.aqFv); } catch (x) {} } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') box.classList.remove('on'); });
+  // voz (gratis, del propio navegador)
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition, mic = $('aq-mic');
+  if (SR && mic) { mic.style.display = ''; let rec = null;
+    mic.onclick = () => { if (rec) { rec.stop(); return; } rec = new SR(); rec.lang = 'es-CO'; rec.interimResults = false; mic.classList.add('on');
+      rec.onresult = ev => { const t = ev.results[0][0].transcript; preguntar(t); };
+      rec.onend = () => { mic.classList.remove('on'); rec = null; }; rec.onerror = () => { mic.classList.remove('on'); rec = null; toast('No pude escuchar. Revisa el permiso del micrófono.'); };
+      try { rec.start(); } catch (x) { mic.classList.remove('on'); rec = null; } }; }
+  window.PLF_ASISTENTE = {responder, cargar, ayudaCompleta, actuarHoy, reset: () => { SRC = null; NOMBRES = null; ULT = null; }};
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar); else iniciar();
+})();
+</script>
+<!-- /PLF-ASISTENTE-V2 -->
 </body>
 </html>
