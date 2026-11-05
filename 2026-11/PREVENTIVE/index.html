@@ -6067,9 +6067,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 </script>
 <style>
-.aq-fab{padding:15px 24px !important;font-size:15.5px !important;background:linear-gradient(135deg,#1F4E78,#2B8FA3) !important;box-shadow:0 8px 22px rgba(31,78,120,.45) !important;border:2px solid #fff !important}
-.aq-fab.aq-pulso{animation:aqPulso 1.6s ease-in-out 4}
-@keyframes aqPulso{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.aq-fab{display:none !important}
 .aq-banda{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(120deg,#12233A 0%,#1F4E78 55%,#2B8FA3 100%);color:#fff;border-radius:12px;padding:14px 18px;margin:0 0 20px;box-shadow:0 4px 16px rgba(18,35,58,.25);font-family:'Segoe UI',Arial,sans-serif}
 .aq-banda .aq-bt{flex:0 0 auto;font-weight:800;font-size:17px;letter-spacing:.3px;line-height:1.2}
 .aq-banda .aq-bt small{display:block;font-weight:400;font-size:12px;opacity:.9;letter-spacing:0}
@@ -6201,7 +6199,6 @@ function iniciar() {
   banda();
   const mic = $('aq-mic');
   if (mic) { mic.style.display = ''; botones.push(mic); mic.onclick = e => { e.preventDefault(); escuchar($('aq-in')); }; }
-  const fab = $('aq-fab'); if (fab) fab.classList.add('aq-pulso');
   window.PLF_ASISTENTE_V3 = {preguntar, demo, escuchar, motivoSinVoz};
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(iniciar, 0)); else setTimeout(iniciar, 0);
