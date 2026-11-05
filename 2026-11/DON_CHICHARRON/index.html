@@ -5414,7 +5414,7 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 })();
 </script>
 <!-- /PLF-CODCOMERCIO-V1 -->
-<!-- PLF-ASISTENTE-V2: Preguntale al dashboard (motor local, sin internet, sin IA externa) -->
+<!-- PLF-ASISTENTE-V3: Preguntale al dashboard (motor local, sin internet, sin IA externa) -->
 <style>
 .aq-fab{position:fixed;right:20px;bottom:20px;z-index:9000;background:#1F4E78;color:#fff;border:0;border-radius:999px;padding:12px 18px;font:600 13.5px 'Segoe UI',Arial,sans-serif;box-shadow:0 6px 18px rgba(31,78,120,.35);cursor:pointer}
 .aq-fab:hover{background:#16324f}
@@ -6151,6 +6151,147 @@ function iniciar() {
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar); else iniciar();
 })();
 </script>
-<!-- /PLF-ASISTENTE-V2 -->
+<style>
+.aq-fab{padding:15px 24px !important;font-size:15.5px !important;background:linear-gradient(135deg,#1F4E78,#2B8FA3) !important;box-shadow:0 8px 22px rgba(31,78,120,.45) !important;border:2px solid #fff !important}
+.aq-fab.aq-pulso{animation:aqPulso 1.6s ease-in-out 4}
+@keyframes aqPulso{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.aq-banda{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(120deg,#12233A 0%,#1F4E78 55%,#2B8FA3 100%);color:#fff;border-radius:12px;padding:14px 18px;margin:0 0 20px;box-shadow:0 4px 16px rgba(18,35,58,.25);font-family:'Segoe UI',Arial,sans-serif}
+.aq-banda .aq-bt{flex:0 0 auto;font-weight:800;font-size:17px;letter-spacing:.3px;line-height:1.2}
+.aq-banda .aq-bt small{display:block;font-weight:400;font-size:12px;opacity:.9;letter-spacing:0}
+.aq-banda form{flex:1 1 360px;display:flex;gap:8px;min-width:260px}
+.aq-banda input{flex:1;border:0;border-radius:10px;padding:12px 14px;font:14.5px 'Segoe UI',Arial,sans-serif;outline:none;color:#1f2d3a;min-width:0}
+.aq-banda button{border:0;border-radius:10px;padding:0 16px;font:700 14px 'Segoe UI',Arial,sans-serif;cursor:pointer;white-space:nowrap}
+.aq-banda .aq-bmic{background:#fff;color:#1F4E78;font-size:18px;padding:0 13px}
+.aq-banda .aq-bmic.on{background:#3BBFCF;color:#fff}
+.aq-banda .aq-benv{background:#3BBFCF;color:#fff}
+.aq-banda .aq-bdemo{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.75);padding:10px 14px}
+.aq-banda .aq-bej{flex-basis:100%;display:flex;gap:6px;flex-wrap:wrap;font-size:12px}
+.aq-banda .aq-bej span{opacity:.85;padding:4px 0}
+.aq-banda .aq-bej button{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:14px;padding:4px 11px;font:12px 'Segoe UI',Arial,sans-serif}
+.aq-banda .aq-bej button:hover{background:rgba(255,255,255,.28)}
+.aq-demo{position:absolute;left:12px;right:12px;bottom:70px;background:#12233A;color:#fff;border-radius:10px;padding:10px 14px;font:13px 'Segoe UI',Arial,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.3);z-index:2}
+.aq-demo b{color:#7FE0EC}
+.aq-demo .aq-dbar{height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin-top:8px;overflow:hidden}
+.aq-demo .aq-dbar i{display:block;height:100%;background:#3BBFCF;width:0;transition:width .4s}
+.aq{position:fixed}
+.aq-escucha{position:fixed;left:50%;top:18px;transform:translateX(-50%);background:#12233A;color:#fff;padding:10px 18px;border-radius:999px;font:600 14px 'Segoe UI',Arial,sans-serif;z-index:9003;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+@media print{.aq-banda,.aq-escucha{display:none !important}}
+</style>
+<script>
+/* PLF-ASISTENTE-V3 — banda superior, voz robusta y demostracion guiada (sin videos: cero MB extra). */
+(function () {
+'use strict';
+const $ = id => document.getElementById(id);
+function abrir() { const b = $('aq'); if (b && !b.classList.contains('on')) { const f = $('aq-fab'); if (f) f.click(); } }
+function preguntar(t) {
+  t = String(t || '').trim(); if (!t) return;
+  abrir(); const i = $('aq-in'), f = $('aq-f'); if (!i || !f) return;
+  i.value = t;
+  if (f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event('submit', {cancelable: true, bubbles: true}));
+}
+function aviso(msg, ms) {
+  let d = document.querySelector('.aq-toast3');
+  if (!d) { d = document.createElement('div'); d.className = 'aq-toast aq-toast3'; d.style.maxWidth = '420px'; d.style.lineHeight = '1.45'; document.body.appendChild(d); }
+  d.innerHTML = msg; d.style.display = '';
+  clearTimeout(d._t); d._t = setTimeout(() => { d.style.display = 'none'; }, ms || 9000);
+}
+/* ---------------- VOZ ---------------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const ua = navigator.userAgent || '';
+const esFirefox = /firefox|fxios/i.test(ua);
+const embebido = /Teams\/|Electron|; wv\)|FBAN|FBAV|Instagram|Line\//i.test(ua);
+let rec = null, botones = [];
+function marcar(on) { botones.forEach(b => b && b.classList.toggle('on', on)); }
+function motivoSinVoz() {
+  if (esFirefox) return 'Firefox no tiene dictado por voz. Abre este link en <b>Google Chrome</b> o <b>Microsoft Edge</b>, o escribe tu pregunta.';
+  if (embebido) return 'Este visor (Teams, Outlook u otra app) no permite el micrófono. Abre el link en <b>Chrome</b> o <b>Edge</b>, o escribe tu pregunta.';
+  return 'Este navegador no tiene dictado por voz. Usa <b>Google Chrome</b> o <b>Microsoft Edge</b>, o escribe tu pregunta.';
+}
+const ERR = {
+  'not-allowed': 'El micrófono está <b>bloqueado</b> para esta página. Clic en el candado 🔒 junto a la dirección → <b>Micrófono → Permitir</b> y vuelve a pulsar 🎤.',
+  'service-not-allowed': 'El navegador no permite el dictado aquí. Abre el link publicado (https) en <b>Chrome</b> o <b>Edge</b>.',
+  'audio-capture': 'No encontré un micrófono. Revisa que esté conectado y que Windows lo permita: <b>Configuración → Privacidad → Micrófono</b>.',
+  'network': 'El dictado por voz usa internet y tu red lo está bloqueando. Escribe la pregunta o prueba con otra red.',
+  'no-speech': 'No te escuché. Pulsa 🎤 y habla enseguida, cerca del micrófono.',
+  'language-not-supported': 'El navegador no reconoce español en este equipo. Escribe la pregunta.'
+};
+function escuchar(inputDestino) {
+  if (rec) { try { rec.stop(); } catch (e) {} return; }
+  if (!SR) { aviso('🎤 ' + motivoSinVoz()); return; }
+  if (location.protocol === 'file:') aviso('Si el micrófono no responde, abre el <b>link publicado</b>: algunos navegadores no permiten el dictado en archivos locales.', 6000);
+  let r; try { r = new SR(); } catch (e) { aviso('🎤 ' + motivoSinVoz()); return; }
+  rec = r; r.lang = 'es-CO'; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
+  let texto = '', fallo = false;
+  const ind = document.createElement('div'); ind.className = 'aq-escucha'; ind.textContent = '🎙️ Escuchando… habla ahora';
+  r.onstart = () => { marcar(true); document.body.appendChild(ind); };
+  r.onresult = ev => {
+    let fin = '', par = '';
+    for (let k = ev.resultIndex; k < ev.results.length; k++) { const t = ev.results[k][0].transcript; if (ev.results[k].isFinal) fin += t; else par += t; }
+    if (fin) texto += fin;
+    const mostrar = (texto + ' ' + par).trim();
+    if (inputDestino) inputDestino.value = mostrar;
+    ind.textContent = '🎙️ ' + (mostrar || 'Escuchando… habla ahora');
+  };
+  r.onerror = ev => { fallo = true; aviso('🎤 ' + (ERR[ev.error] || ('No pude usar el micrófono (' + ev.error + '). Escribe tu pregunta.'))); };
+  r.onend = () => {
+    marcar(false); ind.remove(); rec = null;
+    const t = texto.trim() || (inputDestino && !fallo ? inputDestino.value.trim() : '');
+    if (t && !fallo) preguntar(t);
+    else if (!fallo && !t) aviso('🎤 ' + ERR['no-speech'], 6000);
+  };
+  try { r.start(); } catch (e) { rec = null; marcar(false); aviso('🎤 No pude iniciar el micrófono. Recarga la página e inténtalo de nuevo.'); }
+}
+/* ---------------- DEMOSTRACION GUIADA ---------------- */
+const PASOS = [
+  ['¿Cómo va el cumplimiento de visitas?', '<b>1.</b> Escribe tu pregunta como se la harías a una persona… o pulsa 🎤 y díctala.'],
+  ['top 5 puntos de venta con más pendientes', '<b>2.</b> Pide rankings: "top 5", "el que más", "el peor"… Responde con tabla.'],
+  ['¿dónde debo actuar hoy?', '<b>3.</b> Pregunta qué hacer: te muestra dónde actuar primero. Con "Ver el capítulo" vas a esa vista del tablero.']
+];
+let demoOn = false;
+function demo() {
+  if (demoOn) return; demoOn = true; abrir();
+  const box = $('aq'), inp = $('aq-in'); if (!box || !inp) { demoOn = false; return; }
+  const cap = document.createElement('div'); cap.className = 'aq-demo';
+  cap.innerHTML = '<div class="aq-dtx"></div><div class="aq-dbar"><i></i></div>'; box.appendChild(cap);
+  let p = 0;
+  const sig = () => {
+    if (p >= PASOS.length) {
+      cap.querySelector('.aq-dtx').innerHTML = '¡Listo! Ahora pregunta tú: ventas de exhibición, agotados, precios, visitas… por cadena, ciudad, mercaderista o PDV.';
+      cap.querySelector('i').style.width = '100%';
+      setTimeout(() => { cap.remove(); demoOn = false; inp.value = ''; inp.focus(); }, 5000); return;
+    }
+    const [q, txt] = PASOS[p]; cap.querySelector('.aq-dtx').innerHTML = txt; cap.querySelector('i').style.width = ((p + 1) / (PASOS.length + 1) * 100) + '%';
+    inp.value = ''; let k = 0;
+    const tip = setInterval(() => { inp.value = q.slice(0, ++k); if (k >= q.length) { clearInterval(tip); setTimeout(() => { preguntar(q); p++; setTimeout(sig, 4200); }, 500); } }, 45);
+  };
+  sig();
+}
+/* ---------------- BANDA SUPERIOR ---------------- */
+function banda() {
+  if (document.querySelector('.aq-banda')) return;
+  const top = document.querySelector('.main .topbar') || document.querySelector('.topbar'); if (!top) return;
+  const d = document.createElement('div'); d.className = 'aq-banda';
+  d.innerHTML = '<div class="aq-bt">💬 PREGÚNTALE AL DASHBOARD<small>Escribe o dicta tu pregunta y el informe te responde al instante</small></div>'
+    + '<form autocomplete="off"><input placeholder="Ej: ¿cómo va el cumplimiento de visitas por cadena?"><button type="button" class="aq-bmic" title="Preguntar por voz">🎤</button><button type="submit" class="aq-benv">Preguntar</button></form>'
+    + '<button type="button" class="aq-bdemo" title="Demostración de 30 segundos">▶ Ver cómo funciona</button>'
+    + '<div class="aq-bej"><span>Prueba:</span><button type="button">Resumen del mes</button><button type="button">¿Dónde debo actuar hoy?</button><button type="button">Top 5 PDV con más pendientes</button><button type="button">¿Qué puedo preguntar?</button></div>';
+  top.parentNode.insertBefore(d, top.nextSibling);
+  const inp = d.querySelector('input');
+  d.querySelector('form').addEventListener('submit', e => { e.preventDefault(); const t = inp.value; inp.value = ''; preguntar(t); });
+  const bm = d.querySelector('.aq-bmic'); botones.push(bm); bm.onclick = () => escuchar(inp);
+  d.querySelector('.aq-bdemo').onclick = demo;
+  d.querySelectorAll('.aq-bej button').forEach(b => b.onclick = () => preguntar(b.textContent === '¿Qué puedo preguntar?' ? 'ayuda' : b.textContent));
+}
+function iniciar() {
+  banda();
+  const mic = $('aq-mic');
+  if (mic) { mic.style.display = ''; botones.push(mic); mic.onclick = e => { e.preventDefault(); escuchar($('aq-in')); }; }
+  const fab = $('aq-fab'); if (fab) fab.classList.add('aq-pulso');
+  window.PLF_ASISTENTE_V3 = {preguntar, demo, escuchar, motivoSinVoz};
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(iniciar, 0)); else setTimeout(iniciar, 0);
+})();
+</script>
+<!-- /PLF-ASISTENTE-V3 -->
 </body>
 </html>
